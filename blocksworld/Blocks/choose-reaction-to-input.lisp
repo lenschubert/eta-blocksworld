@@ -30,9 +30,7 @@
 
 (mapc 'attachfeat ; needed for detecting alternatives in the
                   ; watching-or-reading question
-  '((spare-time-activity sports read reading watch watching play
-     playing hike hiking explore exploring walk walking walks hobby
-     hobbies painting); others? "make", "build" seem too general
+  '(
    ))
 
 (READRULES '*reaction-to-input*
@@ -62,27 +60,12 @@
   ; issue.
   ;
 ; e.g., 
- '(1 (0 my hobby is 0) 
-    2 *reaction-to-hobbies-input* (0 :subtree )
-   1 (0 do not like 2 hobby 0)
-    2 *reaction-to-hobbies-input* (0 :subtree )   
-   1 (0 I do not like reading  0)
-    2 *reaction-to-like-to-read-input* (0 :subtree)
-   1 (0 I like reading 0)
-    2 *reaction-to-like-to-read-input* (0 :subtree)
-   1 (0 I like to read  0)
-    2 *reaction-to-things-like-to-read-input* (0 :subtree)
-   1 (0 I spend my days 0)
-    2 *reaction-to-spend-your-days-input* (0 :subtree)
-   1 (0 I like to 5 in neighborhood 0)
-    2 *reaction-to-things-in-neighborhood-input* (0 :subtree)
-   1 (0 I do not like to 5 in neighborhood 0)
-    2 *reaction-to-things-in-neighborhood-input* (0 :subtree)
+ '(1 (0) 
+    2 *reaction-to-query-input* (0 :subtree)
    ))
 
  (READRULES '*reaction-to-unexpected*
-   '(1 (0 thank you 0)
-      2 *user-thanks-schema* (0 :schema))
+ '()
  )
  
 )

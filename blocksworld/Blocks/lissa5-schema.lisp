@@ -44,7 +44,7 @@
          ; explanation of the icons, with each nonprimitive action broken 
          ; down in turn into a number of (primitive) saying-acts.
 ?a1. (Me say-to.v you 
-      '(Do you have any hobbies or anything in particular you like to do for fun?))
+      '(Hello please ask a question about blocks \.))
 
 ?a2. (You reply-to.v ?a1.)   ; This is a nonprimitive action by the user, to be
                              ; elaborated by creation of an action description
@@ -77,40 +77,8 @@
      ; actions -- a subplan. [WHAT ABOUT INTERLEAVING OF MULTIPLE PLANS
      ; AIMED AT DIFFERENT GOALS?]
 
-?a5. (Me say-to.v you '(I used to play tennis regularly\, but with my back\, 
-                        I haven\'t been able to these days\! Luckily\, I love to 
-						read and they have a great library here\, so I\'m not 
-						usually bored\! Do you like to read?))
-
-?a6. (You reply-to ?a5.) ; again leads to a (READWORDS) call, and 
-                         ; formation of a subordinate 
-                         ; (you say-to.v me '(...)) plan
-?a8. (Me react-to.v ?a6.)
-
-?a9. (Me say-to.v you '(what kind of things you like to read?))
-
-?a10. (You reply-to.v ?a9.) ; again leads to a (READWORDS) call, and
-                             ; formation of a subordinate
-                             ; (you say-to.v me '(...)) plan
-
-?a12. (Me react-to.v ?a10.)
-
-?a13. (Me say-to.v you '(How do you spend your days?))
-
-?a14. (You reply-to.v ?a13.)
-
-?a16. (Me react-to.v ?a14.)
-
-?a17. (Me say-to.v you '(what kind of things do you like to do in your 
-                         neighborhood\,like going to coffee shops\, 
-						 the theater\, or the movies?))
-
-?a18. (You reply-to.v ?a17.)
-
-?a20. (Me react-to.v ?a18.)
-
-?a21. (Me say-to.v you
-      '(lets pause here so i can give you final feedback))
+?a6. (Me say-to.v you
+      '(Okay we are done here \.))
 )); end of defparameter *lissa-schema*
 
 
@@ -154,44 +122,7 @@
 ; (such as "I'm in physics", yielding (I am a physics major)). So
 ; we also specify ]
 ;
- '((?a1. ; Hi I am LISSA. I am an autonomous avatar ... etc.
-         (me explain-to.v you (ans-to (wh ?x ((we do.v ?x) @ ?e)))))
-   (?a2. ; Alright, let's get to know each other more
-         (me suggest-to.v you (that ((we (become.v acquainted.a)) @ ?e))))
-   (?a3. ; I am a senior comp sci major, how about you?
-         ((me tell.v you
-           (that 
-             ((me (be.v (nn (nn computer.n science.n) major.n))) @ Now)))
-          and (me ask.v you 
-                  (ans-to (wh ?x ((you (have-as.v major.n) ?x) @ Now))))))
-   (?a7. ; What was your favourite class so far?
-         (me ask.v you 
-            (ans-to (wh ?x ((you have-as.v (favourite.a class.n) ?x) @ Now)))))
-   (?a11. ; Did you find it hard?
-          (me ask.v you
-            (whether (the ?x ((you have-as.v (favourite.a class.n) ?x) @ Now)
-                             (you (find.v hard.a) @ (time-of.f ?x))))))
-                             ; ^^^^THIS INFO MAY HAVE BEEN SUPPLIED ALREADY
-   (?a15. ; I liked Artificial Intelligence! that was my favourite by far!
-          (me tell.v you
-             (that (the ?x (?x (nn AI.n class.n))
-                           (((me like.v ?x) @ (time-of.f ?x)) and
-                            (me have-as.v 
-                              ((by-far.adv favourite.a) class.n) ?x))))))
-   ; I'm skipping ahead to questions that may become redundant because
-   ; the user may have answered them already.
-   (?a24. ; And what do you not like about it?
-          (me ask.v you
-            (ans-to (wh ?x ((Rochester.name have-as.s property.n ?x) and
-                            (you dislike.v 
-                              (that (Rochester.name have-as.s property.n
-                                                                 ?x))))))))
-                    ; ^^^^THIS INFO MAY HAVE BEEN SUPPLIED ALREADY
-   (?a43. ; have you been to Dinosaur Barbecue?
-          (me ask.v you
-             (whether (some ?e (?e before Now)
-                               ((you (be.v (at-loc.p Dinosaur_Barbecue))) ** ?e)))))
-                                ; ^^^^THIS INFO MAY HAVE BEEN SUPPLIED ALREADY
+ '(                             ; ^^^^THIS INFO MAY HAVE BEEN SUPPLIED ALREADY
  )); end of mapcar #'store-output-semantics
 
 
@@ -218,18 +149,10 @@
 ; normal in dialogue), and will provide the main context for interpreting
 ; the next user input.
 ;
- '((?a1. ; Do you have any hobbies or anything in particular you like to do for fun? 
-         ((what are your hobbies ?)))
-   (?a5. ; I used to play tennis... do you like to read?
-         ((do you like to read ?)))
-   (?a9. ; what kind of things you like to read?
-         ((what kind of things you like to read ?)))
-   (?a13. ; how do you spend your days?
-         ((how do you spend your days ?)))
-   (?a17. ; what kind of things do you like to do in your neighborhood, like going to coffee shops, the theater, or the movies?
-          ((what kind of things do you like to do in your neighborhood ?)))
-   (?a21. ; Let\’s pause here so I can give you feedback.
-          ((lets pause for a feedback \.)))
+ '((?a1. 
+         ((what is your query ?)))
+   (?a6. 
+          ((our conversation is done \.)))
  )); end of mapcar #'store-output-gist-clauses
 
 
@@ -259,14 +182,6 @@
 ;       keys are stored only for questions, not assertions by Lissa.)
 ;
  '((?a1. ; do you have any hobbies..?
-         (hobbies))
-   (?a5. ; I used to play tennis... do you like to read?
-         (like-to-read))
-   (?a9. ; What kind of things you like to read?
-          (things-like-to-read))
-   (?a13. ; How do you spend your days
-          (spend-your-days))
-   (?a17. ; what kind of things do you like to do in your neighborhood
-          (things-in-neighborhood))
+         (query))
 
 		  )); end of mapcar

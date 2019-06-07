@@ -35,29 +35,9 @@
 (eval-when (load eval)
 
 (READRULES '*gist-clause-trees-for-input*
- '(1 (3 what are 1 hobbies 0) 
-    2 (*specific-answer-from-hobbies-input* 
-       *unbidden-answer-from-hobbies-input*
-       *thematic-answer-from-hobbies-input*
-       *question-from-hobbies-input*) (0 :subtrees)
-   1 (3 do 1 like to read 0) 
-    2 (*specific-answer-from-like-to-read-input* 
-       *unbidden-answer-from-like-to-read-input*
-       *thematic-answer-from-like-to-read-input*
-       *question-from-like-to-read-input*) (0 :subtrees)
-   1 (3 what 2 things you like to read 0)
-    2 (*specific-answer-from-things-like-to-read-input* 
-       *unbidden-answer-from-things-like-to-read-input*
-       *thematic-answer-from-things-like-to-read-input*
-       *question-from-things-like-to-read-input*) (0 :subtrees)
-   1 (3 how 2 you spend 1 days 0)
-    2 (*specific-answer-from-spend-your-days-input* 
-       *unbidden-answer-from-spend-your-days-input*
-       *thematic-answer-from-spend-your-days-input*
-       *question-from-spend-your-days-input*) (0 :subtrees)
-   1 (3 what 4 you like 4 neighborhood 0)
-    2 (*specific-answer-from-things-in-neighborhood-input* 
-       *unbidden-answer-from-things-in-neighborhood-input*
-       *thematic-answer-from-things-in-neighborhood-input*
-       *question-from-things-in-neighborhood-input*) (0 :subtrees)
+ '(1 (3 what 3 query 0) 
+    2 (*specific-answer-from-query-input* 
+       *unbidden-answer-from-query-input*
+       *thematic-answer-from-query-input*
+       *question-from-query-input*) (0 :subtrees)
    )))

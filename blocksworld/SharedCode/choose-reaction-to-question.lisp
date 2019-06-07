@@ -10,7 +10,11 @@
   ;
   ; First, some responses to reciprocal queries (with much room
   ; for improvement!):
- '()
+ '(
+   1 (0)
+     2 (Thank you for the question \.) (0 :out)
+
+  )
  )
 )
 

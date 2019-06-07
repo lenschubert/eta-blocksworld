@@ -7,17 +7,9 @@
 ;(load "C:/inetpub/wwwroot/RocSpeakRafayet/ttt/ttt/src/load")
 
 (load "lissa5-schema.lisp"); schematic dialog steps
-(format t "ONE")
 (load "choose-gist-clause-trees-for-input.lisp")
-(format t "TWO")
 (load "choose-reaction-to-input.lisp")
-(format t "THREE")
-(load "rules-for-hobbies-input.lisp")
-(format t "FOUR")
-(load "rules-for-like-to-read-input.lisp")
-(load "rules-for-things-like-to-read-input.lisp")
-(load "rules-for-spend-your-days-input.lisp")
-(load "rules-for-things-in-neighborhood-input.lisp")
+(load "rules-for-query-input.lisp")
 
 (format t "~%~%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ~
              ~% TO RUN LISSA IN PRINT-MODE OR TALK-MODE, USE RESPECTIVE CALLS
