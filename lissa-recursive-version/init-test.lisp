@@ -2,7 +2,7 @@
 ;; June 10/19
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load "/p/nl/tools/ttt/src/load"); needed: lissa6.lisp references ttt:...
+(load "ttt/src/load"); needed: lissa6.lisp references ttt:...
 (setq *use-latency* nil)
 (load "lissa6.lisp")
 (load "general-word-data.lisp")
