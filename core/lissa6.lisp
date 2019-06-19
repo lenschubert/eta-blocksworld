@@ -1095,7 +1095,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ; BEN UPDATE 6/19/19: Get ulfs from user gist clauses and set them
               ; as an attribute to the current user action, and output it to ulf.lisp
               (setq user-ulf (mapcar #'form-ulf-from-clause user-gist-clauses))
-              (if (and *live* (remove nil user-ulf))
+              (if *live*
                   (write-ulf (car user-ulf)))
               (setf (get user-action-name 'ulf)
                     user-ulf)
