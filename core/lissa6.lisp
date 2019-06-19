@@ -730,7 +730,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
  (let* ((rest (get {sub}plan-name 'rest-of-plan))
         (lissa-action-name (car rest)) (wff (second rest)) bindings 
         expr user-action-name user-gist-clauses n user-gist-passage
-        main-clause new-subplan-name info topic suggestion query )
+        main-clause new-subplan-name info topic suggestion query user-ulf)
 
 ;      (format t "~%WFF = ~a,~% in the LISSA action ~a being ~
 ;                       processed~%" wff lissa-action-name); DEBUGGING
@@ -803,7 +803,10 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
              ; (format t "~% user gist clause is ~a ~%" user-gist-clauses)
               (setq user-gist-clauses
                     (get user-action-name 'gist-clauses))
+              (setq user-ulf
+                    (get user-action-name 'ulf))
               (format t "~% user gist clause is ~a ~%" user-gist-clauses)
+              (format t "~% user ulf is ~a ~%" user-ulf)
               (setq new-subplan-name
                     (plan-reaction-to user-gist-clauses))
               (when (null new-subplan-name)
@@ -1020,7 +1023,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
         (user-action-name (car rest)) (wff (second rest))
         bindings words user-action-name1 wff1 lissa-action-name 
         lissa-clauses user-gist-clauses main-clause subplan-name
-        input)
+        user-ulf input)
 ;      (format t "~%WFF = ~a,~%      in the user action ~a being ~
 ;                       processed~%" wff user-action-name); DEBUGGING
        (cond ; we deal with primitive say-actions first (previously
@@ -1088,6 +1091,15 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                     user-gist-clauses)
               (setf (get user-action-name1 'gist-clauses)
                     user-gist-clauses)
+
+              ; BEN UPDATE 6/19/19: Get ulfs from user gist clauses and set them
+              ; as an attribute to the current user action
+              (setq user-ulf (mapcar #'form-ulf-from-clause user-gist-clauses))
+              (setf (get user-action-name 'ulf)
+                    user-ulf)
+              (setf (get user-action-name1 'ulf)
+                    user-ulf)
+
               ; Advance the rest-of-plan' pointer of the primitive
               ; plan past the action name and wff just processed, and
               ; initialize the next action (if any):
@@ -2003,7 +2015,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;
  (let (tagged-clause)
       (setq tagged-clause (mapcar #'tagword clause))
-      (choose-result-for tagged-clause '*spatial-question-ulf-tree*)
+      (choose-result-for tagged-clause '*clause-ulf-tree*)
  )); end of form-ulf-from-clause
 
 
