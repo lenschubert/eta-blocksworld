@@ -1,7 +1,7 @@
 gist-kb/*
 .DS_Store
 output.txt
-input.txt
+input.lisp
 sessionInfo.lisp
 
 ttt/src/*.fasl
