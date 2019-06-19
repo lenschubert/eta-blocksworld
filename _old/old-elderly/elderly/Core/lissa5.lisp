@@ -1054,9 +1054,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ; Lissa action:
               (setq lissa-clauses 
                            (get lissa-action-name 'gist-clauses))
-            ; (format t "~%LISSA action name is ~a" lissa-action-name)
-            ; (format t "~%LISSA gist clauses that the user is responding to ~
-             ;           ~% = ~a " lissa-clauses); DEBUGGING
+             (format t "~%LISSA action name is ~a" lissa-action-name)
+             (format t "~%LISSA gist clauses that the user is responding to ~
+                        ~% = ~a " lissa-clauses); DEBUGGING
               ; (In future we might instead or in addition use
               ;     (get lissa-action-name 'interpretation).)
               ; Compute the "interpretation" (gist clauses) of the
