@@ -23,8 +23,12 @@
 ; Delete the content of the sessionInfo.lisp file after reading
 (with-open-file (outfile "./sessionInfo.lisp" :direction :output :if-exists :supersede :if-does-not-exist :create))
 
-; Delete the content of output.txt, if it exists
+; Delete the content of output.txt, if it exists, otherwise create
 (with-open-file (outfile "./output.txt" :direction :output :if-exists 
+                               :supersede :if-does-not-exist :create))
+
+; Delete the content of input.lisp, if it exists, otherwise create
+(with-open-file (outfile "./input.lisp" :direction :output :if-exists 
                                :supersede :if-does-not-exist :create))
 
 
