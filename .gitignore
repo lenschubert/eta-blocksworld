@@ -2,3 +2,6 @@ gist-kb/*
 .DS_Store
 output.txt
 input.txt
+
+ttt/src/*.fasl
+ttt/src/operators/*.fasl
