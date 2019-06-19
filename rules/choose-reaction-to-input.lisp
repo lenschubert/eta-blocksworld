@@ -23,10 +23,10 @@
     1 (my name is 0)
       2 *reaction-to-name-input* (0 :subtree)
     1 (0) 
-      2 *reaction-to-spatial-question-input* (0 :subtree)
+      2 *reaction-to-spatial-question-input* (0 :subtree+file)
   ))
 
- (READRULES '*reaction-to-unexpected*
+(READRULES '*reaction-to-unexpected*
  '())
  
 ); end of eval-when

@@ -1632,6 +1632,19 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                   (choose-result-for1 new-tagged-clause nil 
                                            (car pattern)))); = root name
 
+              ((eq directive :subtree+file)
+               ; This is similar to :subtree, except that if in live mode,
+               ; the pattern supplied to the subtree is read in through a
+               ; reaction.lisp file. If not in live mode, this functions
+               ; the same as :subtree.
+               (setf (get rule-node 'time-last-used) *count*)
+               (if *live*
+                 (progn
+                   (setq newclause (get-reaction))
+                   (setq new-tagged-clause (mapcar #'tagword newclause))
+                   (return (choose-result-for1 new-tagged-clause nil pattern)))
+                 (return (choose-result-for1 tagged-clause parts pattern))))
+
               ((eq directive :ulf-recur) 
                ; Find the instance of the rule pattern determined by 'parts',
                ; which will be a shallow analysis of a text segment, of the
@@ -2284,6 +2297,57 @@ with the characters in LIST-OF-CHARACTERS."
         ; interned into an atom
         (reverse (mapcar (lambda (x) (intern (coerce x 'string))) chlists))
  ))); end of hear-words
+
+
+ (defun get-reaction () 
+;``````````````````````
+; This waits until it can load a character sequence from "./reaction.lisp",
+; which will set the value of *next-reaction*, and then processes it.
+  (progn
+    (setq *next-reaction* nil)
+    (setf *default-pathname-defaults* *root-dir*)
+    (loop while (not *next-reaction*) do
+      (sleep .5)
+      (progn
+        (load "./reaction.lisp")
+		(if *next-reaction*
+              (with-open-file (outfile "./reaction.lisp" :direction :output 
+                  :if-exists :supersede :if-does-not-exist :create)))))
+    (setf *default-pathname-defaults* (truename *temp-dir*))
+          
+  (let ((chars (coerce *next-reaction* 'list)) prevch chlist chlists) 
+       (if (null chars) (return-from hear-words nil))
+       ; Form a list of character sublists, each sublist to be made
+       ; into an atom; (the list & sublists will at first be backward,
+       ; and so have to be reversed before interning & output)
+       (setq prevch #\Space)
+       (dolist (ch chars)
+          ; Do we have the start of a new word?
+          (if (or (and (char-equal prevch #\Space) 
+                       (not (char-equal ch #\Space)) )
+                  (and (alphanumericp prevch)
+                       (not (alphanumericp ch))
+                       (not (member ch '(#\Space #\' #\- #\_) 
+                                       :test #'char-equal )))
+                  (and (not (alphanumericp prevch))
+                       (not (member prevch '(#\' #\- #\_) 
+                                           :test #'char-equal ))
+                       (alphanumericp ch) ))
+              ; if so, push the current chlist (if nonempty) onto 
+              ; chlists, and start a new chlist containing ch
+              (progn (if chlist (push (reverse chlist) chlists))
+                     (setq chlist (list (char-upcase ch))) )
+              ; if not, push ch (if nonblank) onto the current chlist
+              (if (not (char-equal ch #\Space))
+                  (push (char-upcase ch) chlist) ))
+          (setq prevch ch) )
+        
+        ; Push the final chlist (if nonempty) onto chlists (in reverse)
+        (if chlist (push (reverse chlist) chlists))
+        ; Return the reverse of chlists, where each sublist has been
+        ; interned into an atom
+        (reverse (mapcar (lambda (x) (intern (coerce x 'string))) chlists))
+ ))); end of get-reaction
        
 
 
