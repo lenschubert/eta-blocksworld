@@ -1,0 +1,3 @@
+
+ (QUERY)   ((( BE IS ) ( NP THE NVIDIA BLOCK ) ( REL TO THE LEFT OF ) ( NP THE
+             MERCEDES BLOCK )))
