@@ -1,7 +1,7 @@
 ;; *LISSA-SCHEMA*: development version 6
 ;;
 ;; Dialogue for blocksworld conversation 
-;; (intro + 5 questions +  outro)
+;; (intro + 10 questions +  outro)
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -11,7 +11,7 @@
 '(Event-schema (((set of me you) have-lissa-dialog.v) ** ?e)
 ;```````````````````````````````````````````````````````````
 ; Blocksworld conversation. This consists of one or two "getting
-; to know you" type questions, followed by a series of 5 questions.
+; to know you" type questions, followed by a series of 10 questions.
 ;
 
 :Actions 
