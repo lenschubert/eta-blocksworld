@@ -1,7 +1,7 @@
 
 ; NIL for text mode
 ; T for speak mode
-(defparameter *mode* NIL)
+(defparameter *mode* t)
 (defparameter *user-id* NIL)
 
 ; sessionInfo.lisp should be as following
@@ -29,12 +29,6 @@
 (defvar *gist-kb* (make-hash-table :test #'equal)); for storage of gist
                 ; clauses, particularly ones obtained from user inputs;
 (clrhash *gist-kb*)
-
-(defparameter *level* nil)
-(defparameter *mode* nil)
-(defparameter *user-id* "Test")
-
-(setf *root-dir* *default-pathname-defaults*)
 
 
 ;

@@ -2137,9 +2137,7 @@ with the characters in LIST-OF-CHARACTERS."
             (eval (cons 'concatenate (cons ''string wordstring))))
       (setq *lissa-count* (+ *lissa-count* 1))
       ; create a file called lock, while working on output.txt 
-      ; added for the elderly study. Unlike *lissa-count* we do not reset this
-      ; variable at every topic but we reset it at the beginning of every day
-      (setq *global-count* (+ *global-count* 1))
+
       ;(loop while (probe-file "lock") do
       ;    (sleep 0.1)
       ;)
@@ -2155,7 +2153,7 @@ with the characters in LIST-OF-CHARACTERS."
       (setf *default-pathname-defaults* *root-dir*)
       (with-open-file (outfile "./output.txt" :direction :output :if-exists
                                 :append :if-does-not-exist :create)
-                      (format outfile "~%#~D: ~a" *global-count* wordstring));)
+                      (format outfile "~%#: ~a" wordstring));)
       ; used to be lissa-count, changed it for elderly study
       (setf *default-pathname-defaults* (truename *temp-dir*))
       ;(delete-file "./lock")
@@ -2227,7 +2225,7 @@ with the characters in LIST-OF-CHARACTERS."
   (progn
     (setq *next-input* nil)
     (setf *default-pathname-defaults* *root-dir*)
-    (while (not *next-input*)
+    (loop while (not *next-input*) do
       (sleep .5)
       (progn
         ;(load "C:/inetpub/wwwroot/RocSpeakRafayet/lissa5/input.lisp")
