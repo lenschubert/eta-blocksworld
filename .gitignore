@@ -1,8 +1,12 @@
-gist-kb/*
 .DS_Store
+
+gist-kb/*
+
 output.txt
 input.lisp
 sessionInfo.lisp
+ulf.lisp
+reaction.lisp
 
 ttt/src/*.fasl
 ttt/src/operators/*.fasl
