@@ -1093,8 +1093,10 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                     user-gist-clauses)
 
               ; BEN UPDATE 6/19/19: Get ulfs from user gist clauses and set them
-              ; as an attribute to the current user action
+              ; as an attribute to the current user action, and output it to ulf.lisp
               (setq user-ulf (mapcar #'form-ulf-from-clause user-gist-clauses))
+              (if (and *live* (remove nil user-ulf))
+                  (write-ulf (car user-ulf)))
               (setf (get user-action-name 'ulf)
                     user-ulf)
               (setf (get user-action-name1 'ulf)
@@ -2017,6 +2019,18 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
       (setq tagged-clause (mapcar #'tagword clause))
       (choose-result-for tagged-clause '*clause-ulf-tree*)
  )); end of form-ulf-from-clause
+
+
+(defun write-ulf (ulf)
+;```````````````````````````
+; Writes a ulf to the file ulf.lisp, so that it can be used
+; by the blocksworld system.
+;
+   (setf *default-pathname-defaults* *root-dir*)
+   (with-open-file (outfile "./ulf.lisp" :direction :output :if-exists
+                                :supersede :if-does-not-exist :create)
+      (format outfile "(setq *next-ulf* '~a)" ulf))
+   (setf *default-pathname-defaults* (truename *temp-dir*)))
 
 
 (defun store-fact (fact keys kb); tested
