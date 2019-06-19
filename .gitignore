@@ -2,6 +2,7 @@ gist-kb/*
 .DS_Store
 output.txt
 input.txt
+sessionInfo.lisp
 
 ttt/src/*.fasl
 ttt/src/operators/*.fasl
