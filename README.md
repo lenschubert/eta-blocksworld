@@ -1,29 +1,33 @@
 
-# Lissa tutorial (Ver 1 - 06/18/19):
+# Lissa Blocksworld (Ver 1 - 06/19/19):
 
-This tutorial is meant to demonstrate how Lissa pattern transduction works.
-There are two components to this tutorial: gist clause extraction, and ULF extraction.
+Currently this is just a skeleton dialogue. The dialogue can be run by starting SBCL and
+doing `(load "start.lisp")`. The dialogue begins with a getting-to-know question (currently
+just asking the user for their name), listens for a reply, and reacts to that.
 
-## Running tests
+Then the system asks 10 "prompt" questions. Currently, the gist clause extracted for each
+user query is just the query itself prepended by "Spatial question :". The system will
+currently just react to each query by echoing the query back to the user. Additionally,
+for spatial questions, the system will try to extract ulf from the gist clauses and attach
+those as features to that action in the dialogue plan.
 
-To view and edit the rule files for both of these components, see `rules-input-gist.lisp` and `rules-input-ulf.lisp`.
-Both files contain comments describing how the pattern matching algorithm and syntax work.
+The most pressing things to do right now:
+* Connect inputs/outputs with Georgiy's blocksworld system:
+  - Text would need to be taken from the ASR output rather than the command line. Much of this functionality should already be
+    in place from the elderly study, however.
+  - The ulf extracted at each step would need to be relayed to Georgiy's system for processing.
+  - The output response from Georgiy's system would need to be hooked back up to the response rule
+    file (which currently just echoes the user's query back to them - see `rules/spatial-question/rules-for-spatial-question-reaction.lisp`).
 
-To test the components, start SBCL and do `(load "test")`. The program will prompt you for whether you're testing
-the gist clause extraction or ULF extraction. Enter `g` for the former, and `u` for the latter. The program will also
-prompt you if you want verbose printing, which will print the extracted and expected results for each test. The program
-will run each test case and return the fraction that were correct.
+* Expanding the gist clause rule files:
+  - Creating rules to catch non-query questions and inputs from the user - see `rules/choose-reaction-to-input.lisp`. Currently,
+    in that file, the only question that's detected is "what is your name", from the getting-to-know stage, in case the user asks
+    the system for its name. We would need to expand that with possible questions that aren't actual queries. We can't simply detect
+    any wh_ question for example, since some wh_ questions will be queries and should be processed differently.
+  - Creating the rules to simplify user queries before the ulf is extracted, by smoothing over interjections for instance. These should
+    be implemented in `rules/spatial-question/rules-for-spatial-question-input.lisp`.
+  - Finding some way to use the previous utterance to help extract gist clauses. Not yet sure how this should be done, but it would be
+    impemented in `rules/choose-gist-clause-trees-for-input.lisp`.
 
-Initially, the rule files aren't complete: the gist test cases get `10/15` correct, and the ULF test cases get `5/15` correct.
-It's up to you to help improve them!
-
-To view the test cases as well as to add your own, see `test.lisp`.
-
-## Simulating Lissa
-
-To see the gist clause extraction in action, you can start SBCL and do `(load "start")`. Lissa will ask a single question
-about "how did you get here today?", and then will echo the extracted gist clause back to you.
-
-For fun, you can also change Lissa's reactions to your answer, as well as reactions to a question you might ask, in
-`rules-for-reaction.lisp` and `rules-for-question.lisp`, respectively. Note that the pattern matching syntax here is
-the same as in the gist clause extraction, except without the topic key and with an :out directive instead of :gist.
+* Expanding the ulf rule files:
+  - Len is primarily working on this, and I will incorporate his changes in `rules/spatial-question/rules-for-spatial-question-ulf.lisp`.
