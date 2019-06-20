@@ -76,7 +76,8 @@
                     ((furthest farthest) 'far.a) (nearest 'near.a)
                     (closest 'close.a) (highest 'high.a) (tallest 'tall.a)
                     (nearest 'near.a) (topmost 'top.a)
-                    (t (intern (format nil "~a.A" (stem-superlative word-sym)))))))
+                    (t (intern (format nil "~a.A" (stem-superlative word-sym))))))
+         (adv (intern (format nil "~a.ADV-A" word-sym))) )
  )); end of lex-ulf!)
                    
 
