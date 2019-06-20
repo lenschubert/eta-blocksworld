@@ -1,8 +1,8 @@
 
 ; NIL for text mode
 ; T for speak mode
-(defparameter *mode* t)
-;; (defparameter *mode* NIL)
+;; (defparameter *mode* t)
+(defparameter *mode* NIL)
 (defparameter *user-id* NIL)
 
 ; sessionInfo.lisp should be as following
@@ -97,3 +97,5 @@
 (setf *default-pathname-defaults* *root-dir*)
 
 (lissa *mode*)
+
+(setf *default-pathname-defaults* *root-dir*)
