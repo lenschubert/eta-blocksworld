@@ -2574,11 +2574,13 @@ with the characters in LIST-OF-CHARACTERS."
 
 
 (DEFUN ATTACHFEAT (LIST)
- ; Add the first element of LIST to the FEATS list
- ; of each remaining element
-  (MAPC 
-      #'(lambda (X) (setf (get X 'FEATS) (cons (car LIST) (get X 'FEATS))))
-    (CDR LIST) ))
+ ; Add the first element of LIST to the FEATS list ; of each 
+ ; remaining element; allow for symbolic atoms as features only
+  (MAPC #'(lambda (X)
+            (if (not (find (car LIST) (get X 'FEATS)))
+                (setf (get X 'FEATS) (cons (car LIST) (get X 'FEATS)))))
+          (CDR LIST)
+  )); end of ATTACHFEAT
 
 
 (DEFUN READRULES (rootname packet); modified June 26/15; 
