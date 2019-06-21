@@ -1062,9 +1062,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ; Lissa action:
               (setq lissa-clauses 
                            (get lissa-action-name 'gist-clauses))
-            ; (format t "~%LISSA action name is ~a" lissa-action-name)
-            ; (format t "~%LISSA gist clauses that the user is responding to ~
-             ;           ~% = ~a " lissa-clauses); DEBUGGING
+             (format t "~%LISSA action name is ~a" lissa-action-name)
+             (format t "~%LISSA gist clauses that the user is responding to ~
+                        ~% = ~a " lissa-clauses); DEBUGGING
               ; (In future we might instead or in addition use
               ;     (get lissa-action-name 'interpretation).)
               ; Compute the "interpretation" (gist clauses) of the
@@ -1792,31 +1792,11 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; will become simpler, based on the gist clauses extracted from
 ; the input.
 ;
-; We use 3 sorts of strategies in extracting gist clauses,
-; based on three choice trees aimed at each of the user
-; responses to Lissa's questions:
-;
-; - pattern-match successive 10-word windows, shifted 5 words
-;   at a time (but including any immediately preceding negation
-;   word, like "no", "not", "don't", "cannot" or "never" in
-;   the 10-word window; accumulate results, remove duplicates;
-;
-;   This might use choice trees such as
-;      *specific-answer-from-major-input*,
-;      *specific-answer-from-favorite-class-input*,
-;      etc.
-;
-; - do a kind of statistical pattern match where we look
-;   for as many words/phrases of a particular category as
-;   possible (e.g., names of TV series, names of restaurants,
-;   literature references like fiction/nonfiction/book/novel/
-;   read/journal/...); prevalence of certain types of phrases
-;   tend to indicate a preference or interest.
-;
-;   This might use choice trees such as
-;       *thematic-answer-from-major-input*,
-;       *thematic-answer-from-favorite-class-input*,
-;       etc.
+; BEN UPDATE 6/20/19:
+; For the purposes of the Blocksworld application, this function
+; has been modified to only use one strategy for extracting gist
+; clauses, which simply uses the entire input (in addition to
+; potentially looking for a final question).
 ;
 ; - look for a final question -- either yes-no, starting
 ;   with auxiliary + "you{r}", or wh-question, starting with
@@ -1828,116 +1808,37 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;   This might use choice trees such as
 ;       *question-from-major-input*,
 ;       *question-from-favorite-class-input*,
-;       etc.
-;
-;   Sometimes there are final suggestions instead of questions,
-;   like "you should check it out"; those might be worth looking
-;   for (& replying "Maybe I will", or just "OK", and then go on).
-;
-;   If implemented, this might use choice trees such as
-;       *suggestion-from-major-input*,
-;       *sggestion-from-favorite-moview-input*
-;       etc.
-;   [** Not handled yet]    
+;       etc. 
 ;
  (let ((n (length words)) tagged-prior-gist-clause relevant-trees 
-        specific-content-tree unbidden-content-tree thematic-content-tree
-        question-content-tree chunks tagged-chunk clause keys specific-answers
-        unbidden-answers thematic-answer question facts gist-clauses)
+        specific-content-tree question-content-tree chunks tagged-chunk
+        clause keys specific-answers  question facts gist-clauses)
       ;
       ; Form specific answer clauses from input
       ; ```````````````````````````````````````
-      ; Form successive 10-word chunks of 'words', stepping forward
-      ; 5 words at a time. But include immediately preceding negative
-      ; words at the beginning of chunks. (If 'words' is 15 words or 
-      ; less, use a single 15-word chunk.)
       ;(format t "~% prior-gist-clause =" prior-gist-clause)
       (setq tagged-prior-gist-clause 
             (mapcar #'tagword prior-gist-clause))
       ;(format t "~% tagged prior gist clause = ~a" tagged-prior-gist-clause)
-      ; Find the (three) gist-clause extraction trees corresponding
-      ; to 'tagged-prior-gist-clause':
       (setq relevant-trees 
             (cdr ; drop the :subtrees directive from the result
               (choose-result-for 
                 tagged-prior-gist-clause '*gist-clause-trees-for-input*)))
-      ; *********************** HERE ************************************
-      ; there is a problem here
-      ; for garbage plate the following clue is NIL, while it should be 
-      ; something like this:
-      ;    (SUBTREES *SPECIFIC-ANSWER-FROM-MAJOR-INPUT*
-      ;              *UNBIDDEN-ANSWER-FROM-MAJOR-INPUT*
-      ;              *THEMATIC-ANSWER-FROM-MAJOR-INPUT*
-      ;              *QUESTION-FROM-MAJOR-INPUT*)
 
       ;(choose-result-for tagged-prior-gist-clause '*gist-clause-trees-for-input*)          
       ;(format t "~% this is a clue == ~a" (choose-result-for tagged-prior-gist-clause '*gist-clause-trees-for-input*))
       ;(format t "~% relevant trees = ~a" relevant-trees)          
       (setq specific-content-tree (first relevant-trees)
-            unbidden-content-tree (second relevant-trees)
-            thematic-content-tree (third relevant-trees)
             question-content-tree (fourth relevant-trees))
 
-      (setq chunks (form-chunks words))
-      ; (format t "~% chunks = ~a" chunks) 
-      ; Apply the 'specific-content-tree' and the 'unbidden-content-tree'
-      ; to each chunk, and collect any non-nil results, also storing
-      ; them in *gist-kb* under the key that is returned along with
-      ; any factual gist clause by the tree search (this will in 
-      ; particular enable Lissa to tell later if a question about
-      ; to be asked of the user has already been answered; also,
-      ; in future we might generate inferences from gist clauses):
-      (dolist (chunk chunks)
-         (setq tagged-chunk (mapcar #'tagword chunk))
-         (setq clause 
-           (cdr ; drop the :gist directive
-             (choose-result-for tagged-chunk specific-content-tree)))
-         ; here the clause should be a gist but it is not (BBQ question)
-         ;(format t "~% tagged-chunk = ~a" tagged-chunk)
-         ;(format t "~% specific-content-tree = ~a" specific-content-tree) 
-         ;(format t "~% before clause = ~a" (choose-result-for tagged-chunk specific-content-tree))
-         ;(format t "~% clause = ~a" clause)
-         (when clause ; this is of form (wordlist keys)
-            (setq keys (second clause))
-            ;(format t "~% clause = ~a" clause)
-            (store-fact (car clause) keys *gist-kb*)
-            (push (pop clause) specific-answers); save, w/o keys
-            ;(format t "~% clause = ~a" clause)
-            ;(format t "~% keys = ~a" keys)
-            ;(format t "~% knowledge = ~a" (gethash keys *gist-kb*))
-         )
-
-         (setq clause 
-           (cdr ; drop the :gist directive
-             (choose-result-for tagged-chunk unbidden-content-tree)))
-         (when clause 
-            (setq keys (second clause))
-            (store-fact (car clause) keys *gist-kb*)
-            (push (pop clause) unbidden-answers) )
-      ); end dolist
-  
-      (if specific-answers
-          (setq specific-answers 
-             (reverse (remove-duplicates specific-answers :test #'equal))))
-             ; Lissa's reaction will depend especially on the first
-             ; specific answer, which is likely to be the one most
-             ; directly answering Lissa's question
-
-      (if unbidden-answers
-          (setq unbidden-answers
-             (reverse (remove-duplicates unbidden-answers :test #'equal))))
-
-      ; Form thematic answer from lengthy input
-      ; ```````````````````````````````````````
-      (if (> n 15)
-          (setq thematic-answer
-            (cdr ; drop the :gist directive
-              (choose-result-for 
-                 (mapcar #'tagword words) thematic-content-tree))))
-      (when thematic-answer
-         (setq keys (second thematic-answer))
-         (setq thematic-answer (car thematic-answer))
-         (store-fact (car thematic-answer) keys *gist-kb*) )
+      (setq specific-answer
+      (cdr ; drop the :gist directive
+          (choose-result-for 
+            (mapcar #'tagword words) specific-content-tree)))
+      (when specific-answer
+         (setq keys (second specific-answer))
+         (setq specific-answer (car specific-answer))
+         (store-fact (car specific-answer) keys *gist-kb*) )
 
       ; Form final question from input
       ; ``````````````````````````````
@@ -1953,12 +1854,10 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
       ; property of the name of the user input. So, concatenate
       ; the above results; in reacting, Lissa will pay particular
       ; attention to the first clause, and any final question.
-      (setq facts specific-answers)
-      (if thematic-answer 
-          (setq facts (append facts (list thematic-answer))))
+      (setq facts (list specific-answer))
       (setq gist-clauses facts)
       (if question
-          (setq gist-clauses  (append facts (list question))))
+          (setq gist-clauses (append facts (list question))))
 	
 	  ; Modified to allow arbitrary unexpected inputs to be processed. -PM
       (if NIL ;(null gist-clauses)
