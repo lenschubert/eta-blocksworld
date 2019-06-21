@@ -115,6 +115,10 @@
     2 *wh-question-ulf-tree* (0 :subtree)
    1 (prep 2 wh_ 0) ; e.g., "On top of which block is the NVidia block ?"
     2 *ppwh-question-ulf-tree* (0 :subtree)
+   1 (0 block 0); last resort
+    2 *fallback-spatial-question-ulf-tree* (0 :subtree) 
+   1 (0 table 0)
+    2 *fallback-spatial-question-ulf-tree* (0 :subtree)
  ))
 
 
@@ -269,15 +273,23 @@
     2 (where be det 2 noun ?)
      3 (((lex-ulf! wh-pred 1) (lex-ulf! v 2) (*np-ulf-tree* 3 4 5) ?)
         ((sub 1 (2 3 *h)) ?)) (0 :ulf-recur)
+   1 (where be there 0); interpret like a y/n-question, i.e., drop the "where"
+    2 (((*yn-question-ulf-tree* 2 3 4)) 1) (0 :ulf-recur)
    1 (wh-det noun be prep 3 det 3 ?); e.g., what/which/whose block is to the left
                                    ; of the Nvidia block ?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) (*rel-ulf-tree* 4 5) 
         (*np-ulf-tree*  6 7) ?) (((1 2) (3 (4 5))) ?)) (0 :ulf-recur)
+   1 (what be prep 3 det 3 ?)
+    2 ((what.pro (lex-ulf! v 2) (*pp-ulf-tree* 3 4 5 6) ?) 
+       ((1 (2 3)) ?)) (0 :ulf-recur)
    1 (what color noun be prep 3 det 3 ?); e.g., what color block is to the left
                                         ; of the Nvidia block ? [unusual subj NP!]
     2 (((lex-ulf! det 1) (lex-ulf! adj 2) (lex-ulf! noun 3) (lex-ulf! v 4) 
        (*rel-ulf-tree* 5 6) (*np-ulf-tree*  7 8) ?) (((1 (2 3)) (4 (5 6))) ?)) 
        (0 :ulf-recur)
+   1 (what color be the 0 ?)
+    2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) (*np-ulf-tree* 4 5))
+       ((sub ({of}.p (1 2)) (3 4 *h)) ?)) (0 :ulf-recur)
    1 (wh-det noun be the 2 prep 2 prep ?); e.g., What/which block is the NVidia block
                                         ; on top of [to the left of]?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) the.d (*n1-ulf-tree* 5)
@@ -317,5 +329,62 @@
   ; add further rules, e.g., for "On what blocks are there other blocks ?", or
   ; "On how many blocks is the Target block resting/placed/supported/positioned ?"
  ))
+
+
+(READRULES '*fallback-spatial-question-ulf-tree* ;
+  ; These rules should be accesed as last resort by *spatial-question-ulf-tree*
+  ; For the most part, these rules just allow for ignoring some words here and
+  ; there, but there are also some reformulations (e,g., "support" relations)
+ '(1 (4 where 2 det 2 block 2)
+    2 (((*wh-question-ulf-tree* where is 4 5 6 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (4 where be there 0)
+    2 (((*fallback-spatial-question-ulf-tree* 3 4 5)) 1) (0 :ulf-recur)
+   1 (4 wh-det 1 color be det 1 block 2)
+    2 (((*wh-question-ulf-tree* 2 4 5 6 7 8 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-det 1 color 1 block be 1 prep 3 noun 2)
+    2 (((*wh-question-ulf-tree* what color block is 8 9 10 11 ?)) 
+       (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-pron be 2 sup-adj 2 noun 2)
+    2 (((*wh-question-ulf-tree* 2 3 the 5 6 7 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-det 2 noun be the sup-adj 2); e.g., which red block is the highest up?
+    2 (((*wh-question-ulf-tree* which is the 7 3 4 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (8 sup-adj 2 noun 5); desperation rule for a superlative
+    2 (((*wh-question-ulf-tree* which is the 2 3 4 ?)) (poss-ques 1)) (0 :ulf-recur) 
+   1 (4 wh-pron be the 2 noun 1 be 1 prep 3 det 2 noun 5)
+    2 (((*wh-question-ulf-tree* what is 4 5 6 that is 9 10 11 12 13 14 ?))
+       (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-det 2 noun be 1 prep 3 det 2 noun 5)
+    2 (((*wh-question-ulf-tree* which 3 4 is 6 7 8 9 10 11 ?))
+       (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-det 2 noun be supporting det 2 noun 2); transform to on-relation
+    2 (((*wh-question-ulf-tree* on 2 3 4 is 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (4 wh-det 2 noun be 1 supported by det 2 noun 2); transform to on-relation
+    2 (((*wh-question-ulf-tree* 2 3 4 5 on 9 10 11 ?)) (poss-ques 1)) (0 :ulf-recur) 
+   1 (2 be 1 det 2 noun 2 prep 3 det 3 noun 2)
+    2 (((*yn-question-ulf-tree* 2 4 5 6 8 9 10 11 12 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (2 be pron 2 prep 3 det 3 noun 2) 
+    2 (((*yn-question-ulf-tree* 2 3 5 6 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (2 be 1 det 2 noun 2 prep 3 pron 2)
+    2 (((*yn-question-ulf-tree* 2 4 5 6 8 9 10 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (2 be det 2 noun 1 adj 2)
+    2 (((*yn-question-ulf-tree* 2 3 4 5 7 ?)) (poss-ques 1)) (0 :ulf-recur)
+   ; More can/should be added
+   1 (0 det 2 block 0)
+    2 (I\'m asking about a 3 4 \, but you didn\'t catch what it was) (0 :out)
+   1 (0 det table 0)
+    2 (I referred to the table\, but you didn\'t catch what I said) (0 :out)
+ ))  
+ 
+
+;  ; borrowed stuff, for reference:
+;   2 *yn-question-ulf-tree* (0 :subtree)
+;  1 (modal 0)      ; e.g., "Can you see the NVidia block ?
+;   2 *modal-question-ulf-tree* (0 :subtree)
+;  1 (wh_ 0)
+;   2 *wh-question-ulf-tree* (0 :subtree)
+;  1 (prep 2 wh_ 0) ; e.g., "On top of which block is the NVidia block ?"
+;   2 *ppwh-question-ulf-tree* (0 :subtree)
+
+
 
 ); end of eval-when
