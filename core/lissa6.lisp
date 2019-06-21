@@ -1927,10 +1927,10 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;
 ; Use hierarchical choice trees for extracting the ULF.
 ;
- (let (tagged-clause)
+ (let (tagged-clause pattern)
       (setq tagged-clause (mapcar #'tagword clause))
-      (choose-result-for tagged-clause '*clause-ulf-tree*)
- )); end of form-ulf-from-clause
+      (setq pattern (choose-result-for tagged-clause '*clause-ulf-tree*))
+ pattern)); end of form-ulf-from-clause
 
 
 (defun write-ulf (ulf)
