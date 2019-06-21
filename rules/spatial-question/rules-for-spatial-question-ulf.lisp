@@ -113,6 +113,8 @@
     2 *modal-question-ulf-tree* (0 :subtree)
    1 (wh_ 0)
     2 *wh-question-ulf-tree* (0 :subtree)
+   1 (how 0)
+    2 *wh-question-ulf-tree* (0 :subtree)
    1 (prep 2 wh_ 0) ; e.g., "On top of which block is the NVidia block ?"
     2 *ppwh-question-ulf-tree* (0 :subtree)
    1 (0 block 0); last resort

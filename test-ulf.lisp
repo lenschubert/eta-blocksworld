@@ -1,6 +1,11 @@
 ;; File for testing example rule files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; NOTES:
+;; ' IS THERE A GREEN BLOCK BETWEEN THE HIGHEST RED BLOCK AND THE NVIDIA BLOCK ?' fails
+;; 'HOW MANY RED BLOCKS ARE ON THE NVIDIA BLOCK ?' fails
+
 ;; Load ttt and core Lissa functions
 (load "ttt/src/load")
 (defparameter *use-latency* nil)
