@@ -6,7 +6,11 @@
 (eval-when (load eval)
   (MAPC 'ATTACHFEAT
   '(
+    (spatial-words noun supporting corp rel-adj qual-adj sup-adj
+      uppermost under touching farthest rotated)
+    (kinds types sorts kind type sort formats format)
     (question questions)
+    (answer understand hear interpret parse)
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
       Starbucks Texaco Target Toyota )
     (block blocks cube cubes book books black glock 
@@ -48,14 +52,19 @@
   ;
   (READRULES '*specific-answer-from-spatial-question-input*
   '(
-    ;; 1 (0 det 2 block prep 2 det 2 block 0)
-    ;;   2 ((Spatial question \: 2 3 4 5 6 7 8 9)) (0 :gist)
-    ;; 1 (0 be there det 2 block prep 2 det 2 block 0)
-    ;;   2 ((Spatial question \: 2 there 4 5 6 7 8 9 10 11 ?)) (0 :gist)
-    ;; 1 (0)
-    ;;   2 ((NIL Gist \: Lissa could not understand my question \.)) (0 :gist)
+    1 (0 spatial-words 0)
+      2 ((spatial-question 1 2 3)) (0 :gist)
+    ;; ------------------------------
+    ;; ADD "SMALL TALK" PATTERNS HERE
+    ;; ------------------------------
+    1 (0 wh_ 1 your name 0)
+      2 ((What is your name ?)) (0 :gist)
+    1 (0 aux you 1 answer 3 question 0)
+      2 ((Can you answer my question ?)) (0 :gist)
+    1 (0 wh_ 1 kinds 2 question 1 aux you 1 answer 0)
+      2 ((What questions can you answer ?)) (0 :gist)
     1 (0)
-      2 ((Spatial question \: 1)) (0 :gist)
+      2 ((NIL Gist \: Lissa could not understand my question \.)) (0 :gist)
   ))
   
   (READRULES '*thematic-answer-from-spatial-question-input*
@@ -67,8 +76,6 @@
 		
   (READRULES '*question-from-spatial-question-input*
   '(
-    1 (0 aux you 1 answer 3 question 0)
-      2 ((Can you answer my question ?)) (0 :gist)
   ))
 
 ); end of eval-when

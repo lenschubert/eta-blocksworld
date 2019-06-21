@@ -4,7 +4,8 @@
 
 ;; NOTES:
 ;; ' IS THERE A GREEN BLOCK BETWEEN THE HIGHEST RED BLOCK AND THE NVIDIA BLOCK ?' fails
-;; 'HOW MANY RED BLOCKS ARE ON THE NVIDIA BLOCK ?' fails
+;; ' HOW MANY RED BLOCKS ARE ON THE NVIDIA BLOCK ?' fails
+;; ' WHICH BLUE BLOCK IS THE RIGHTMOST RED BLOCK IN FRONT OF ?' fails
 
 ;; Load ttt and core Lissa functions
 (load "ttt/src/load")
@@ -27,7 +28,7 @@
 ;````````````````````````````
 ; Gets ulf from query
 ;
-  (form-ulf-from-clause (append '(Spatial question \:) query)))
+  (form-ulf-from-clause (cons 'spatial-question query)))
 
 
 (defun test-ulf (query answer)
