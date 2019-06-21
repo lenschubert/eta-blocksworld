@@ -18,6 +18,8 @@
     2 *reaction-to-question* (0 :subtree)
    1 (0 wh_ 1 questions 1 aux you 1 answer 0)
     2 *reaction-to-question* (0 :subtree)
+   1 (0 aux you 0)
+    2 *reaction-to-question* (0 :subtree)
    1 (0); by default, it's an assertion
     2 *reaction-to-assertion* (0 :subtree)
  ))

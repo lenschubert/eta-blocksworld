@@ -61,6 +61,8 @@
       2 ((What is your name ?)) (0 :gist)
     1 (0 aux you 1 answer 3 question 0)
       2 ((Can you answer my question ?)) (0 :gist)
+    1 (0 aux you 0)
+      2 ((Can you do something ?)) (0 :gist)
     1 (0 wh_ 1 kinds 2 question 1 aux you 1 answer 0)
       2 ((What questions can you answer ?)) (0 :gist)
     1 (0)
