@@ -7,11 +7,11 @@
 ;; ' HOW MANY RED BLOCKS ARE ON THE NVIDIA BLOCK ?' fails
 ;; ' WHICH BLUE BLOCK IS THE RIGHTMOST RED BLOCK IN FRONT OF ?' fails
 
-;; Load ttt and core Lissa functions
+;; Load ttt and core Eta functions
 (load "ttt/src/load")
 (defparameter *use-latency* nil)
 (defparameter *count* 0)
-(load "core/lissa6.lisp")
+(load "core/eta.lisp")
 (load "core/general-word-data.lisp")
 (load "core/eval-lexical-ulfs.lisp")
 (load "core/stem.lisp")

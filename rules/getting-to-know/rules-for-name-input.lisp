@@ -18,7 +18,7 @@
   1 (0 american-names 0)
      2 ((My name is 2 \.)  (name)) (0 :gist)
   1 (0)
-     2 ((LISSA could not understand what my name is \.)  (name)) (0 :gist)
+     2 ((ETA could not understand what my name is \.)  (name)) (0 :gist)
   ))
        
        

@@ -23,19 +23,19 @@
 ;; choice trees for answering (or deflecting) the question.
 ;;
 ;; **We might ultimately allow for more than one schema (plus
-;; arguments) as the value reurned, so that Lissa can exhibit some
+;; arguments) as the value reurned, so that Eta can exhibit some
 ;; variety in the way multiple-clause contributions by the user
 ;; are handled. We could either supply lists of schemas (with
 ;; args), leaving the choice to the planner, or begin with small,
 ;; high-level choice trees that choose among schemas for compound
-;; reactions by Lissa (allowing for latency to avoid repetitiveness).
+;; reactions by Eta (allowing for latency to avoid repetitiveness).
 
 (eval-when (load eval)
 
 (READRULES '*reactions-to-input*
   ; Very rough initial attempt; the rules should be carefully
   ; designed to reflect patterns of input gist clauses responding 
-  ; to Lissa's questions, extracted by *specific-answer-from-...*, 
+  ; to Eta's questions, extracted by *specific-answer-from-...*, 
   ; *thematic-answer-from-...*, and *question-from-...* choice
   ; trees specified in the various "rules-for-...lisp" files for
   ; specific inputs.

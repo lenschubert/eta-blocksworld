@@ -28,7 +28,7 @@
  '(
     1 (my name is 0)
       2 *reaction-to-name-input* (0 :subtree)
-    1 (Lissa 2 not understand 2 my name 0)
+    1 (Eta 2 not understand 2 my name 0)
       2 *reaction-to-name-input* (0 :subtree)
     1 (spatial-question 0) 
       2 *reaction-to-spatial-question-input* (0 :subtree+file)

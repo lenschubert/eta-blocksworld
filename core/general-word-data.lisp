@@ -1,7 +1,6 @@
-; Copied from https://github.com/bkane2/lissa-elderly/blob/master/elderly/Core/general-word-data-5.lisp
 ; June 8/19
 ;=================================================================
-; These are the general word data used by a LISSA1 (initial version
+; These are the general word data used by a ETA1 (initial version
 ; derived as a variant of doolittle). [This file is derived from
 ; data.lisp, but excluding the doolittle rule tree.] They consist of
 ;

@@ -1,4 +1,4 @@
-;; *LISSA-SCHEMA*: development version 6
+;; *ETA-SCHEMA*: development version 6
 ;;
 ;; Dialogue for blocksworld conversation 
 ;; (intro + 10 questions +  outro)
@@ -6,9 +6,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defparameter *lissa-schema*
+(defparameter *eta-schema*
 
-'(Event-schema (((set of me you) have-lissa-dialog.v) ** ?e)
+'(Event-schema (((set of me you) have-eta-dialog.v) ** ?e)
 ;```````````````````````````````````````````````````````````
 ; Blocksworld conversation. This consists of one or two "getting
 ; to know you" type questions, followed by a series of 10 questions.
@@ -17,7 +17,7 @@
 :Actions 
 
 ?a1. (Me say-to.v you 
-      '(Hi I am Lissa\. Insert introduction here\.))
+      '(Hi I am Eta\. I\'m here to help answer some spatial questions for you\.))
 
 ?a2. (Me say-to.v you 
       '(Before we begin\, would you mind telling me what your name is?))
@@ -112,14 +112,14 @@
         '(Excellent questions\, but unfortunately all that
           thinking has been very tiring\, so I need to take a break now\.))
 
-)); end of defparameter *lissa-schema*
+)); end of defparameter *eta-schema*
 
 
 
 
 
 
-(setf (get '*lissa-schema* 'semantics) (make-hash-table))
+(setf (get '*eta-schema* 'semantics) (make-hash-table))
 ;````````````````````````````````````````````````````````
 ; EL Semantics - Not yet used
 ;
@@ -128,14 +128,14 @@
 ); end of store-output-semantics
 
 (mapcar #'(lambda (x)
-      (store-output-semantics (first x) (second x) '*lissa-schema*))
+      (store-output-semantics (first x) (second x) '*eta-schema*))
   '()
 ); end of mapcar #'store-output-semantics
 
 
 
 
-(setf (get '*lissa-schema* 'gist-clauses) (make-hash-table))
+(setf (get '*eta-schema* 'gist-clauses) (make-hash-table))
 ;````````````````````````````````````````````````````````
 ; Gist clauses
 ;
@@ -144,7 +144,7 @@
 ); end of store-output-gist-clauses
 
 (mapcar #'(lambda (x) 
-      (store-output-gist-clauses (first x) (second x) '*lissa-schema*))
+      (store-output-gist-clauses (first x) (second x) '*eta-schema*))
   '(
     (?a2.  ((what is your name ?)))
     (?a5.  ((do you have a spatial question ?)))
@@ -163,7 +163,7 @@
 
 
 
-(setf (get '*lissa-schema* 'topic-keys) (make-hash-table))
+(setf (get '*eta-schema* 'topic-keys) (make-hash-table))
 ;````````````````````````````````````````````````````````
 ; Topic keys
 ;
@@ -172,7 +172,7 @@
 ); end of store-topic-keys
 
 (mapcar #'(lambda (x) 
-      (store-topic-keys (first x) (second x) '*lissa-schema*))
+      (store-topic-keys (first x) (second x) '*eta-schema*))
   '(
     (?a2.  (name))
     (?a5.  (spatial-question1))

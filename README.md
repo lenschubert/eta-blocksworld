@@ -1,9 +1,11 @@
 
-# Lissa Blocksworld (Ver 1 - 06/19/19):
+# Eta Blocksworld (Ver 1 - 06/21/19):
 
-Currently this is just a skeleton dialogue. The dialogue can be run by starting SBCL and
-doing `(load "start.lisp")`. The dialogue begins with a getting-to-know question (currently
-just asking the user for their name), listens for a reply, and reacts to that.
+NOTE: Readme to be updated soon.
+
+The dialogue can be run by starting SBCL and doing `(load "start.lisp")`. The dialogue begins
+with a getting-to-know question (currently just asking the user for their name), listens for a 
+reply, and reacts to that.
 
 Then the system asks 10 "prompt" questions. Currently, the gist clause extracted for each
 user query is just the query itself prepended by "Spatial question :". The system will

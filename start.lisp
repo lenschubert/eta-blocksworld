@@ -62,8 +62,8 @@
 ;
 (setf *temp-dir* "core")
 (setf *default-pathname-defaults* (truename *temp-dir*))
-(load "lissa6")
-(load "lissa6-schema.lisp")
+(load "eta")
+(load "eta-schema.lisp")
 (load "general-word-data.lisp")
 ;; (load "choose-gist-clause-trees-for-input.lisp")
 ;; (load "choose-reaction-to-input.lisp")
@@ -96,6 +96,6 @@
 (load "spatial-question/rules-for-spatial-question-ulf.lisp")
 (setf *default-pathname-defaults* *root-dir*)
 
-(lissa *mode*)
+(eta *mode*)
 
 (setf *default-pathname-defaults* *root-dir*)

@@ -66,7 +66,7 @@
     1 (0 wh_ 1 kinds 2 question 1 aux you 1 answer 0)
       2 ((What questions can you answer ?)) (0 :gist)
     1 (0)
-      2 ((NIL Gist \: Lissa could not understand my question \.)) (0 :gist)
+      2 ((NIL Gist \: Eta could not understand my question \.)) (0 :gist)
   ))
   
   (READRULES '*thematic-answer-from-spatial-question-input*

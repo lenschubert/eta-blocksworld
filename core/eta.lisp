@@ -1,8 +1,8 @@
-;; Copied from https://github.com/bkane2/lissa-elderly/blob/master/elderly/Core/lissa5.lisp
+;; Copied from https://github.com/bkane2/eta-elderly/blob/master/elderly/Core/eta5.lisp
 ;; June 8/19 
 ;; ===========================================================
-;; July 31/15: Modify LISSA4 to associate "gist clauses" and
-;; (for later use) interpretations with user inputs and Lissa 
+;; July 31/15: Modify ETA4 to associate "gist clauses" and
+;; (for later use) interpretations with user inputs and Eta 
 ;; outputs. [UNDER CONSTRUCTION]
 ;;
 ;; For inputs, we use the question it answers to create a list
@@ -11,10 +11,10 @@
 ;; i.e., the content of an utterance most likely to be needed
 ;; to understand the next turn in the dialogue. The intent is that
 ;; logical interpretations will later play that role, and this
-;; has been initiated by supplying a hash table of (some) Lissa 
+;; has been initiated by supplying a hash table of (some) Eta 
 ;; output interpretations,
 ;;     *output-semantics*
-;; (which uses keys such as (*lissa-schema* ?a3.) along with the
+;; (which uses keys such as (*eta-schema* ?a3.) along with the
 ;; hash table of gist clauses,
 ;;     *output-gist-clauses*
 ;; (indexed in the same way). These tables can be used to set up
@@ -23,7 +23,7 @@
 ;; schemas.
 ;;
 ;; One important goal in setting up these tables is to be able
-;; later to match certain user inputs to Lissa question gists/
+;; later to match certain user inputs to Eta question gists/
 ;; interpretations, to see if the inputs already answer the
 ;; questions, making them redundant. 
 ;;
@@ -37,9 +37,9 @@
  ; classifies inputs by their general form (instead of by keyword).]
 	
  ; To run the program, do the following (while in the present
- ; lissa directory):
+ ; eta directory):
  ; lisp
- ; (load "start-lissa5")
+ ; (load "start-eta5")
 
 (defun initialization () ; initialize global parameters
 ;``````````````````````
@@ -64,8 +64,8 @@
   ;(defvar *memory*) ; another doolittle relic: a list of saved responses,
   ;                  ; to be used to revert to an earlier exchange, if 
   ;                  ; no better options remained. This idea may still be
-  ;                  ; relevant to Lissa.
-  (defvar *count* 0); number of Lissa outputs generated so far (maintained
+  ;                  ; relevant to Eta.
+  (defvar *count* 0); number of Eta outputs generated so far (maintained
                     ; for latency enforcement, i.e., not repeating a previously
                     ; used response too soon).
   
@@ -73,7 +73,7 @@
   (defparameter *live* nil); *live* = T indicates "live usage", i.e.,
                   ; with the avatar; *live* = nil is for terminal use.
   
-  ; NOTE: Instead of doolittle's "contexts", Lissa has USE-CHOICE-TREE
+  ; NOTE: Instead of doolittle's "contexts", Eta has USE-CHOICE-TREE
   ; and USE-SCHEMA "directives" in its reassembly rules, giving the name
   ; of another choice tree or schema to be used to construct a step or 
   ; steps for a subplan.
@@ -82,24 +82,24 @@
   ; atoms in "contexts" (as specified in reassembly rules) that enabled
   ; repetitive return to the same "region" of the doolittle choice tree,
   ; maintaining topical focus. This may also turn out to be relevant to
-  ; Lissa, although currently we attempt to maintain topical consistency
-  ; in Lissa by (a) following sequences of steps, and (b) computing "gist
+  ; Eta, although currently we attempt to maintain topical consistency
+  ; in Eta by (a) following sequences of steps, and (b) computing "gist
   ; clauses" or interpretations based on the user input, which should reveal
   ; the current theme unambiguously, and thus enable making relevant
   ; response choices.
   ;
   (defvar *tracerules* NIL); can be set to T to activate rule-tracing
   
-  (defvar *lissa-count*); ** I'm no sure why this new var is used in addition
-                        ;    to *count*, which also counts Lissa outputs-LKS
-  (setq *lissa-count* 0)
+  (defvar *eta-count*); ** I'm no sure why this new var is used in addition
+                        ;    to *count*, which also counts Eta outputs-LKS
+  (setq *eta-count* 0)
   
   ; Other global parameters used here, but whose values are set elsewhere,
   ; are:  ***THIS NEEDS UPDATING
   ;      *next-input*
   ;      *output-semantics*
   ;      *output-gist-clauses*
-  ;      *lissa-schema* (top-level schema) & possibly many subschemas
+  ;      *eta-schema* (top-level schema) & possibly many subschemas
   ;      *reactions-to-input* (top-level choice tree for selecting a
   ;         schema or subtree to react to a user turn (possibly multiple
   ;         extracted "gist clauses")
@@ -127,7 +127,7 @@
  ); end of initialization
 
 
-(defun lissa (live); Sep 2/15: live = t: avatar mode; live = nil: terminal
+(defun eta (live); Sep 2/15: live = t: avatar mode; live = nil: terminal
  ;;              ; We set global variable *live* = live, for use elsewhere
  ;; Main program: Originally handled initial and final formalities,
  ;; (now largely commented out) and controls the loop for producing,
@@ -139,11 +139,11 @@
         )
         (initialization)
         (setq *live* live)
-        ; Though the initial name-inquiry is not used in Lissa, let's
+        ; Though the initial name-inquiry is not used in Eta, let's
         ; keep it around because it involves iteration -- something
         ; currently not allowed for in the schema/plan action syntax,
         ; but eventually should be (along with conditional branching)!
-	;(format t "~%... HELLO, I AM LISSA.")
+	;(format t "~%... HELLO, I AM ETA.")
 	;(format t "~%... WHAT'S YOUR NAME?~%")
     ;NAME (SETQ INPUT (READ-WORDS))
 	;(SETQ L (LENGTH INPUT))
@@ -154,7 +154,7 @@
 	;(format t "~%... HI, ~a.~%" NAME)
 	;(SETQ *MEMORY* (LIST (CONC1 '(I GUESS WE'RE DONE\,)
 	;                             (LIST NAME '?) ) '(NIL) ))
-	;(SETQ *MEMORY* '()) ; updated for lissa -- but actually not used
+	;(SETQ *MEMORY* '()) ; updated for eta -- but actually not used
 
 	(setq *count* 0)            ; number of outputs so far	
                                     ; (in doolittle, it was #inputs))
@@ -167,7 +167,7 @@
         ; via properties of atoms. 
         ; (** We might later use structures instead of properties; see 
         ; "structify.lisp".)
-        (initialize-plan '*dialog-plan* '*lissa-schema* nil); args = nil
+        (initialize-plan '*dialog-plan* '*eta-schema* nil); args = nil
         ;(print-current-plan-status '*dialog-plan*); DEBUGGING
         
         ; Next we call 'process-next-action' repeatedly, always
@@ -186,7 +186,7 @@
         ; a say-step) that expands it, and set the 'rest-of-plan'
         ; pointer of the subplan to the first action (i.e., the entire
         ; subplan). 
-        ;    In reacting to user inputs, Lissa will use doolittle-like
+        ;    In reacting to user inputs, Eta will use doolittle-like
         ; generic choice packets as a last resort for unmatchable or
         ; offensive, complimentary, etc., user inputs. But all reactions,
         ; based on a degree of understanding or not, will be formulated
@@ -199,7 +199,7 @@ nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or form a 
 		(if (eq status1 'exit) (go exit)) 
 		;(format t "~%we have exit~%")
 		
-        ; The execution should also increase *count* for each Lissa
+        ; The execution should also increase *count* for each Eta
         ; utterance (needed for output latency enforcement); ultimately
         ; this could also be used for switching to alternative main-script
         ; utterances, to give a user some variety.
@@ -226,7 +226,7 @@ nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or form a 
 exit    (format t "~% ... THANK YOU FOR VISITING,~%") 
         (format t "GOOD-BYE FOR NOW")
         (return '------------------------------------ )
-)) ; end of lissa
+)) ; end of eta
 
 
 ;; Note: An alternative to the following pointer-update function
@@ -411,7 +411,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
   ; propositions names:
   (setf (get prop-name 'wff) 
         (second (get plan-name 'rest-of-plan)))
-  ; If this is a Lissa action, supply the gist clauses, interpretation,
+  ; If this is a Eta action, supply the gist clauses, interpretation,
   ; and topic key list from the hash tables associated with 'schema-name':
   (when (eq 'me (car (get prop-name 'wff)))
         ; (no harm done if any of the schema properties are nil)
@@ -519,7 +519,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
   ; Set the 'wff' property of prop-name to the action wff:
   (setf (get prop-name 'wff) 
         (second (get plan-name 'rest-of-plan)))
-  ; If this is a Lissa action, supply the gist clauses and
+  ; If this is a Eta action, supply the gist clauses and
   ; interpretation from the hash tables associated with 'schema-name':
   (setq schema-name (get plan-name 'schema-name))
   (when (eq 'me (car (get prop-name 'wff)))
@@ -570,7 +570,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 
 (defun process-next-action (plan-name); July 31/15;
 ;````````````````````````````````````` 
-; As currently envisaged, 'plan-name' will always be the main Lissa
+; As currently envisaged, 'plan-name' will always be the main Eta
 ; plan, but in looking for the next action we potentially descend
 ; into subplans.
 ;
@@ -592,8 +592,8 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; to implement the nonprimitive action, with a name pointed to by
 ; the 'subplan' property of 'plan-name'. We hold off on executing the
 ; first step of such a subplan (leaving this to the next iteration
-; of 'process-next-action' as called for in the main lissa program),
-; in order to give the main plan management program (lissa) a chance
+; of 'process-next-action' as called for in the main eta program),
+; in order to give the main plan management program (eta) a chance
 ; to evaluate the "proposed" subplan and possibly make amendments.
 ; [This is just for future enhancements of the system, not immediately
 ; used.] 
@@ -624,22 +624,22 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
         ;;          {sub}plan-name (car rest) (second rest)); DEBUGGING
        (setq wff (second rest))            
 
-       (cond ; First we try to match '(me ...)' (Lissa) actions, typically
+       (cond ; First we try to match '(me ...)' (Eta) actions, typically
            ; one or more sentential utterances. However, the action heading
            ; 'rest-of-plan' may be nonprimitive, e.g., (me react-to.v ...)
            ; (unlike an immediately executable one such as (me say-to.v you
            ; '(...))), in which case it needs to be elaborated into a named
            ; subplan. (If the first step of this subplan, after initialization
            ; of the subplan, is again nonprimitive, the repeated calls to 
-           ; 'process-next-action' in the main Lissa program will continue to
+           ; 'process-next-action' in the main Eta program will continue to
            ; elaborate the subplan until an initial primitive step is posited.)
            ; At present the elaboration process is just use of a choice tree
            ; or subschema that supplies the lower-level action(s) corresponding
            ; to the specified higher-level action.
            ; DEBUGGING
-           ((eq (car wff) 'me) ; Lissa action
-            (progn  (implement-next-lissa-action {sub}plan-name) (print ""))) ; also increments
-                                         ; *count* for primitive lissa actions
+           ((eq (car wff) 'me) ; Eta action
+            (progn  (implement-next-eta-action {sub}plan-name) (print ""))) ; also increments
+                                         ; *count* for primitive eta actions
                                 
            ((eq (car wff) 'you) ; user action (input)
             (observe-next-user-action {sub}plan-name))
@@ -667,7 +667,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
              ((null (get subplan-name 'rest-of-plan)); unexpected: If
                                  ; the subplan is fully executed, then
                                  ; the 'update-rest-of-plan-pointers'-
-                                 ; call in the main lissa program should
+                                 ; call in the main eta program should
                                  ; have advanced the 'rest-of-plan' ptr
                                  ; of the (superordinate) 'plan-name'.
               (format t "~%**'find-curr-{sub}plan' applied to ~a ~
@@ -680,7 +680,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
  )); end of find-next-{sub}action
  
 
-(defun implement-next-lissa-action ({sub}plan-name); July 30/15
+(defun implement-next-eta-action ({sub}plan-name); July 30/15
 ;`````````````````````````````````````````````````
 ; We assume that every {sub}plan name has a 'rest-of-plan' property
 ; pointing to the remainder of the plan that has not been fully executed
@@ -693,7 +693,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;
 ; We assume that this program is called only if the first action of
 ; 'rest-of-plan' of '{sub}plan-name' is already known to be of type
-; (me ...), i.e., an action by Lissa.
+; (me ...), i.e., an action by Eta.
 ;
 ; NOTE FOR THE FUTURE: IT SEEMS THAT THIS PROGRAM COULD ITSELF BE
 ;   REFORMULATED AS A KIND OF CHOICE TREE THAT SELECTS A SUBPLAN
@@ -718,7 +718,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; for realizing the currently due action, and initialize the subplan.
 ;
 ; No part of the new subplan is immediately executed or further
-; elaborated, so that the main Lissa plan manager can in principle
+; elaborated, so that the main Eta plan manager can in principle
 ; check and amend the overall rest of the plan if necessary (e.g.,
 ; add or modify temporal constraints to avoid inconsistencies; more 
 ; radical changes may be warranted for optimizing overall utility).
@@ -728,12 +728,12 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; into single or multiple (me say-to.v you '(...)) subactions.
 ;
  (let* ((rest (get {sub}plan-name 'rest-of-plan))
-        (lissa-action-name (car rest)) (wff (second rest)) bindings 
+        (eta-action-name (car rest)) (wff (second rest)) bindings 
         expr user-action-name user-gist-clauses n user-gist-passage
         main-clause new-subplan-name info topic suggestion query user-ulf)
 
-;      (format t "~%WFF = ~a,~% in the LISSA action ~a being ~
-;                       processed~%" wff lissa-action-name); DEBUGGING
+;      (format t "~%WFF = ~a,~% in the ETA action ~a being ~
+;                       processed~%" wff eta-action-name); DEBUGGING
        (cond 
              ; Saying
              ; ``````
@@ -746,18 +746,18 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ; can be seen from a final question mark -- to be safer, we
               ; could check for wh-words, "you", auxiliaries & other cues),
               ; then use 'topic-keys' and 'gist-clauses' of the current
-              ; lissa-action-name and the *gist-kb* to see if the question
+              ; eta-action-name and the *gist-kb* to see if the question
               ; already seems to have been answered. If so, change the
-              ; {sub}plan to omit the current Lissa action: 
+              ; {sub}plan to omit the current Eta action: 
             ;(format t "~% **** expr is ~a **** ~%" expr)
             ;(format t "~% **** car expr is ~a **** ~%" (car expr))
-              ;(when (obviated-question (car expr) lissa-action-name)
-              ;(format t "~% ****Output of obviated-question**** ~a ~%" (not (null (obviated-question expr lissa-action-name))))
-              (when (not (null (obviated-question expr lissa-action-name)))
+              ;(when (obviated-question (car expr) eta-action-name)
+              ;(format t "~% ****Output of obviated-question**** ~a ~%" (not (null (obviated-question expr eta-action-name))))
+              (when (not (null (obviated-question expr eta-action-name)))
                     (delete-current-action {sub}plan-name)
                     (delete-current-action {sub}plan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
+                    (return-from implement-next-eta-action nil))
                     ; this will also reset the 'rest-of-plan' pointer
                     ; of '{sub}plan-name'.
 
@@ -785,9 +785,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                       ; is handled, as equivalent to (me tell.v you (that ...))
                       (setq new-subplan-name (plan-tell-act expr))
                       ; Bidirectional hierarchy connections:
-                      (setf (get lissa-action-name 'subplan) new-subplan-name)
+                      (setf (get eta-action-name 'subplan) new-subplan-name)
                       (setf (get new-subplan-name 'subplan-of) 
-                                                   lissa-action-name))))
+                                                   eta-action-name))))
              
              ; Reacting
              ; ````````
@@ -812,23 +812,23 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (when (null new-subplan-name)
                     (progn (delete-current-action {sub}plan-name) ;(print "~% We could not find any reaction ~%")
 					)
-                    (return-from implement-next-lissa-action nil))
+                    (return-from implement-next-eta-action nil))
 
               ; 'new-subplan-name' will be the name of a subplan, with either
               ; a single (me say-to.v you '(...)) step, or with multiple
-              ; primitive or nonprimitive steps. Link lissa-action-name to
-              ; this subplan, and conversely link the subplan to lissa-action-
+              ; primitive or nonprimitive steps. Link eta-action-name to
+              ; this subplan, and conversely link the subplan to eta-action-
               ; name, using a 'subplan-of' property (which might at some point
               ; be used in bidirectional plan traversals):
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name)
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name)
               ;(print "~% Step 1 ~%")
               ;(format t "~% user action name is ~a ~%" user-action-name )
               ;(format t "~% the gist clause is ~a ~%" user-gist-clauses )
               
               )
 
-             ; Apart from saying and reacting, assume that Lissa actions
+             ; Apart from saying and reacting, assume that Eta actions
              ; also allow telling, describing, suggesting, asking, saying 
              ; hello, and saying good-bye. 
              ;
@@ -845,7 +845,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                     ;        (ans-to (wh ?x (me have-as.v name.n ?x)))),
                     ; and answer retrieval should bind ?x to a name. Or
                     ; we could have explicit reified propositions such as 
-                    ;    (that (me have-as.v name.n 'Lissa)), or
+                    ;    (that (me have-as.v name.n 'Eta)), or
                     ;    (that (me be.v ((attr autonomous.a) avatar.n))).
                     ; The match variable _! will have as binding the (wh ...)
                     ; expression.
@@ -853,9 +853,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name (plan-tell-act info))
               (when (null new-subplan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+                    (return-from implement-next-eta-action nil))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
 
              ; Describing
              ; ``````````
@@ -890,9 +890,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name (plan-description topic))
               (when (null new-subplan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+                    (return-from implement-next-eta-action nil))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
                     
              ; Suggesting
              ; ``````````
@@ -903,8 +903,8 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ;         (that (you provide-to.v me
               ;                   (K ((attr extended.a) (plur answer.n)))))
               (setq new-subplan-name (plan-suggest-act suggestion))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
 
              ; Asking
              ((setq bindings
@@ -914,9 +914,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name (plan-question query))
               (when (null new-subplan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+                    (return-from implement-next-eta-action nil))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
              
              ; Saying hello
              ; ````````````
@@ -924,9 +924,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name (plan-saying-hello))
               (when (null new-subplan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+                    (return-from implement-next-eta-action nil))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
              
              ; Saying good-bye
              ; ```````````````
@@ -934,13 +934,13 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name (plan-saying-bye))
               (when (null new-subplan-name)
                     (delete-current-action {sub}plan-name)
-                    (return-from implement-next-lissa-action nil))
-              (setf (get lissa-action-name 'subplan) new-subplan-name)
-              (setf (get new-subplan-name 'subplan-of) lissa-action-name))
+                    (return-from implement-next-eta-action nil))
+              (setf (get eta-action-name 'subplan) new-subplan-name)
+              (setf (get new-subplan-name 'subplan-of) eta-action-name))
 
              (T (format t "~%*** UNRECOGNIZABLE STEP ~a " wff))
            )
- )); end of implement-next-lissa-action
+ )); end of implement-next-eta-action
 
 
 (defun observe-next-user-action ({sub}plan-name); Aug 3/15
@@ -951,23 +951,23 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;
 ; We build a two-level plan structure for nonprimitive user
 ; replies (with a (you say-to.v me '(...)) at the primitive
-; level), and (in another Lissa plan iteration) "interpret" 
+; level), and (in another Eta plan iteration) "interpret" 
 ; these replies. The value returned is a pair 
 ;    (<user action name> <corresponding wff>) 
 ; for the step that was processed. (This is not needed but 
 ; may help in debugging.)
 ;
 ; The idea is that we should recognize user actions as being
-; hierarchically organized (just like Lissa actions). 
+; hierarchically organized (just like Eta actions). 
 ; Currently we're just anticipating nonprimitive top-level
 ; actions like 
-;        (you reply-to.v <lissa action>)
+;        (you reply-to.v <eta action>)
 ; that we expand to one further, primitive level of type
 ;        (you say-to.v me '(...)) 
 ; actions. However, in principle, observing a user action
 ; is a plan-recognition process, where for example multiple 
 ; sentences uttered by the user may comprise a sequence of
-; speech acts of different types (just like outputs by Lissa);
+; speech acts of different types (just like outputs by Eta);
 ; as well, the highest-level user plan that is recognized may
 ; fail to match the *expected* type of the user action (but
 ; we're ignoring this possibility for now).
@@ -975,59 +975,59 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; Primitive user actions arise in two ways: First, (you say-to.v
 ; me '(...)) actions are generated here from nonprimitive
 ; (you reply-to.v ...) actions as already mentioned and explained
-; further below. Second, Lissa actions of type (Me react-to.v ...)
-; may generate schema-based subplans that contain multiple Lissa
+; further below. Second, Eta actions of type (Me react-to.v ...)
+; may generate schema-based subplans that contain multiple Eta
 ; comments of type (Me say-to.v you '(...)), where these are
 ; preceded by "hallucinated" user inputs of form (You paraphrase.v
 ; '(...)); here the quoted words comprise a gist clause "attributed"
 ; to the user, i.e., these are treated as implicit versions of 
 ; (parts of) the user's previous actual input that were "para-
-; phrased" by the user in the context of the Lissa question they
+; phrased" by the user in the context of the Eta question they
 ; answer. These "hallucinated" clauses attributed to the user are
-; needed to enable uniform processing of Lissa's reaction to each
+; needed to enable uniform processing of Eta's reaction to each
 ; individual gist clause derived from an actual input.
 ;
 ; To generate a subplan containing a primitive (you say-to.v me 
-; '(...)) action, given a (you reply-to.v <lissa action>) action, 
+; '(...)) action, given a (you reply-to.v <eta action>) action, 
 ; we read the user input, form a wff for the primitive action with
 ; the input word list filled in, generate a plan name for the
 ; simple subordinate plan, and assign a value to that plan name
 ; consisting of a new action name for the primitive action and the
 ; (you say-to.v ...) wff. We don't make interpretation of the 
 ; user input part of the process of generating the primitive 
-; action (though we could, since we have at hand the <lissa action>
+; action (though we could, since we have at hand the <eta action>
 ; to which the user is responding, in the wff (you reply-to.v 
-; <lissa action>)); instead, we derive the interpretation when
+; <eta action>)); instead, we derive the interpretation when
 ; processing the primitive action; this is for consistency with
 ; the general principle that interpretation (including speech act
 ; recognition) should proceed bottom-up (but with the previous 
-; Lissa utterance as context). [However, maybe hierarchical
+; Eta utterance as context). [However, maybe hierarchical
 ; interpretation should be a process separate from hierarchical
 ; plan processing...]
 ; 
 ; So, processing of primitive (you say-to.v me '(...)) actions
 ; should lead to their "interpretation", i.e., extraction of gist
 ; clauses and possibly supplementary information that could
-; obviate later Lissa questions. This requires finding out what
+; obviate later Eta questions. This requires finding out what
 ; the user is replying to, by looking "upward" and "backward" in the
 ; plan hierarchy. Specifically, we need to access the nonprimitive
 ; user action that immediately subsumes the (you say-to.v me ...)
 ; action -- this is accessible via the 'subplan-of' property of
 ; {sub}plan-name -- and the wff of this noprimitive action in turn
-; supplies the name of the Lissa action that the user is responding
-; to. The 'gist-clauses' property of that Lissa action name leads 
+; supplies the name of the Eta action that the user is responding
+; to. The 'gist-clauses' property of that Eta action name leads 
 ; to the desired context information for interpreting the user input 
 ; utterance. (In future the 'interpretation' property is to be used.)
 ; 
  (let* ((rest (get {sub}plan-name 'rest-of-plan))
         (user-action-name (car rest)) (wff (second rest))
-        bindings words user-action-name1 wff1 lissa-action-name 
-        lissa-clauses user-gist-clauses main-clause subplan-name
+        bindings words user-action-name1 wff1 eta-action-name 
+        eta-clauses user-gist-clauses main-clause subplan-name
         user-ulf input)
 ;      (format t "~%WFF = ~a,~%      in the user action ~a being ~
 ;                       processed~%" wff user-action-name); DEBUGGING
        (cond ; we deal with primitive say-actions first (previously
-             ; created from (you reply-to.v <lissa action>)) based on
+             ; created from (you reply-to.v <eta action>)) based on
              ; reading the user input:
              ((setq bindings
                    (bindings-from-ttt-match '(you say-to.v me _!) wff))
@@ -1040,47 +1040,47 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                      
               ; drop the quote
               (setq words (Decompress (second words)))
-              ; Prepare to "interpret" 'words', using the Lissa output
+              ; Prepare to "interpret" 'words', using the Eta output
               ; it is a response to; first we need the superordinate 
               ; action:
               (setq user-action-name1
                     (get {sub}plan-name 'subplan-of))
               ;(format t "~%User action name1 = ~a" user-action-name1); DEBUGGING
              
-			  ; Next we find the Lissa action name referred to in
+			  ; Next we find the Eta action name referred to in
               ; the wff of the (nonprimitive) superordinate action;
               ; this wff is expected to be of form (you reply-to.v
-              ; <lissa action>)
+              ; <eta action>)
               (setq wff1 (get user-action-name1 'wff)); nonprim. wff
 ;             (format t "~%User WFF1 = ~a, if correct,~%            ~
-;                        ends in a LISSA action name" wff1); DEBUGGING
-              (setq lissa-action-name (car (last wff1)))
-              (when (not (symbolp lissa-action-name))
+;                        ends in a ETA action name" wff1); DEBUGGING
+              (setq eta-action-name (car (last wff1)))
+              (when (not (symbolp eta-action-name))
                     (format t "~%***UNEXPECTED USER ACTION ~A" wff)
                     (return-from observe-next-user-action nil))
               ; Next, the "interpretation" (gist clauses) of the 
-              ; Lissa action:
-              (setq lissa-clauses 
-                           (get lissa-action-name 'gist-clauses))
-             ; (format t "~%LISSA action name is ~a" lissa-action-name)
-             ; (format t "~%LISSA gist clauses that the user is responding to ~
-             ;           ~% = ~a " lissa-clauses); DEBUGGING
+              ; Eta action:
+              (setq eta-clauses 
+                           (get eta-action-name 'gist-clauses))
+             ; (format t "~%ETA action name is ~a" eta-action-name)
+             ; (format t "~%ETA gist clauses that the user is responding to ~
+             ;           ~% = ~a " eta-clauses); DEBUGGING
               ; (In future we might instead or in addition use
-              ;     (get lissa-action-name 'interpretation).)
+              ;     (get eta-action-name 'interpretation).)
               ; Compute the "interpretation" (gist clauses) of the
               ; user input, which will be done with a gist-clause
-              ; packet selected using the main Lissa action clause,
+              ; packet selected using the main Eta action clause,
               ; and with the user input being the text to which the
               ; tests in the gist clause packet (tree) are applied.
               ; The *gist-clause-trees* top-level packet & the
               ; packets it delegates to will be used:
-              ;(format t "~% LLLlissa clauses = ~a" (car (last lissa-clauses)))
+              ;(format t "~% LLLeta clauses = ~a" (car (last eta-clauses)))
 		;	  (format t "~% words = ~a" words)
 			  
               (setq user-gist-clauses
                     (form-gist-clauses-from-input ; for now the context
-                              ; used is just the last LISSA gist clause
-                                        words (car (last lissa-clauses))))
+                              ; used is just the last ETA gist clause
+                                        words (car (last eta-clauses))))
               ; remove contradiction
 			  (setq user-gist-clauses (remove-contradiction user-gist-clauses))
 			  ; (format t "~% this is the gist clause = ~a" user-gist-clauses)
@@ -1118,7 +1118,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
              ; user turns; i.e., we take the view that the user paraphrased
              ; these gist clauses in his/her original, often "condensed", 
              ; sentences; thus we can directly set the 'gist-clauses' 
-             ; properties of the user action (needed for Lissa's reaction), 
+             ; properties of the user action (needed for Eta's reaction), 
              ; rather than applying 'form-gist-clauses-from-input' again
              ; (as was done above for (you say-to.v me '(...)) actions)
              ((setq bindings
@@ -1141,7 +1141,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ;(print-current-plan-status {sub}plan-name); DEBUGGING
               (list user-action-name wff)); return pair (helps debugging)
 
-             (T ; nonprimitive (you reply-to.v <lissa action name>)' action;
+             (T ; nonprimitive (you reply-to.v <eta action name>)' action;
                ; We particularize this action as a subplan, based on reading
                ; the user input:
                (loop while (not input) 
@@ -1181,21 +1181,21 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
  )); end of observe-next-user-action
 
 
-(defun obviated-question (sentence lissa-action-name); Aug 28/15
+(defun obviated-question (sentence eta-action-name); Aug 28/15
 ;````````````````````````````````````````````````````
 ; Check whether this is a (quoted, bracketed) question.
 ; If so, check what facts, if any, are stored in *gist-kb* under 
 ; the 'topic-keys' obtained as the value of that property of
-; 'lissa-action-name'. If there are such facts, check if they
+; 'eta-action-name'. If there are such facts, check if they
 ; seem to provide an answer to the gist-version of the question,
 ; which will be the last gist clause stored under property
-; 'gist-clauses' of 'lissa-action-name'.
+; 'gist-clauses' of 'eta-action-name'.
 ;
  (prog (topic-keys facts)
       ; (format t "~% ****** quoted question returns ~a **** ~%" (quoted-question? sentence))
        (if (not (quoted-question? sentence))
            (return nil))
-       (setq topic-keys (get lissa-action-name 'topic-keys))
+       (setq topic-keys (get eta-action-name 'topic-keys))
       ; (format t "~% ****** topic key is ~a ****** ~%" topic-keys)
        (if (null topic-keys) (return nil))
        (setq facts (gethash topic-keys *gist-kb*))
@@ -1204,7 +1204,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
       ; (format t "~% ****** There is no fact about this topic. ~a ****** ~%" (null facts))
      
        (if (null facts) (return nil))
-       ; We have a Lissa question, corresponding to which we have
+       ; We have a Eta question, corresponding to which we have
        ; stored facts (as user gist clauses) that seem topically
        ; relevant.
        ; ** In this simple initial version, we don't try to verify
@@ -1287,7 +1287,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;
 ; ** Should the new subplan name also receive a 'semantics'
 ; property? ... We don't really expect a further user response to these
-; reactive comments from Lissa, which would then need to be understood
+; reactive comments from Eta, which would then need to be understood
 ; in light of the meaning of these reactive comments...More thought
 ; required.
 ;
@@ -1370,7 +1370,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
              ; we assume that the cdr of 'choice' must then be of form 
              ;          (<schema name> <argument list>)
              ; The idea is that the separate pieces of the word sequence
-             ; supply separate gist clauses that Lissa may react to in 
+             ; supply separate gist clauses that Eta may react to in 
              ; the steps of the schema. These are provided as sublists
              ; in <argument list>.
              ;
@@ -1422,7 +1422,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
   ;````````````````````````````````````````````````````` ; ULF added June 2019
   ; This is a generic choice-tree search program, used both for
   ; (i) finding gist clauses in user inputs (starting with selection
-  ; of appropriate subtrees as a function of Lissa's preceding
+  ; of appropriate subtrees as a function of Eta's preceding
   ; question, simplified to a gist clause), and (ii) in selecting
   ; outputs in response to (the gist clauses extracted from) user 
   ; inputs. Outputs in the latter case may be verbal responses
@@ -1716,13 +1716,13 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; Return the name of a plan for telling the user the 'info';
 ; 'info' is a reified proposition that may be in a form that makes
 ; verbalization trivial, e.g.,
-;     (meaning-of.f '(I am Lissa. I am an autonomous avatar.))
+;     (meaning-of.f '(I am Eta. I am an autonomous avatar.))
 ; where the 'meaning-of.f' function in principle provides EL
 ; propositions corresponding to English sentences -- i.e., semantic
 ; parser output, reified using 'that'; but of course, for verbal-
 ; ization we don't need to first convert to EL! Or else the info 
 ; is directly in EL form, e.g.,
-;     (that (me have-as.v name.n 'Lissa)), or
+;     (that (me have-as.v name.n 'Eta)), or
 ;     (that (me be.v ((attr autonomous.a) avatar.n))),
 ; which requires English generation for a fully expanded tell
 ; act.
@@ -1803,7 +1803,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ;   a wh-word and with "you{r}" coming within a few words.
 ;   "What about you" isa fairly common pattern. (Sometimes the
 ;   wh-word is not detected but "you"/"your" is quite reliable.)
-;   The question, by default, is reciprocal to Lissa's question.
+;   The question, by default, is reciprocal to Eta's question.
 ;
 ;   This might use choice trees such as
 ;       *question-from-major-input*,
@@ -1852,7 +1852,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
       
       ; The results obtained will be stored as the 'gist-clauses'
       ; property of the name of the user input. So, concatenate
-      ; the above results; in reacting, Lissa will pay particular
+      ; the above results; in reacting, Eta will pay particular
       ; attention to the first clause, and any final question.
       (setq facts (list specific-answer))
       (setq gist-clauses facts)
@@ -1950,7 +1950,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; put 'fact' into the 'kb' (a hash table) using the given keys.
 ; Avoid duplication of already stored facts. This is intended 
 ; primarily for acquired facts (as gist clauses) about the user,
-; but should also be usable for facts about Lissa, that Lissa
+; but should also be usable for facts about Eta, that Eta
 ; could consult in answering questions from the user.
 ;
  (let ((facts (gethash keys kb)))
@@ -2052,7 +2052,7 @@ with the characters in LIST-OF-CHARACTERS."
 ; For terminal mode only, we use 'print-words'.
 ;
  (let (wordstring)
-      ; Write LISSA's words to "./output.txt" as a continuous string
+      ; Write ETA's words to "./output.txt" as a continuous string
       ; (preceded by the output count and a colon)
       (dolist (word wordlist); form a list of strings (with blanks)
               (push (string word) wordstring)
@@ -2061,7 +2061,7 @@ with the characters in LIST-OF-CHARACTERS."
                        ; reverse order, & drop final blank
       (setq wordstring ; concatenate the individual word strings
             (eval (cons 'concatenate (cons ''string wordstring))))
-      (setq *lissa-count* (+ *lissa-count* 1))
+      (setq *eta-count* (+ *eta-count* 1))
       ; create a file called lock, while working on output.txt 
 
       ;(loop while (probe-file "lock") do
@@ -2080,11 +2080,11 @@ with the characters in LIST-OF-CHARACTERS."
       (with-open-file (outfile "./output.txt" :direction :output :if-exists
                                 :append :if-does-not-exist :create)
                       (format outfile "~%#: ~a" wordstring));)
-      ; used to be lissa-count, changed it for elderly study
+      ; used to be eta-count, changed it for elderly study
       (setf *default-pathname-defaults* (truename *temp-dir*))
       ;(delete-file "./lock")
-      ; Also write LISSA's words to standard output:
-      (format t "~% ... "); initial dots distinguish Lissa outputs
+      ; Also write ETA's words to standard output:
+      (format t "~% ... "); initial dots distinguish Eta outputs
       (dolist (word wordlist)
               (format t "~a " word)
               (if (or (member word '(? ! \.))
@@ -2094,7 +2094,7 @@ with the characters in LIST-OF-CHARACTERS."
  )); end of say-words
 
 (defun read-words () 
-  ;; This is the input reader when LISSA is used with argument live =
+  ;; This is the input reader when ETA is used with argument live =
   ;; nil (hence also *live* = nil), i.e., with terminal input rather
   ;; than live spoken input.
   ;;
@@ -2154,7 +2154,7 @@ with the characters in LIST-OF-CHARACTERS."
     (loop while (not *next-input*) do
       (sleep .5)
       (progn
-        ;(load "C:/inetpub/wwwroot/RocSpeakRafayet/lissa5/input.lisp")
+        ;(load "C:/inetpub/wwwroot/RocSpeakRafayet/eta5/input.lisp")
         (load "./input.lisp")
 		(if *next-input*
           (progn
@@ -2334,7 +2334,7 @@ with the characters in LIST-OF-CHARACTERS."
 
 ;;;;;;;;;;;================================================================
 (DEFUN PRESUBST (RESPONSE)
- ; This function is applied to lissa's responses before 
+ ; This function is applied to eta's responses before 
  ; their "dual" is formed and printed out. It helps avoid 
  ; outputs like
  ;      WHY DO YOU SAY I ARE STUPID
