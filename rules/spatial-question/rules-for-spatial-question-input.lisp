@@ -53,7 +53,7 @@
   (READRULES '*specific-answer-from-spatial-question-input*
   '(
     1 (0 spatial-words 0)
-      2 ((spatial-question 1 2 3)) (0 :gist)
+      2 (*burger-king-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
     ;; ------------------------------
     ;; ADD "SMALL TALK" PATTERNS HERE
     ;; ------------------------------
@@ -67,6 +67,30 @@
       2 ((What questions can you answer ?)) (0 :gist)
     1 (0)
       2 ((NIL Gist \: Eta could not understand my question \.)) (0 :gist)
+  ))
+
+  (READRULES '*burger-king-tree*
+  '(
+    1 (0 burger king 0)
+      2 (*sri-international-tree* (1 burger_king 4)) (0 :subtree+clause)
+    1 (0)
+      2 (*sri-international-tree* (1)) (0 :subtree+clause)
+  ))
+
+  (READRULES '*sri-international-tree*
+  '(
+    1 (0 sri international 0)
+      2 (*next-to-tree* (1 sri_international 4)) (0 :subtree+clause)
+    1 (0)
+      2 (*next-to-tree* (1)) (0 :subtree+clause)
+  ))
+
+  (READRULES '*next-to-tree*
+  '(
+    1 (0 next to 0)
+      2 (*next-to-tree* (1 next_to 4)) (0 :subtree+clause)
+    1 (0)
+      2 ((1)) (0 :gist)
   ))
   
   (READRULES '*thematic-answer-from-spatial-question-input*
