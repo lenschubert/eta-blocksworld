@@ -6,7 +6,9 @@
 (eval-when (load eval)
   (MAPC 'ATTACHFEAT
   '(
-    (spatial-beginning be modal wh_ between prep)
+    (spatial-beginning-pair spatial-beginning there)
+    (spatial-beginning spatial-verb between prep)
+    (spatial-verb be modal wh_)
     (spatial-ending noun adj there)
     (spatial-word noun supporting corp adj
       uppermost under close touching farthest rotated)
@@ -131,6 +133,12 @@
       2 (*multi-token-word-tree* (spatial-question 8)) (0 :subtree+clause)
     1 (0 my 1 question 2 be 0)
       2 (*multi-token-word-tree* (spatial-question 7)) (0 :subtree+clause)
+    1 (0 spatial-beginning-pair spatial-beginning-pair spatial-beginning-pair ; meant to match something
+        spatial-beginning-pair 0)                                             ; like "is there...what is next
+                                                                              ; to the red block?"
+      2 (*multi-token-word-tree* (spatial-question 4 5 6)) (0 :subtree+clause)
+    1 (between spatial-beginning 0)
+      2 (*multi-token-word-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
     1 (NIL so spatial-beginning 0)
       2 (*multi-token-word-tree* (spatial-question 3 4)) (0 :subtree+clause)
     1 (NIL spatial-beginning 0)
