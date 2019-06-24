@@ -65,9 +65,6 @@
 (load "eta")
 (load "eta-schema.lisp")
 (load "general-word-data.lisp")
-;; (load "choose-gist-clause-trees-for-input.lisp")
-;; (load "choose-reaction-to-input.lisp")
-;; (load "choose-reactions-to-input.lisp")
 (load "schema-for-reactions-to-answer-plus-question.lisp")
 (load "schema-for-reactions-to-question+clause.lisp")
 (load "eval-lexical-ulfs.lisp")
@@ -94,6 +91,7 @@
 (load "spatial-question/rules-for-spatial-question-input.lisp")
 (load "spatial-question/rules-for-spatial-question-reaction.lisp")
 (load "spatial-question/rules-for-spatial-question-ulf.lisp")
+(load "spatial-question/rules-for-spatial-question-ulf-between.lisp")
 (setf *default-pathname-defaults* *root-dir*)
 
 (eta *mode*)

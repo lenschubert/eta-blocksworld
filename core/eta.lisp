@@ -193,7 +193,8 @@
         ; as subplans whose step or steps are primitive actions like
         ; (Me say-to.v you '...).
         ;; goodbye additional code
-nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or form a subplan
+nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or 
+                                                           ; form a subplan
         ;(format t "~% status is equal to ~a" status1)
 		;; goodbye additional code
 		(if (eq status1 'exit) (go exit)) 
@@ -263,7 +264,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 ; then initialize its next action (if any) using 'update-plan'.
 ;
  (let ((rest (get plan-name 'rest-of-plan)) step-name subplan-name)
-      (setq step-name (car rest))
+      (setq step-name (car rest)); rest = (step-name step step-name step ...)
 ;     (format t "~%~%'rest-of-plan' pointer of ~a at beginning of update~
 ;                ~% is (~a ~a ...)" plan-name step-name (second rest)); DEBUGGING
       (cond ((null rest) nil)
@@ -334,9 +335,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 (defun initialize-plan (plan-name schema-name args); Revised July 31/15
 ;````````````````````````````````````````````````` ; & Aug 25-28/15
 ; (eval plan-name) is presumably nil, while (eval schema-name)
-; is the schema (starting with '(event-schema ((...) ** ?e))')
+; is the schema (starting with '(event-schema ((..) ** ?e) ... )')
 ; that the plan will be based on. For non-nil 'args', we replace
-; successive variables occurring in the (...) part of the header
+; successive variables occurring in the (..) part of the header
 ; (i.e., exclusive of ?e) by successive elements of 'args'.
  (let (plan action-list prop-var prop-name 2names ep-var ep-name
        gist-clauses interpretation topic-keys)
@@ -411,7 +412,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
   ; propositions names:
   (setf (get prop-name 'wff) 
         (second (get plan-name 'rest-of-plan)))
-  ; If this is a Eta action, supply the gist clauses, interpretation,
+  ; If this is a Eta action, transfer to it the gist clauses, interpretation,
   ; and topic key list from the hash tables associated with 'schema-name':
   (when (eq 'me (car (get prop-name 'wff)))
         ; (no harm done if any of the schema properties are nil)
@@ -638,8 +639,8 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
            ; to the specified higher-level action.
            ; DEBUGGING
            ((eq (car wff) 'me) ; Eta action
-            (progn  (implement-next-eta-action {sub}plan-name) (print ""))) ; also increments
-                                         ; *count* for primitive eta actions
+            (progn (implement-next-eta-action {sub}plan-name) (print "")))
+                    ; also increments *count* for primitive eta actions
                                 
            ((eq (car wff) 'you) ; user action (input)
             (observe-next-user-action {sub}plan-name))
@@ -755,6 +756,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ;(format t "~% ****Output of obviated-question**** ~a ~%" (not (null (obviated-question expr eta-action-name))))
               (when (not (null (obviated-question expr eta-action-name)))
                     (delete-current-action {sub}plan-name)
+                    ; *** WHY IN TRIPLICATE?? ACCIDENTAL MODIFICATION??
                     (delete-current-action {sub}plan-name)
                     (delete-current-action {sub}plan-name)
                     (return-from implement-next-eta-action nil))
@@ -810,8 +812,8 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               (setq new-subplan-name
                     (plan-reaction-to user-gist-clauses))
               (when (null new-subplan-name)
-                    (progn (delete-current-action {sub}plan-name) ;(print "~% We could not find any reaction ~%")
-					)
+                   (delete-current-action {sub}plan-name); I dropped (progn ...)-LS
+                    ;(print "~% We could not find any reaction ~%")
                     (return-from implement-next-eta-action nil))
 
               ; 'new-subplan-name' will be the name of a subplan, with either
@@ -1148,10 +1150,10 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 			    do (setq input (if *live* (hear-words) (read-words))))
 				;(format t "~% input is equal to ~a ~%" input)
 				;; goodbye additional code
-             ;   (if (or (member 'goodbye input) (member 'bye input)) 
-				;    (progn (setq expr '(Oh\, it was nice to see you! Bye!))
-				;	       (if *live* (say-words expr) (print-words expr))
-                 ;          (return-from observe-next-user-action 'exit))) 				
+             ;   (when (or (member 'goodbye input) (member 'bye input)) 
+	     ;         (setq expr '(Oh\, it was nice to see you! Bye!))
+             ;         (if *live* (say-words expr) (print-words expr))
+             ;         (return-from observe-next-user-action 'exit)) 			
 	       ; Make sure that any final punctuation, such as ?, ., or !,
 	       ; is separated from the final word (so as not to impair
 	       ; pattern matching). [However, note that 'hear-words' and
@@ -1327,7 +1329,9 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                (setq choice (choose-result-for tagged-words
                                                    '*reactions-to-input*))
                ;(format t "~% choice is ~a ~% " choice)
-			   						   ))
+            )
+      ); 'choice' has been set via rule-tree seach, for single or multiple 
+       ; gist clauses
 
       (if (null choice) (return-from plan-reaction-to nil))
 
@@ -1582,7 +1586,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
               ; and :ulf-recur;
               ((null directive); look depth-first for more specific match
                                ; and if that fails, try alternatives
-               (setq newparts (match pattern tagged-clause))
+               (setq newparts (match1 pattern tagged-clause))
             ;   (format t "~% ----3---- new part = ~a ~%" newparts)
             ;;   (if *tracerules*
             ;;       (format t "~%@@ Rule ~s with pattern ~s tried on input ~
@@ -1631,7 +1635,7 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
                (return
                   (choose-result-for1 new-tagged-clause nil 
                                            (car pattern)))); = root name
-
+              ; BEN UPDATE 6/17/19:
               ((eq directive :subtree+file)
                ; This is similar to :subtree, except that if in live mode,
                ; the pattern supplied to the subtree is read in through a
@@ -2437,8 +2441,13 @@ with the characters in LIST-OF-CHARACTERS."
 ;(format t "~%")
  ) ; end of print-words
 
+(defun match1 (pattern input) (match pattern input))
+;```````````````````````````````````````````````````
+; For top-level match tracing
+
 
 (DEFUN MATCH (PATTERN INPUT)
+;```````````````````````````
   ; Match decomposition pattern PATTERN against context-embedded,
   ; tagged input utterance INPUT. PATTERN is a list consisting of
   ; particular words or features (tags), NIL elements (meaning
