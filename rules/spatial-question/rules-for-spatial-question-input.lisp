@@ -160,13 +160,6 @@
     1 (0)
       2 ((1)) (0 :gist)
   ))
-  
-  (READRULES '*thematic-answer-from-spatial-question-input*
-    '())
-
-  (READRULES '*unbidden-answer-from-spatial-question-input*
-  '(
-  ))
 		
   (READRULES '*question-from-spatial-question-input*
   '(

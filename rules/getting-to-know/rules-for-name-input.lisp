@@ -20,13 +20,6 @@
   1 (0)
      2 ((ETA could not understand what my name is \.)  (name)) (0 :gist)
   ))
-       
-       
- (READRULES '*thematic-answer-from-name-input*
-    '())
-
- (READRULES '*unbidden-answer-from-name-input*
-    '())
 		
  (READRULES '*question-from-name-input*
     '(
@@ -38,7 +31,7 @@
        2 (What is your name ?) (0 :gist)
     ))
 
-(READRULES '*reaction-to-name-input*
+ (READRULES '*reaction-to-name-input*
   '(
     1 (0 my name is american-names 0)
       2 (It is very nice to meet me 5 \. You hope we have many great interactions in the future\.) (100 :out)
