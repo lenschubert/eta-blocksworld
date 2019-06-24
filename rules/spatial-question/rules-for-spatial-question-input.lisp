@@ -6,12 +6,14 @@
 (eval-when (load eval)
   (MAPC 'ATTACHFEAT
   '(
-    (spatial-ending noun adj)
+    (spatial-beginning be modal wh_ between prep)
+    (spatial-ending noun adj there)
     (spatial-word noun supporting corp adj
       uppermost under close touching farthest rotated)
     (kinds types sorts kind type sort formats format)
     (question questions)
     (answer understand hear interpret parse)
+    (here here\'s heres)
 
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
       Starbucks Texaco Target Toyota )
@@ -106,6 +108,16 @@
   ; use as an opening, e.g. "my question is ...".
   (READRULES '*trim-prefix-tree*
   '(
+    1 (0 here 1 my 1 question 0)
+      2 (*multi-token-word-tree* (spatial-question 7)) (0 :subtree+clause)
+    1 (0 my 1 question 2 be this 0)
+      2 (*multi-token-word-tree* (spatial-question 8)) (0 :subtree+clause)
+    1 (0 my 1 question 2 be 0)
+      2 (*multi-token-word-tree* (spatial-question 7)) (0 :subtree+clause)
+    1 (NIL so spatial-beginning 0)
+      2 (*multi-token-word-tree* (spatial-question 3 4)) (0 :subtree+clause)
+    1 (NIL spatial-beginning 0)
+      2 (*multi-token-word-tree* (spatial-question 2 3)) (0 :subtree+clause)
     1 (0)
       2 (*multi-token-word-tree* (spatial-question 1)) (0 :subtree+clause) 
   ))
