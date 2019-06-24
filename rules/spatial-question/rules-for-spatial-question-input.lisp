@@ -10,6 +10,7 @@
     (spatial-ending noun adj there)
     (spatial-word noun supporting corp adj
       uppermost under close touching farthest rotated)
+    (spatial-word-potential spatial-word be wh_ prep)
     (kinds types sorts kind type sort formats format)
     (question questions)
     (answer understand hear interpret parse)
@@ -52,11 +53,27 @@
   ; for any number of "small talk" patterns, which we should also be able to handle.
   (READRULES '*specific-answer-from-spatial-question-input*
   '(
+    ;; ---------------------------------
+    ;; Try to preempt references for now
+    ;; ---------------------------------
+    1 (0 spatial-word-potential 0 it 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 they 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 them 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 that block 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 how many be there 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    ;; ----------------------------------------
+    ;; If spatial question, start preprocessing
+    ;; ----------------------------------------
     1 (0 spatial-word 0)
       2 (*trim-suffix-tree* (1 2 3)) (0 :subtree+clause)
-    ;; ------------------------------
-    ;; ADD "SMALL TALK" PATTERNS HERE
-    ;; ------------------------------
+    ;; ---------------------
+    ;; "Small talk" patterns
+    ;; ---------------------
     1 (0 wh_ 1 your name 0)
       2 ((What is your name ?)) (0 :gist)
     1 (0 aux you 1 answer 3 question 0)
