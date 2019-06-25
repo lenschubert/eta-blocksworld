@@ -46,7 +46,7 @@
           (block blocks cube cubes book books black glock 
                              blog blogs bach blood glass); often misrecognized
           (name corp)
-          (prep of on to under in behind near touching abutting between 
+          (prep of on to under in behind near touching abutting between from
                 below above next next_to visible); currently "next" needs to have
                                                  ; the 'prep' feature, to allow
                                                  ; merging into 'next_to.p'; it's
@@ -67,7 +67,8 @@
           (adj qual-adj rel-adj num-adj sup-adj ord-adj diff-adj)
           (mod-n adj corp)
           (noun block table stack row edge face plane line circle pile object
-                color structure other); NB: "each other"; can also be adj, det
+                color structure left right back front other); NB: "each other"
+                                                         ; can also be adj, det
           (uppermost on highest top sitting)
           (under underneath supporting support)
           (close next)
@@ -142,6 +143,7 @@
    1 (do np_ 2 verb prep 3 det 3 ?); does any block sit on the red NVidia block ?
     2 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 5 6 7 8) ?)
        ((1 2 (3 (adv-e 4))) ?)) (0 :ulf-recur)
+
    1 (0 block 0 between 0)
     2 *fallback-between-spatial-question-ulf-tree* (0 :subtree)
    1 (0 between 0 block 0)
