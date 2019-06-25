@@ -1,0 +1,42 @@
+June 20/19
+
+Enumerate key phrase occurrences in spatial relation questions, with a view
+towards looking for combinations of occurrences that allow guessing of what
+may have been asked. by NP[block] I mean an NP containing "block"
+
+...where...NP[block]... 
+
+...which/what..block...on/in/behind/above/in_front_of/... NP[block]/table/stack/...
+                       ``````````````````````````````also, "between"
+... what/which color...block be ...NP[block]
+
+... what/which color...block be ... on/in/under/behind/above/in_front_of/ ...NP[block]
+
+... what/which be ...sup-adj..block
+
+... what/which be ...the N1[block] ...on/under/behind/above/in_front_of/ ...NP[block]
+
+... what/which N1[block] be on/under/behind/above/in_front_of/ ...NP[block]
+
+... what/which N1[block] be not on/under/behind/above/in_front_of/ ...NP[block,table]
+
+... what/which N1[block] be NP[block] supporting/on/under/behind/above/in_front_of/ ...
+                                     ````````````also "supported by"
+... what/which be ...sup-adj..block
+
+... what/which N1[block] be sup-adj...
+
+... what/which be ...sup-adj..block
+
+... be..NP[block] ... on/in/under/behind/above/in_front_of/... NP[block,table]/pron
+
+... be..NP[block]..adj..
+
+... how many NP[block] be.. on/in/under/behind/above/in_front_of/..NP[block]/pron/table
+
+... how many NP[block] have ...NP[block] on/in/under/behind/above/in_front_of/...pron
+
+... be...NP[block] form NP[row,stack]
+
+
+
