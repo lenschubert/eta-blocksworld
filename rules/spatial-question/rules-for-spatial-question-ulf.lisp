@@ -346,8 +346,9 @@
 
 (readrules '*ppwh-question-ulf-tree* ;e.g., On (top of) what object is the NVidia block ?
  '(1 (prep 2 wh-det 2 be det 4 ?) 
-    2 (((lex-ulf! 1 2) (lex-ulf! det 3) (*n1-ulf-tree* 4) (lex-ulf! 5) (lex-ulf! det 6)
-        (*n1-ulf-tree* 7 ) ?) ((sub (1 (2 3)) (4 (5 6) *h)) ?)) (0 :ulf-recur)
+    2 (((*rel-ulf-tree* 1 2) (lex-ulf! det 3) (*n1-ulf-tree* 4) (lex-ulf! v 5) 
+        (lex-ulf! det 6) (*n1-ulf-tree* 7 ) ?) ((sub (1 (2 3)) (4 (5 6) *h)) ?)) 
+       (0 :ulf-recur)
   ; add further rules, e.g., for "On what blocks are there other blocks ?", or
   ; "On how many blocks is the Target block resting/placed/supported/positioned ?"
  ))
