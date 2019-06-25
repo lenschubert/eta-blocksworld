@@ -174,25 +174,39 @@
   (READRULES '*trim-prefix-tree*
   '(
     1 (0 here 1 my 1 question 0)
-      2 (*multi-token-word-tree* (spatial-question 7)) (0 :subtree+clause)
+      2 (*trim-prefix-tree* (7)) (0 :subtree+clause)
     1 (0 my 1 question 2 be this 0)
-      2 (*multi-token-word-tree* (spatial-question 8)) (0 :subtree+clause)
+      2 (*trim-prefix-tree* (8)) (0 :subtree+clause)
     1 (0 my 1 question 2 be 0)
-      2 (*multi-token-word-tree* (spatial-question 7)) (0 :subtree+clause)
+      2 (*trim-prefix-tree* (7)) (0 :subtree+clause)
+    1 (0 aux you 1 know if 0)
+      2 (*multi-token-word-tree* (7)) (0 :subtree+clause)
+    1 (0 aux you 1 know 0)
+      2 (*multi-token-word-tree* (6)) (0 :subtree+clause)
+    1 (0 aux you 1 see if 0)
+      2 (*multi-token-word-tree* (7)) (0 :subtree+clause)
+    1 (0 aux you 1 see 0)
+      2 (*multi-token-word-tree* (6)) (0 :subtree+clause)
+    1 (0 aux you 1 tell 1 if 0)
+      2 (*multi-token-word-tree* (8)) (0 :subtree+clause)
+    1 (0 aux you 1 tell me 0)
+      2 (*multi-token-word-tree* (7)) (0 :subtree+clause)
+    1 (0 aux you 1 tell 0)
+      2 (*multi-token-word-tree* (6)) (0 :subtree+clause)
     1 (0 spatial-beginning-pair spatial-beginning-pair spatial-beginning-pair ; meant to match something
         spatial-beginning-pair 0)                                             ; like "is there...what is next
                                                                               ; to the red block?"
-      2 (*multi-token-word-tree* (spatial-question 4 5 6)) (0 :subtree+clause)
+      2 (*multi-token-word-tree* (4 5 6)) (0 :subtree+clause)
     1 (between spatial-beginning 0)
-      2 (*multi-token-word-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
+      2 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
     1 (wh_ spatial-beginning 0)
-      2 (*multi-token-word-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
+      2 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
     1 (NIL so spatial-beginning 0)
-      2 (*multi-token-word-tree* (spatial-question 3 4)) (0 :subtree+clause)
+      2 (*multi-token-word-tree* (3 4)) (0 :subtree+clause)
     1 (NIL spatial-beginning 0)
-      2 (*multi-token-word-tree* (spatial-question 2 3)) (0 :subtree+clause)
+      2 (*multi-token-word-tree* (2 3)) (0 :subtree+clause)
     1 (0)
-      2 (*multi-token-word-tree* (spatial-question 1)) (0 :subtree+clause) 
+      2 (*multi-token-word-tree* (1)) (0 :subtree+clause) 
   ))
 
   ; The fifth stage of preprocessing. Here we combine any words that have multiple tokens,
@@ -206,7 +220,7 @@
     1 (0 next to 0)
       2 (*multi-token-word-tree* (1 next_to 4)) (0 :subtree+clause)
     1 (0)
-      2 ((1)) (0 :gist)
+      2 ((spatial-question 1)) (0 :gist)
   ))
 		
   (READRULES '*question-from-spatial-question-input*
