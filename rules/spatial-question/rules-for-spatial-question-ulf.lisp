@@ -58,7 +58,8 @@
           (num-adj two three four five six seven eight nine ten eleven twelve)
                    ; (But note: we assume numerals can also be determiners)
           (sup-adj leftmost rightmost furthest farthest nearest closest highest
-                tallest nearest topmost uppermost)
+                tallest nearest topmost uppermost smallest lowest largest
+                centermost shortest backmost longest fewest frontmost)
           (ord-adj first second third fourth fifth sixthe seventh eighth ninth
            tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth
            seventeens eighteenth nineteenth twentieth)
@@ -67,11 +68,12 @@
           (mod-n adj corp)
           (noun block table stack row edge face plane line circle pile object
                 color structure other); NB: "each other"; can also be adj, det
-         ;;  (uppermost on highest top sitting)
+          (uppermost on highest top sitting)
           (under underneath supporting support)
           (close next)
           (touching face-to-face abutting against flush) 
           (be is are was were)
+          (verb touch support connect consist_of sit)
           (farthest furthest)
           (rotated angled swivelled turned)
           ))
@@ -131,6 +133,15 @@
     2 *ppwh-between-question-ulf-tree* (0 :subtree)
    1 (prep 2 wh_ 0) ; e.g., "On top of which block is the NVidia block ?"
     2 *ppwh-question-ulf-tree* (0 :subtree)
+   1 (do np_ 2 verb 1 between 0 ?); does anything sit between the two red blocks?
+    2 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-between-ulf-tree* 6 7) ?)
+       ((1 2 (3 (adv-e 4))) ?)) (0 :ulf-recur)
+   1 (do np_ 2 verb np_ 2 ?); Does any block support the NVidia block ?
+    2 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (lex-ulf! v 4) (*np-ulf-tree* 5 6) ?)
+       ((1 2 (3 4)) ?)) (0 :ulf-recur)
+   1 (do np_ 2 verb prep 3 det 3 ?); does any block sit on the red NVidia block ?
+    2 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 5 6 7 8) ?)
+       ((1 2 (3 (adv-e 4))) ?)) (0 :ulf-recur)
    1 (0 block 0 between 0)
     2 *fallback-between-spatial-question-ulf-tree* (0 :subtree)
    1 (0 between 0 block 0)
