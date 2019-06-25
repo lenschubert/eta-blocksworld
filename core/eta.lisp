@@ -197,7 +197,7 @@ nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or
                                                            ; form a subplan
         ;(format t "~% status is equal to ~a" status1)
 		;; goodbye additional code
-		(if (eq status1 'exit) (go exit)) 
+		(if (eq status1 'exit) (go exit))
 		;(format t "~%we have exit~%")
 		
         ; The execution should also increase *count* for each Eta
@@ -224,7 +224,7 @@ nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or
               ; consistency or expected effects/benefits of the plan.
               (go nextact))
 		;; goodbye additional label
-exit    (format t "~% ... THANK YOU FOR VISITING,~%") 
+exit    (format t "~% ... THANK YOU FOR THE QUESTIONS,~%") 
         (format t "GOOD-BYE FOR NOW")
         (return '------------------------------------ )
 )) ; end of eta
@@ -1150,10 +1150,16 @@ exit    (format t "~% ... THANK YOU FOR VISITING,~%")
 			    do (setq input (if *live* (hear-words) (read-words))))
 				;(format t "~% input is equal to ~a ~%" input)
 				;; goodbye additional code
-             ;   (when (or (member 'goodbye input) (member 'bye input)) 
-	     ;         (setq expr '(Oh\, it was nice to see you! Bye!))
-             ;         (if *live* (say-words expr) (print-words expr))
-             ;         (return-from observe-next-user-action 'exit)) 			
+
+             ; BEN UPDATE 6/25/19: Reinstated this "quick exit" code, if
+             ; the user says "goodbye" or "bye". Ideally, this should be
+             ; updated in the future with an actual schema, rather than
+             ; something hardcoded.
+             (when (or (member 'goodbye input) (member 'bye input))
+	            ; (setq expr '(Oh\, it was nice to see you! Bye!))
+                  ; (if *live* (say-words expr) (print-words expr))
+             (return-from observe-next-user-action 'exit))
+
 	       ; Make sure that any final punctuation, such as ?, ., or !,
 	       ; is separated from the final word (so as not to impair
 	       ; pattern matching). [However, note that 'hear-words' and
