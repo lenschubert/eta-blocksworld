@@ -224,9 +224,7 @@ nextact (setq status1 (process-next-action '*dialog-plan*)); execute; or
               ; consistency or expected effects/benefits of the plan.
               (go nextact))
 		;; goodbye additional label
-exit    (format t "~% ... THANK YOU FOR THE QUESTIONS,~%") 
-        (format t "GOOD-BYE FOR NOW")
-        (return '------------------------------------ )
+exit    (return '------------------------------------ )
 )) ; end of eta
 
 
@@ -1156,8 +1154,8 @@ exit    (format t "~% ... THANK YOU FOR THE QUESTIONS,~%")
              ; updated in the future with an actual schema, rather than
              ; something hardcoded.
              (when (or (member 'goodbye input) (member 'bye input))
-	            ; (setq expr '(Oh\, it was nice to see you! Bye!))
-                  ; (if *live* (say-words expr) (print-words expr))
+	             (setq expr '(Oh\, thank you for the questions\. Good bye for now!))
+                   (if *live* (say-words expr) (print-words expr))
              (return-from observe-next-user-action 'exit))
 
 	       ; Make sure that any final punctuation, such as ?, ., or !,
