@@ -49,9 +49,14 @@
              (list 'plur (intern (format nil "~a.N" stem))))
          ((n noun) (case word-sym
                      (block 'block.n) (blocks '(plur block.n))
-                     (cube 'block.n) (cubes '(plur block.n))
-                     (book 'block.n) (books '(plur block.n))
-                     (blog 'block.n) (blogs '(plur block.n))
+                     (cube 'block.n)  (cubes '(plur block.n))
+                     (book 'block.n)  (books '(plur block.n))
+                     (blog 'block.n)  (blogs '(plur block.n))
+                     (black 'block.n) (blacks '(plur block.n))
+                     (glock 'block.n) (glocks '(plur block.n))
+                     (bach 'block.n)  (bachs '(plur block.n))
+                     (blood 'block.n) (bloods '(plur block.n))
+                     (glass 'block.n)
                      (t (setq stem (stem (list 'n word-sym))); tries to depluralize
                         (if (eq stem word-sym); assume singular if unchanged
                                               ; (somewhat error-prone)
