@@ -1,7 +1,0 @@
-  ; declarative questions
-  1 (np_ 3 be 0 ?); a red block is next to a blue block ?
-   2 (((*spatial-sentence-ulf-tree* 1 2 3 4)) (1 ?)) (0 :ulf-recur)
-  1 (np_ 3 verb 1 np_ 0 ?)
-   2 (((*spatial-sentence-ulf-tree* 1 2 3 4 5)) (1 ?)) (0 :ulf-recur)
-  1 (np_ 3 verb 1 prep 0 ?); a red block sits between two green blocks ?
-   2 (((*spatial-sentence-ulf-tree* 1 2 3 4 5 6)) (1 ?)) (0 :ulf-recur)
