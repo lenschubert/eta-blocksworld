@@ -58,7 +58,7 @@
           (num-adj two three four five six seven eight nine ten eleven twelve)
                    ; (But note: we assume numerals can also be determiners)
           (sup-adj leftmost rightmost furthest farthest nearest closest highest
-                tallest nearest topmost)
+                tallest nearest topmost uppermost)
           (ord-adj first second third fourth fifth sixthe seventh eighth ninth
            tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth
            seventeens eighteenth nineteenth twentieth)
@@ -67,7 +67,7 @@
           (mod-n adj corp)
           (noun block table stack row edge face plane line circle pile object
                 color structure other); NB: "each other"; can also be adj, det
-          (uppermost on highest top sitting)
+         ;;  (uppermost on highest top sitting)
           (under underneath supporting support)
           (close next)
           (touching face-to-face abutting against flush) 

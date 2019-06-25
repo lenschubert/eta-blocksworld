@@ -9,7 +9,7 @@
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_)
-    (spatial-ending noun adj there)
+    (spatial-ending noun adj there directions)
     (spatial-word noun supporting corp adj
       uppermost under close touching farthest rotated)
     (spatial-word-potential spatial-word be wh_ prep)
@@ -17,6 +17,7 @@
     (question questions)
     (answer understand hear interpret parse)
     (here here\'s heres)
+    (directions left right top bottom back front)
 
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
       Starbucks Texaco Target Toyota )
@@ -138,6 +139,8 @@
                                                                               ; to the red block?"
       2 (*multi-token-word-tree* (spatial-question 4 5 6)) (0 :subtree+clause)
     1 (between spatial-beginning 0)
+      2 (*multi-token-word-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
+    1 (wh_ spatial-beginning 0)
       2 (*multi-token-word-tree* (spatial-question 1 2 3)) (0 :subtree+clause)
     1 (NIL so spatial-beginning 0)
       2 (*multi-token-word-tree* (spatial-question 3 4)) (0 :subtree+clause)
