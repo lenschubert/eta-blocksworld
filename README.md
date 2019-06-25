@@ -1,20 +1,38 @@
 
 # Eta Blocksworld (Ver 1 - 06/21/19):
 
-NOTE: Readme to be updated soon.
+## How to run
 
-The dialogue can be run by starting SBCL and doing `(load "start.lisp")`. The dialogue begins
-with a getting-to-know question (currently just asking the user for their name), listens for a 
-reply, and reacts to that.
+Start SBCL in the top level directory and enter `(load "start.lisp")`. The dialogue will prompt
+you for an ID (just enter anything here). It will then begin with a getting-to-know question
+(currently just asking you for your name), and then will give a series of 10 prompts.
 
-Then the system asks 10 "prompt" questions. Currently, the gist clause extracted for each
-user query is just the query itself prepended by "Spatial question :". The system will
-currently just react to each query by echoing the query back to the user. Additionally,
-for spatial questions, the system will try to extract ulf from the gist clauses and attach
-those as features to that action in the dialogue plan.
+Eta has two modes: text mode, and live mode. In `start.lisp`, the mode can be changed at the very
+top of the file. Use `(defparameter *mode* nil)` for text mode, and `(defparameter *mode* t)` for live mode.
 
-The most pressing things to do right now:
-* Connect inputs/outputs with Georgiy's blocksworld system:
+In text mode, simply enter the query into the command line when the system prompts you to do so. The system will
+output the gist clause that was extracted, the corresponding ulf that it extracted, and will then react by
+echoing your query back to you (if it was a spatial question).
+
+In live mode, the system will await for an input to be set in `input.lisp` as `(setq *next-input* "Input here")`,
+where the value of \*next-input\* is a string. If the input was a spatial question, the system will output the
+extracted ulf to `ulf.lisp` as `(setq *next-ulf* '(((PRES BE.V) THERE.PRO ...) ?))`, where the value of \*next-ulf\* is
+some list.
+
+**NOTE**: the value of \*next-ulf\* might not necessarily be a ulf; it could be `(:out SOME RESPONSE ...)`. The
+ulf could also have an additional *poss-ques* wrapper around it, e.g. `'(POSS-QUES (((PRES BE.V) THERE.PRO ...) ?))`.
+Currently, both of these should be dealt with by Georgiy's system externally to Eta, although this should be changed in
+the future.
+
+Finally, in the case of a spatial question, the system will await a response in `reaction.lisp` as
+`(setq *next-reaction* "Reaction here")`, where the value of \*next-reaction\* is a string. If the input
+was not a spatial question, the system will skip this step and form a reaction as normal. Finally, the
+system will output the reaction to `output.txt`, on a single line prepended by `#: ` (it will also form
+initial prompts this way).
+
+## Task breakdown
+
+* Connect inputs/outputs with Georgiy's blocksworld system **(mostly done by this point)**:
   - Text would need to be taken from the ASR output rather than the command line. Much of this functionality should already be
     in place from the elderly study, however.
   - The ulf extracted at each step would need to be relayed to Georgiy's system for processing.
@@ -22,14 +40,12 @@ The most pressing things to do right now:
     file (which currently just echoes the user's query back to them - see `rules/spatial-question/rules-for-spatial-question-reaction.lisp`).
 
 * Expanding the gist clause rule files:
-  - Creating rules to catch non-query questions and inputs from the user - see `rules/choose-reaction-to-input.lisp`. Currently,
-    in that file, the only question that's detected is "what is your name", from the getting-to-know stage, in case the user asks
-    the system for its name. We would need to expand that with possible questions that aren't actual queries. We can't simply detect
-    any wh_ question for example, since some wh_ questions will be queries and should be processed differently.
-  - Creating the rules to simplify user queries before the ulf is extracted, by smoothing over interjections for instance. These should
-    be implemented in `rules/spatial-question/rules-for-spatial-question-input.lisp`.
+  - Creating rules to catch non-query ("small talk") questions and inputs from the user - see `rules/spatial-questions/rules-for-spatial-question-input.lisp` and `rules/choose-reaction-to-input.lisp`.
+  - Creating the rules to detect and preprocess spatial questions (primarily removing prefixed and suffixed utterances that the user might attach to their queries) **(mostly done by this point)** - see `rules/spatial-question/rules-for-spatial-question-input.lisp`.
   - Finding some way to use the previous utterance to help extract gist clauses. Not yet sure how this should be done, but it would be
     impemented in `rules/choose-gist-clause-trees-for-input.lisp`.
 
-* Expanding the ulf rule files:
+* Expanding the coverage of the ulf rule files:
   - Len is primarily working on this, and I will incorporate his changes in `rules/spatial-question/rules-for-spatial-question-ulf.lisp`.
+
+* Overall finding more elegant ways to implement Eta functionality, such as how it awaits a reaction from an external system currently.
