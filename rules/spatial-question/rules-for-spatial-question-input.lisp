@@ -56,24 +56,11 @@
   ; for any number of "small talk" patterns, which we should also be able to handle.
   (READRULES '*specific-answer-from-spatial-question-input*
   '(
-    ;; ---------------------------------
-    ;; Try to preempt references for now
-    ;; ---------------------------------
-    1 (0 spatial-word-potential 0 it 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 spatial-word-potential 0 they 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 spatial-word-potential 0 them 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 spatial-word-potential 0 that block 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 how many be there 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
     ;; ----------------------------------------
     ;; If spatial question, start preprocessing
     ;; ----------------------------------------
     1 (0 spatial-word 0)
-      2 (*trim-suffix-tree* (1 2 3)) (0 :subtree+clause)
+      2 (*asr-fix-tree* (1 2 3)) (0 :subtree+clause)
     ;; ---------------------
     ;; "Small talk" patterns
     ;; ---------------------
@@ -89,7 +76,65 @@
       2 ((NIL Gist \: Eta could not understand my question \.)) (0 :gist)
   ))
 
-  ; The first stage of preprocessing. We want to remove any "suffix" that the user might
+  ; The first stage of preprocessing. Here we want to check for common ASR mistakes, and
+  ; map those to the (most plausibly) correct input.
+  (READRULES '*asr-fix-tree*
+  '(
+    1 (0 mcdonald\'s 0)
+      2 (*asr-fix-tree* (1 mcdonalds 3)) (0 :subtree+clause)
+    1 (0 mcdonalds black 0)
+      2 (*asr-fix-tree* (1 mcdonalds block 4)) (0 :subtree+clause)
+    1 (0 meats are i 0)
+      2 (*asr-fix-tree* (1 SRI 5)) (0 :subtree+clause)
+    1 (0 meats? are i 0)
+      2 (*asr-fix-tree* (1 SRI 5)) (0 :subtree+clause)
+    1 (0 meats ? are i 0)
+      2 (*asr-fix-tree* (1 SRI 6)) (0 :subtree+clause)
+    1 (0 ssri block 0)
+      2 (*asr-fix-tree* (1 SRI block 4)) (0 :subtree+clause)
+    1 (0 sr. i block 0)
+      2 (*asr-fix-tree* (1 SRI block 5)) (0 :subtree+clause)
+    1 (0 sr \. i block 0)
+      2 (*asr-fix-tree* (1 SRI block 6)) (0 :subtree+clause)
+    1 (0 psr i block 0)
+      2 (*asr-fix-tree* (1 the SRI block 5)) (0 :subtree+clause)
+    1 (0 they survived look 0)
+      2 (*asr-fix-tree* (1 the SRI block 5)) (0 :subtree+clause)
+    1 (0 novita 0)
+      2 (*asr-fix-tree* (1 NVidia 3)) (0 :subtree+clause)
+    1 (0 univita 0)
+      2 (*asr-fix-tree* (1 NVidia 3)) (0 :subtree+clause)
+    1 (0 visiting aveda block 0)
+      2 (*asr-fix-tree* (1 is the NVidia block 5)) (0 :subtree+clause)
+    1 (0 above to 0)
+      2 (*asr-fix-tree* (1 above the 4)) (0 :subtree+clause)
+    1 (0 a mirror to 0)
+      2 (*asr-fix-tree* (1 nearer to 5)) (0 :subtree+clause)
+    1 (0 lymph nodes look 0)
+      2 (*asr-fix-tree* (1 leftmost block 5)) (0 :subtree+clause)
+    1 (0 stock 0)
+      2 (*asr-fix-tree* (1 stack 3)) (0 :subtree+clause)
+    1 (0)
+      2 (*detect-references-tree* (1)) (0 :subtree+clause)
+  ))
+
+  ; The second stage of preprocessing. We want to detect any references/pronouns (for now)
+  ; so we can preempt them and tell the user that they aren't currently supported.
+  (READRULES '*detect-references-tree*
+  '(
+    1 (0 spatial-word-potential 0 it 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 they 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 them 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 that block 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0)
+      2 (*trim-suffix-tree* (1)) (0 :subtree+clause)
+  ))
+
+  ; The third stage of preprocessing. We want to remove any "suffix" that the user might
   ; throw after the query, such as tag questions. We do this by trimming off everything at
   ; the end that isn't a spatial-ending (noun or adj). Right now this is being done in a rather
   ; unwieldy way, due to the problem of recursion (i.e. an input can theoretically have any number
@@ -124,7 +169,7 @@
       2 (*trim-prefix-tree* (1 2 ?)) (0 :subtree+clause)
   ))
 
-  ; The second stage of preprocessing. We want to remove any "prefix" that the user might
+  ; The fourth stage of preprocessing. We want to remove any "prefix" that the user might
   ; use as an opening, e.g. "my question is ...".
   (READRULES '*trim-prefix-tree*
   '(
@@ -150,7 +195,7 @@
       2 (*multi-token-word-tree* (spatial-question 1)) (0 :subtree+clause) 
   ))
 
-  ; The third stage of preprocessing. Here we combine any words that have multiple tokens,
+  ; The fifth stage of preprocessing. Here we combine any words that have multiple tokens,
   ; e.g. "burger king" into a single word, joined by an underscore.
   (READRULES '*multi-token-word-tree*
   '(
