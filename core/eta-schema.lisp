@@ -17,7 +17,7 @@
 :Actions 
 
 ?a1. (Me say-to.v you 
-      '(Hi I am Eta\. I\'m here to help answer some spatial questions for you\.
+      '(Hi I am David\. I\'m here to help answer some spatial questions for you\.
         Please try to speak as clearly as possible\. If you wish to quit at any time\, just say bye or goodbye\.))
 
 ?a2. (Me say-to.v you 
