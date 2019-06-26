@@ -1,3 +1,6 @@
+; On github at https://github.com/bkane2/eta-blocksworld 
+; Select rules/spatial-question/rules-for-spatial-question-ulf.lisp
+; ========================================================================
 ; "rules-for-spatial-questions.lisp"  -- currently under revision, June 21/19
 ; from previous version (v6). Add "between" rules. That's a bit tricky,
 ; because the complement of "between" either can be a plural ("between two
@@ -55,7 +58,7 @@
           (rel-adj near close touching adjacent flush)
           (qual-adj purple blue green yellow orange red pink gray grey
                 black white brown clear visible nearby)
-          (num-adj two three four five six seven eight nine ten eleven twelve)
+          (num-adj two three four five six seven eight nine ten eleven twelve many)
                    ; (But note: we assume numerals can also be determiners)
           (sup-adj leftmost rightmost furthest farthest nearest closest highest
                 tallest nearest topmost uppermost smallest lowest largest
@@ -239,6 +242,8 @@
     2 (((*n1-ulf-tree* 1 2 3)) (k 1)) (0 :ulf-recur)
    1 (adj adj noun 0); e.g., leftmost red blocks on the table
     2 (((*n1-ulf-tree* 1 2 3 4)) (k 1)) (0 :ulf-recur)
+   ; Still need "There are...", "There is ..." sentence forms.
+
  ))
 
 
