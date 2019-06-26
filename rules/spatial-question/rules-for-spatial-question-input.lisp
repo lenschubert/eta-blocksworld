@@ -20,7 +20,7 @@
     (directions left right top bottom back front)
 
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
-      Starbucks Texaco Target Toyota)
+      Starbucks Texaco Target Toyota Twitter Shell Adidas)
     (block blocks cube cubes book books black blacks glock glocks
       blog blogs bach blood bloods glass box look looks); often misrecognized
     (name corp)

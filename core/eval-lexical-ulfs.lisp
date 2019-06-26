@@ -37,6 +37,9 @@
                   (TEXACO '|Texaco|)
                   (TARGET '|Target|)
                   (TOYOTA '|Toyota|)
+                  (TWITTER '|Twitter|)
+                  (SHELL '|Shell|)
+                  (ADIDAS '|Adidas|)
                   (t (if (< (length word-str) 4)
                          (intern (format nil "~a " word-sym)); NB: final blank
                          (intern (capitalize (string-downcase word-sym)))))))
