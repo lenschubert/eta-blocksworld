@@ -247,6 +247,14 @@
   ; use as an opening, e.g. "my question is ...".
   (READRULES '*trim-prefix-tree*
   '(
+    1 (yes I do \, 0)
+      2 (*trim-prefix-tree* (5)) (0 :subtree+clause)
+    1 (yes I do 0)
+      2 (*trim-prefix-tree* (4)) (0 :subtree+clause)
+    1 (yes \, 0)
+      2 (*trim-prefix-tree* (3)) (0 :subtree+clause)
+    1 (yes 0)
+      2 (*trim-prefix-tree* (2)) (0 :subtree+clause)
     1 (0 here 1 my 1 question 0)
       2 (*trim-prefix-tree* (7)) (0 :subtree+clause)
     1 (0 my 1 question 2 be this 0)
