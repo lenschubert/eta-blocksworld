@@ -22,7 +22,7 @@
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
       Starbucks Texaco Target Toyota )
     (block blocks cube cubes book books black glock 
-      blog blogs bach blood glass); often misrecognized
+      blog blogs bach blood glass lover); often misrecognized
     (name corp)
     (prep of on to under in behind near touching abutting between 
       below above next next_to visible)
@@ -114,6 +114,8 @@
       2 (*asr-fix-tree* (1 leftmost block 5)) (0 :subtree+clause)
     1 (0 stock 0)
       2 (*asr-fix-tree* (1 stack 3)) (0 :subtree+clause)
+    1 (0 lover 0)
+      2 (*asr-fix-tree* (1 block 3)) (0 :subtree+clause)
     1 (0)
       2 (*detect-references-tree* (1)) (0 :subtree+clause)
   ))
