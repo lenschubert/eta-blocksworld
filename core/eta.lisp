@@ -2222,7 +2222,9 @@ with the characters in LIST-OF-CHARACTERS."
                   :if-exists :supersede :if-does-not-exist :create)))))
     (setf *default-pathname-defaults* (truename *temp-dir*))
           
-  (let ((chars (coerce *next-reaction* 'list)) prevch chlist chlists) 
+  (let ((chars (if (stringp *next-reaction*) (coerce *next-reaction* 'list)
+                                             (coerce (car *next-reaction*) 'list)))
+        prevch chlist chlists) 
        (if (null chars) (return-from hear-words nil))
        ; Form a list of character sublists, each sublist to be made
        ; into an atom; (the list & sublists will at first be backward,
