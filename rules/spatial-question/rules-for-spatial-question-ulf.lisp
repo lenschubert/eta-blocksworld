@@ -343,7 +343,7 @@
 
      
 (readrules '*modal-question-ulf-tree* ; ones like "Can you see the NVidia block ?
- '(1 (Sorry\, you\'re not handling modal questions yet) (0 :out)
+ '(1 (Sorry\, you\'re not handling modal questions yet\.) (0 :out)
  ))
 
 (readrules '*wh-question-ulf-tree* ; ones like "Where is the NVidia block?
@@ -454,9 +454,9 @@
     2 (((*yn-question-ulf-tree* 2 3 4 5 7 ?)) (poss-ques 1)) (0 :ulf-recur)
    ; More can/should be added
    1 (0 det 2 block 0)
-    2 (I\'m asking about some 3 4 \, but you didn\'t catch what it was) (0 :out)
+    2 (I\'m asking about some 3 4 \, but you didn\'t catch what it was\.) (0 :out)
    1 (0 det table 0)
-    2 (I referred to the table\, but you didn\'t catch what I said) (0 :out)
+    2 (I referred to the table\, but you didn\'t catch what I said\.) (0 :out)
    ; variants of begging-off responses should be added, with non-zero latency,
    ; so that the user will see a variety of such responses
  ))  
