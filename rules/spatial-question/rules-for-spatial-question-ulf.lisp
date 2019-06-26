@@ -46,8 +46,8 @@
         '(; New as of June 9/19:
           (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
                 Starbucks Texaco Target Toyota )
-          (block blocks cube cubes book books black glock 
-                             blog blogs bach blood glass); often misrecognized
+          (block blocks cube cubes book books black blacks glock glocks
+                             blog blogs bach blood bloods glass box look looks); often misrecognized
           (name corp)
           (prep of on to under in behind near touching abutting between from
                 below above next next_to visible); currently "next" needs to have

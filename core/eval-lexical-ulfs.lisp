@@ -56,7 +56,8 @@
                      (glock 'block.n) (glocks '(plur block.n))
                      (bach 'block.n)  (bachs '(plur block.n))
                      (blood 'block.n) (bloods '(plur block.n))
-                     (glass 'block.n)
+                     (look 'block.n)  (looks '(plur block.n))
+                     (glass 'block.n) (box '(plur block.n))
                      (t (setq stem (stem (list 'n word-sym))); tries to depluralize
                         (if (eq stem word-sym); assume singular if unchanged
                                               ; (somewhat error-prone)

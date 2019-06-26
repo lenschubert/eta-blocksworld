@@ -20,18 +20,24 @@
     (directions left right top bottom back front)
 
     (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
-      Starbucks Texaco Target Toyota )
-    (block blocks cube cubes book books black glock 
-      blog blogs bach blood glass lover); often misrecognized
+      Starbucks Texaco Target Toyota)
+    (block blocks cube cubes book books black blacks glock glocks
+      blog blogs bach blood bloods glass box look looks); often misrecognized
     (name corp)
-    (prep of on to under in behind near touching abutting between 
-      below above next next_to visible)
+    (prep of on to under in behind near touching abutting between from
+      below above next next_to visible); currently "next" needs to have
+                                                 ; the 'prep' feature, to allow
+                                                 ; merging into 'next_to.p'; it's
+                                                 ; risky, & prior word-joining 
+                                                 ; by '_' would be safer.
     (rel-adj near close touching adjacent flush)
     (qual-adj purple blue green yellow orange red pink gray grey
       black white brown clear visible nearby)
-    (num-adj two three four five six seven eight nine ten eleven twelve)
+    (num-adj two three four five six seven eight nine ten eleven twelve many)
+                   ; (But note: we assume numerals can also be determiners)
     (sup-adj leftmost rightmost furthest farthest nearest closest highest
-      tallest nearest topmost)
+      tallest nearest topmost uppermost smallest lowest largest
+      centermost shortest backmost longest fewest frontmost)
     (ord-adj first second third fourth fifth sixthe seventh eighth ninth
       tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth
       seventeens eighteenth nineteenth twentieth)
@@ -39,12 +45,15 @@
     (adj qual-adj rel-adj num-adj sup-adj ord-adj diff-adj)
     (mod-n adj corp)
     (noun block table stack row edge face plane line circle pile object
-      color structure other); NB: "each other"; can also be adj, det
+      color structure left right back front other); NB: "each other"
+                                                         ; can also be adj, det
     (uppermost on highest top sitting)
     (under underneath supporting support)
     (close next)
     (touching face-to-face abutting against flush) 
     (be is are was were)
+    (verb touch touches support supports connect connects consist_of
+      consists_of sit sits adjoin adjoins flank flanks)
     (farthest furthest)
     (rotated angled swivelled turned)
   ))
@@ -84,12 +93,32 @@
       2 (*asr-fix-tree* (1 mcdonalds 3)) (0 :subtree+clause)
     1 (0 mcdonalds black 0)
       2 (*asr-fix-tree* (1 mcdonalds block 4)) (0 :subtree+clause)
+    1 (0 sra 0)
+      2 (*asr-fix-tree* (1 SRI 3)) (0 :subtree+clause)
+    1 (0 s or i 0)
+      2 (*asr-fix-tree* (1 SRI 5)) (0 :subtree+clause)
     1 (0 meats are i 0)
       2 (*asr-fix-tree* (1 SRI 5)) (0 :subtree+clause)
     1 (0 meats? are i 0)
       2 (*asr-fix-tree* (1 SRI 5)) (0 :subtree+clause)
     1 (0 meats ? are i 0)
       2 (*asr-fix-tree* (1 SRI 6)) (0 :subtree+clause)
+    1 (0 bsri 0)
+      2 (*asr-fix-tree* (1 the SRI 3)) (0 :subtree+clause)
+    1 (0 bsr i 0)
+      2 (*asr-fix-tree* (1 the SRI 4)) (0 :subtree+clause)
+    1 (0 psri 0)
+      2 (*asr-fix-tree* (1 the SRI 3)) (0 :subtree+clause)
+    1 (0 psr i 0)
+      2 (*asr-fix-tree* (1 the SRI 4)) (0 :subtree+clause)
+    1 (0 dsri 0)
+      2 (*asr-fix-tree* (1 the SRI 3)) (0 :subtree+clause)
+    1 (0 dsr i 0)
+      2 (*asr-fix-tree* (1 the SRI 4)) (0 :subtree+clause)
+    1 (0 esri 0)
+      2 (*asr-fix-tree* (1 the SRI 3)) (0 :subtree+clause)
+    1 (0 esr i 0)
+      2 (*asr-fix-tree* (1 the SRI 4)) (0 :subtree+clause)
     1 (0 ssri block 0)
       2 (*asr-fix-tree* (1 SRI block 4)) (0 :subtree+clause)
     1 (0 sr. i block 0)
@@ -100,25 +129,68 @@
       2 (*asr-fix-tree* (1 the SRI block 5)) (0 :subtree+clause)
     1 (0 they survived look 0)
       2 (*asr-fix-tree* (1 the SRI block 5)) (0 :subtree+clause)
+    1 (0 in their survival 0)
+      2 (*asr-fix-tree* (1 and the SRI block 5)) (0 :subtree+clause)
     1 (0 novita 0)
       2 (*asr-fix-tree* (1 NVidia 3)) (0 :subtree+clause)
     1 (0 univita 0)
       2 (*asr-fix-tree* (1 NVidia 3)) (0 :subtree+clause)
+    1 (0 aveda 0)
+      2 (*asr-fix-tree* (1 NVidia 3)) (0 :subtree+clause)
+    1 (0 play media 0)
+      2 (*asr-fix-tree* (1 the NVidia 4)) (0 :subtree+clause)
+    1 (0 play video 0)
+      2 (*asr-fix-tree* (1 the NVidia 4)) (0 :subtree+clause)
     1 (0 visiting aveda block 0)
       2 (*asr-fix-tree* (1 is the NVidia block 5)) (0 :subtree+clause)
+    1 (0 ultra 0)
+      2 (*asr-fix-tree* (1 Toyota 3)) (0 :subtree+clause)
+    1 (0 yoda 0)
+      2 (*asr-fix-tree* (1 Toyota 3)) (0 :subtree+clause)
+    1 (0 traffic 0)
+      2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
+    1 (0 pocket 0)
+      2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
+    1 (0 Mexico 0)
+      2 (*asr-fix-tree* (1 Texaco 3)) (0 :subtree+clause)
+    1 (0 texas call 0)
+      2 (*asr-fix-tree* (1 Texaco 4)) (0 :subtree+clause)
+    1 (0 mass of the 0)
+      2 (*asr-fix-tree* (1 Mercedes 5)) (0 :subtree+clause)
+    1 (0 varsity sports 0)
+      2 (*asr-fix-tree* (1 Mercedes 4)) (0 :subtree+clause)
     1 (0 above to 0)
       2 (*asr-fix-tree* (1 above the 4)) (0 :subtree+clause)
     1 (0 a mirror to 0)
       2 (*asr-fix-tree* (1 nearer to 5)) (0 :subtree+clause)
     1 (0 lymph nodes look 0)
       2 (*asr-fix-tree* (1 leftmost block 5)) (0 :subtree+clause)
+    1 (0 rifles 0)
+      2 (*asr-fix-tree* (1 rightmost 3)) (0 :subtree+clause)
+    1 (0 metal 0)
+      2 (*asr-fix-tree* (1 middle 3)) (0 :subtree+clause)
+    1 (0 punches 0)
+      2 (*asr-fix-tree* (1 touches 3)) (0 :subtree+clause)
+    1 (0 punching 0)
+      2 (*asr-fix-tree* (1 touching 3)) (0 :subtree+clause)
+    1 (0 catching 0)
+      2 (*asr-fix-tree* (1 touching 3)) (0 :subtree+clause)
     1 (0 stock 0)
       2 (*asr-fix-tree* (1 stack 3)) (0 :subtree+clause)
+    1 (0 hour 0)
+      2 (*asr-fix-tree* (1 tower 3)) (0 :subtree+clause)
+    1 (0 power 0)
+      2 (*asr-fix-tree* (1 tower 3)) (0 :subtree+clause)
     1 (0 lover 0)
       2 (*asr-fix-tree* (1 block 3)) (0 :subtree+clause)
+    1 (0 rose 0)
+      2 (*asr-fix-tree* (1 rows 3)) (0 :subtree+clause)
+    1 (0 brett 0)
+      2 (*asr-fix-tree* (1 red 3)) (0 :subtree+clause)
     1 (0)
       2 (*detect-references-tree* (1)) (0 :subtree+clause)
   ))
+
 
   ; The second stage of preprocessing. We want to detect any references/pronouns (for now)
   ; so we can preempt them and tell the user that they aren't currently supported.
