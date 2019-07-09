@@ -44,10 +44,13 @@
 
   (MAPC 'ATTACHFEAT
         '(; New as of June 9/19:
-          (corp Burger_King McDonalds Mercedes NVidia SRI SRI_International
-                Starbucks Texaco Target Toyota Twitter Shell Adidas)
-          (block blocks cube cubes book books black blacks glock glocks
-                             blog blogs bach blood bloods glass box look looks); often misrecognized
+          (corp Adidas Burger_King Esso Heineken HP McDonalds Mercedes NVidia  
+                Pepsi Shell SRI SRI_International Starbucks Texaco Target Toyota
+                Twitter ) 
+          (Shell Show); sometimes misrecognized
+
+          (block blocks cube cubes book books black glock 
+                             blog blogs bach blood glass); often misrecognized
           (name corp)
           (prep of on to under in behind near touching abutting between from
                 below above next next_to visible); currently "next" needs to have
@@ -310,11 +313,7 @@
  ))
 
 (readrules '*pp-ulf-tree*
- '(1 (prep det 2 noun); on a red block
-    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
-   1 (prep 2 noun); on red blocks
-    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3)) (1 2)) (0 :ulf-recur)
-   1 (on top of det 2 noun); on top of a red block
+ '(1 (on top of det 2 noun); on top of a red block
     2 ((on_top_of.p (*np-ulf-tree* 4 5 6)) (1 2)) (0 :ulf-recur)
    1 (on top of 2 noun); on top of red blocks
     2 ((on_top_of.p (*np-ulf-tree* 4 5)) (1 2)) (0 :ulf-recur)
@@ -334,12 +333,16 @@
     2 ((in_front_of.p (*np-ulf-tree* 4 5 6)) (1 2)) (0 :ulf-recur)
    1 (in front of 2 noun); in front of red blocks
     2 ((in_front_of.p (*np-ulf-tree* 4 5)) (1 2)) (0 :ulf-recur)
+   1 (prep det 2 noun); on a red block
+    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
+   1 (prep 2 noun); on red blocks
+    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3)) (1 2)) (0 :ulf-recur)
    ; recurse if there's a premodifying adverb:
    1 (deg-adv prep 3 det 3 noun)
     2 (((lex-ulf! adv 1) (*pp-ulf-tree* 2 3 4 5 6)) (1 2)) (0 :ulf-recur)
    1 (deg-adv prep 3 adj 1 noun)
     2 (((lex-ulf! adv 1) (*pp-ulf-tree* 2 3 4 5 6)) (1 2)) (0 :ulf-recur)
- ))
+ )); end of *pp-ulf-tree*
 
      
 (readrules '*modal-question-ulf-tree* ; ones like "Can you see the NVidia block ?
@@ -357,10 +360,19 @@
                                    ; of the Nvidia block ?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) 
         (*pp-ulf-tree* 4 5 6 7) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
-   1 (what be prep 3 det 3 ?)
+   1 (what be prep 3 det 3 ?); What is next to the Texaco block?
     2 ((what.pro (lex-ulf! v 2) (*pp-ulf-tree* 3 4 5 6) ?) 
        ((1 (2 3)) ?)) (0 :ulf-recur)
-  1 (wh-det 1 noun be 1 prep 2 noun ?); What red blocks are (there) on blue blocks ?
+   1 (wh-det 1 noun be not adj ?); which blocks are not clear ?
+    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) not.adv-a 
+        (lex-ulf! adj 6) ?) (((1 2) (3 4 5)) ?)) (0 :ulf-recur)
+   1 (wh-det 1 noun be 1 adj ?); which blocks are (totally) clear ?
+    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (lex-ulf! adj 6) ?) 
+       (((1 2) (3 4)) ?)) (0 :ulf-recur)
+   1 (wh-det 1 noun be not 3 prep 2 noun ?); What red blocks are not on blue blocks ?
+    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 6 7 8 9) ?)
+        (((1 2) (3 (not.adv-a 4))) ?)) (0 :ulf-recur)
+   1 (wh-det 1 noun be 1 prep 4 noun ?); What red blocks are (there) on blue blocks ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 6 7 8) ?)
         (((1 2) (3 4)) ?)) (0 :ulf-recur)
    1 (what color noun be prep 3 det 3 ?); e.g., what color block is to the left
@@ -381,11 +393,18 @@
                                            ; farthest blue block ?
     2 (((lex-ulf! pro 1) (lex-ulf! v 2) (*np-ulf-tree* 3 4 5 6 7 8 9) ?)
        ((1 (2 (= 3))) ?)) (0 :ulf-recur)
-   1 (how many 1 block be prep 3 det 3 ?); e.g., How many blocks are on some red block ?
-    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 6 7 8 9) ?) 
+   1 (how many 1 block be not prep 3 det 3 ?); How many blocks are not on a red block ?
+    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree*  7 8 9 10) ?)
+       (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
+   1 (how many 1 block be 1 prep 3 det 3 ?); How many blocks are (there) on some red block ?
+    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree*  7 8 9 10) ?) 
+       (((1 2) (3 4)) ?)) (0 :ulf-recur)
+   1 (how many 1 block be not 3 prep adj 3 ?); e.g., How many blocks are not in front
+                                         ;        of red blocks ? (NB: no 'det')
+    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 7 8 9 10) ?)
        (((1 2) (3 4)) ?)) (0 :ulf-recur)
    1 (how many 1 block be 3 prep adj 3 ?); e.g., How many blocks are in front of 
-                                         ;       red blocks ?
+                                         ;       red blocks ? (NB: no 'det')
     2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 6 7 8 9) ?)
        (((1 2) (3 4)) ?)) (0 :ulf-recur)
    1 (how many 1 block be there ?)
