@@ -1,8 +1,8 @@
 
 ; NIL for text mode
 ; T for speak mode
-(defparameter *mode* t)
-;; (defparameter *mode* NIL)
+;; (defparameter *mode* t)
+(defparameter *mode* NIL)
 (defparameter *user-id* NIL)
 
 ; sessionInfo.lisp should be as following
@@ -62,7 +62,8 @@
 ;
 (setf *temp-dir* "core")
 (setf *default-pathname-defaults* (truename *temp-dir*))
-(load "eta")
+(load "eta.lisp")
+(load "util.lisp")
 (load "eta-schema.lisp")
 (load "general-word-data.lisp")
 (load "schema-for-reactions-to-answer-plus-question.lisp")
