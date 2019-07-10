@@ -1,7 +1,6 @@
 ;; ASDF system definition for TTT
 ;; Original version of this file written for Epilog.
 
-(print "hi2")
 (require 'asdf)
 
 ;; avoids saving compiled files in special local cache.
