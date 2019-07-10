@@ -113,7 +113,7 @@
   ; system) with file IO. If *live* = nil, operates in terminal mode.
   (defparameter *live* nil)
 
-  ;; Initialize/clear output file (only used in live mode)
+  ; Initialize/clear output file (only used in live mode)
   (setf *default-pathname-defaults* *root-dir*)
   (with-open-file (outfile "./output.txt" :direction :output
                                           :if-exists :append
