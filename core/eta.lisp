@@ -81,8 +81,8 @@
   ; and any very brief user response (such as "yes",
   ; or "my mother") was expanded using that context.
   ;
-  ; NOTE: Instead of doolittle's "contexts", Eta has USE-CHOICE-TREE
-  ; and USE-SCHEMA "directives" in its reassembly rules, giving the name
+  ; NOTE: Instead of doolittle's "contexts", Eta has 'subtree'
+  ; and 'schema' "directives" in its reassembly rules, giving the name
   ; of another choice tree or schema to be used to construct a step or 
   ; steps for a subplan.
   ;
