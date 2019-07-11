@@ -124,10 +124,10 @@
       (0 :ulf-recur)
    1 (0 det 1 block 0 between 0)
     2 (Sorry\, I\'m asking about some 3 4 being between objects \, but you didn\'t 
-       really catch what it was) (0 :out)
+       really catch what it was\.) (0 :out)
    1 (0 between 0 det table 0)
     2 (Hmm\, you think I asked about a between-relation on the table\, but you 
-       didn\'t really catch what I said) (0 :out)
+       didn\'t really catch what I said\.) (0 :out)
    ; variants of begging-off responses should be added, with non-zero latency,
    ; so that the user will see a variety of such responses
  )) ; end of *fallback-between-spatial-question-ulf-tree*
