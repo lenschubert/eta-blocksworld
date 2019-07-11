@@ -123,7 +123,7 @@
     2 (((*yn-between-question-ulf-tree* 2 4 5 6 8 9 10 ?)) (poss-ques 1)) 
       (0 :ulf-recur)
    1 (0 det 1 block 0 between 0)
-    2 (Sorry\, I\'m asking about some 3 4 being between objects \, but you didn\'t 
+    2 (Sorry\, I am asking about some 3 4 being between objects \, but you didn\'t 
        really catch what it was\.) (0 :out)
    1 (0 between 0 det table 0)
     2 (Hmm\, you think I asked about a between-relation on the table\, but you 

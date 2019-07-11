@@ -650,7 +650,7 @@
         (setq user-ulf (get user-action-name 'ulf))
         (format t "~% user gist clause is ~a ~%" user-gist-clauses) ; DEBUGGING
         (format t "~% user ulf is ~a ~%" user-ulf) ; DEBUGGING
-        (setq new-subplan-name (plan-reaction-to user-gist-clauses))
+        (setq new-subplan-name (plan-reaction-to user-gist-clauses user-ulf))
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
@@ -1115,7 +1115,7 @@
 
 
 
-(defun plan-reaction-to (user-gist-clauses)
+(defun plan-reaction-to (user-gist-clauses user-ulf)
 ;`````````````````````````````````````````````````````````
 ; Starting at a top-level choice tree root, choose an action or
 ; subschema suitable for reacting to 'user-gist-clauses' (which
@@ -1149,6 +1149,29 @@
     
     (if (null user-gist-clauses)
       (return-from plan-reaction-to nil))
+
+    ; Currently we're only using a single ulf
+    ; TODO: in case use of ulf is extended, we will probably want to have some
+    ; way of dealing with multiple ulf in the same way that we deal with multiple
+    ; gist clauses
+    (if user-ulf (setq user-ulf (car user-ulf)))
+
+    ; (Ben update 7/11/19)
+    ; If the extracted ulf specifies an :out directive, we want to create a
+    ; say-to.v subplan directly
+    (cond
+      ((and user-ulf (eq (car user-ulf) :out))
+        ; Drop :out key and adjust
+        (setq choice (modify-response (cdr user-ulf)))
+        (setq wff `(me say-to.v you (quote ,choice)))
+        ; We want the action proposition name to terminate in a period
+        (setq action-prop-name (action-name))
+        ; Build the 1-step plan
+        (setf (get action-prop-name 'wff) wff)
+        (setq subplan-name (gensym "SUBPLAN"))
+        (set subplan-name (list :actions action-prop-name wff))
+        (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
+      (return-from plan-reaction-to subplan-name)))
 
     ; We use either choice tree '*reaction-to-input*' or
     ; '*reactions-to-input*' (note plural) depending on  whether
@@ -1196,7 +1219,7 @@
         ; Build the 1-step plan
         (setf (get action-prop-name 'wff) wff)
         (set subplan-name (list :actions action-prop-name wff))
-        (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name))) 
+        (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
       subplan-name)
 
       ; :schema directive
