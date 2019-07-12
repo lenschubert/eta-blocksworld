@@ -181,6 +181,8 @@
       2 (*asr-fix-tree* (1 tower 3)) (0 :subtree+clause)
     1 (0 power 0)
       2 (*asr-fix-tree* (1 tower 3)) (0 :subtree+clause)
+    1 (0 boxer 0)
+      2 (*asr-fix-tree* (1 blocks are 3)) (0 :subtree+clause)
     1 (0 blockus 0)
       2 (*asr-fix-tree* (1 blocks 3)) (0 :subtree+clause)
     1 (0 blokus 0)
