@@ -293,6 +293,8 @@
       2 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
     1 (NIL so spatial-beginning 0)
       2 (*multi-token-word-tree* (3 4)) (0 :subtree+clause)
+    1 (NIL \, spatial-beginning 0)
+      2 (*multi-token-word-tree* (3 4)) (0 :subtree+clause)
     1 (NIL spatial-beginning 0)
       2 (*multi-token-word-tree* (2 3)) (0 :subtree+clause)
     1 (0)
