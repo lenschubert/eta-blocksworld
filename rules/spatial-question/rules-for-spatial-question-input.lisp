@@ -149,6 +149,8 @@
       2 (*asr-fix-tree* (1 Toyota 3)) (0 :subtree+clause)
     1 (0 traffic 0)
       2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
+    1 (0 chopping 0)
+      2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
     1 (0 pocket 0)
       2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
     1 (0 Mexico 0)
