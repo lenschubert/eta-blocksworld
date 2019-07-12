@@ -153,6 +153,8 @@
       2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
     1 (0 pocket 0)
       2 (*asr-fix-tree* (1 Target 3)) (0 :subtree+clause)
+    1 (0 texican 0)
+      2 (*asr-fix-tree* (1 Texaco 3)) (0 :subtree+clause)
     1 (0 Mexico 0)
       2 (*asr-fix-tree* (1 Texaco 3)) (0 :subtree+clause)
     1 (0 texas call 0)
