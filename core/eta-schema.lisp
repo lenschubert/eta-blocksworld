@@ -107,9 +107,89 @@
 
 ?a34. (Me react-to.v ?a33.)
 
-
-
+; 11
 ?a35. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a36. (You reply-to.v ?a35.)
+
+?a37. (Me react-to.v ?a36.)
+
+; 12
+?a38. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a39. (You reply-to.v ?a38.)
+
+?a40. (Me react-to.v ?a39.)
+
+; 13
+?a41. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a42. (You reply-to.v ?a41.)
+
+?a43. (Me react-to.v ?a42.)
+
+; 14
+?a44. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a45. (You reply-to.v ?a44.)
+
+?a46. (Me react-to.v ?a45.)
+
+; 15
+?a47. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a48. (You reply-to.v ?a47.)
+
+?a49. (Me react-to.v ?a48.)
+
+; 16
+?a50. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a51. (You reply-to.v ?a50.)
+
+?a52. (Me react-to.v ?a51.)
+
+; 17
+?a53. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a54. (You reply-to.v ?a53.)
+
+?a55. (Me react-to.v ?a54.)
+
+; 18
+?a56. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a57. (You reply-to.v ?a56.)
+
+?a58. (Me react-to.v ?a57.)
+
+; 19
+?a59. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a60. (You reply-to.v ?a59.)
+
+?a61. (Me react-to.v ?a60.)
+
+; 20
+?a62. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a63. (You reply-to.v ?a62.)
+
+?a64. (Me react-to.v ?a63.)
+
+
+
+?a65. (Me say-to.v you
         '(Excellent questions\, but unfortunately all that
           thinking has been very tiring\, so I need to take a break now\.))
 
@@ -158,6 +238,16 @@
     (?a26. ((do you have a spatial question ?)))
     (?a29. ((do you have a spatial question ?)))
     (?a32. ((do you have a spatial question ?)))
+    (?a35. ((do you have a spatial question ?)))
+    (?a38. ((do you have a spatial question ?)))
+    (?a41. ((do you have a spatial question ?)))
+    (?a44. ((do you have a spatial question ?)))
+    (?a47. ((do you have a spatial question ?)))
+    (?a50. ((do you have a spatial question ?)))
+    (?a53. ((do you have a spatial question ?)))
+    (?a56. ((do you have a spatial question ?)))
+    (?a59. ((do you have a spatial question ?)))
+    (?a62. ((do you have a spatial question ?)))
   )
 ); end of mapcar #'store-output-gist-clauses
 
