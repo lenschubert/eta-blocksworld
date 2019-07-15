@@ -68,6 +68,7 @@
 (load "general-word-data.lisp")
 (load "schema-for-reactions-to-answer-plus-question.lisp")
 (load "schema-for-reactions-to-question+clause.lisp")
+(load "schema-for-reactions-to-spatial-question.lisp")
 (load "eval-lexical-ulfs.lisp")
 (load "stem.lisp")
 (setf *default-pathname-defaults* *root-dir*)

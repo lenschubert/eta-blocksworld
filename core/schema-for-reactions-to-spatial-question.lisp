@@ -25,7 +25,7 @@
 
 (defparameter *reactions-to-spatial-question*
 
-  (Event-schema ((me react-to-spatial-question ?var ?earlier-ques) ** ?e)
+  ;; '(Event-schema ((me react-to-spatial-question ?var ?earlier-ques) ** ?e)
   ; ?var would be the name of the (you say-to.v me '...) action
   ; that now has a ULF version of the question attached to it;
   ; the ?earlier-ques would be the previous question asked by the
@@ -33,11 +33,18 @@
   ; especially if it alse has an attached ULF; but maybe this
   ; wouldn't be an explicit argument, but rather attached
   ; somewhere, & reachable by searching backwards...
+  '(Event-schema ((me react-to-spatial-question ?ulf ?earlier-ques) ** ?e)
+  ; NOTE: Currently using ?ulf rather than ?var, since there is no way to provide
+  ; an action name as an argument when a schema is selected during pattern transduction
+  ; TODO: Add this functionality and then add ?var back to header
     :actions ?a1. (me seek-answer-from.v |Spatial-QA-Server| '?ulf)
                ; this would send the ulf (obtained from the properties
                ; of the actual name replacing ?var) to an appropriate
                ; file, monitored by the Spatial-QA-Server; the server
                ; would empty the file after reading it;
+               ; Currently variable given should be '?ans+alternates if expect
+               ; to recieve list of answer and then alternates, or should be given
+               ; as '?ans if expect to recieve only answer.
               ?a2. (me receive-answer-from.v |Spatial-QA-Server| '?ans+alternates)
                ; the value of ?ans+alternates would be read off from a file
                ; to which Spatial-QA-Server sends the answer (with weighted
@@ -57,17 +64,17 @@
 )) ; end of parameter *reactions-to-spatial-question*
 
 
-(setf (get '*reactions-to-spatial-question* 'semantics) 
-      (make-hash-table))
+(setf (get '*reactions-to-spatial-question* 'semantics) (make-hash-table))
  ; To fill this in, EL formulas would need to be derived from
  ; Eta reactions (not yet used). This would be rather unlike
  ; the explicit 'store-output-semantics' used in *Eta-schema*
  ; (see "Eta5-schema.lisp").
 
 
-(setf (get '*reactions-to-spatial-question* 'gist-clauses) 
-      (make-hash-table))
+(setf (get '*reactions-to-spatial-question* 'gist-clauses) (make-hash-table))
  ; Much the same comment as above applies -- something other than
  ; the straightforward 'store-output-gist-clauses' used in
  ; the *Eta-schema* code would be needed.
+
+(setf (get '*reactions-to-spatial-question* 'topic-keys) (make-hash-table))
 

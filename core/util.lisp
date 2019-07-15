@@ -595,6 +595,26 @@
 
 
 
+(defun create-say-to-subplan (content)
+;````````````````````````````````````````
+; Creates and returns a subplan which consists only of a single
+; primitive say-to.v action, given particular content to say
+;
+  (let (wff action-prop-name subplan-name)
+    (setq content (modify-response content))
+    (setq wff `(me say-to.v you (quote ,content)))
+    ; We want the action proposition name to terminate in a period
+    (setq action-prop-name (action-name))
+    ; Build the 1-step plan
+    (setf (get action-prop-name 'wff) wff)
+    (setq subplan-name (gensym "SUBPLAN"))
+    (set subplan-name (list :actions action-prop-name wff))
+    (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
+  subplan-name)
+) ; END create-say-to-subplan
+
+
+
 (defun print-current-plan-status (plan-name)
 ;`````````````````````````````````````````````
 ; Show plan names, action names and wffs reached in following 
@@ -730,26 +750,26 @@
 
 
 
-(defun get-reaction () 
+(defun get-answer () 
 ;``````````````````````
-; This waits until it can load a character sequence from "./reaction.lisp",
-; which will set the value of *next-reaction*, and then processes it.
+; This waits until it can load a character sequence from "./answer.lisp",
+; which will set the value of *next-answer*, and then processes it.
 ;
-  (setq *next-reaction* nil)
+  (setq *next-answer* nil)
   (setf *default-pathname-defaults* *root-dir*)
-  (loop while (not *next-reaction*) do
+  (loop while (not *next-answer*) do
     (sleep .5)
     (progn
-      (load "./reaction.lisp")
-		  (if *next-reaction*
-        (with-open-file (outfile "./reaction.lisp" :direction :output 
+      (load "./answer.lisp")
+		  (if *next-answer*
+        (with-open-file (outfile "./answer.lisp" :direction :output 
                                                    :if-exists :supersede
                                                    :if-does-not-exist :create)))))
   (setf *default-pathname-defaults* (truename *temp-dir*))
           
-  (parse-chars (if (stringp *next-reaction*) (coerce *next-reaction* 'list)
-                                             (coerce (car *next-reaction*) 'list)))
-) ; END get-reaction
+  (parse-chars (if (stringp *next-answer*) (coerce *next-answer* 'list)
+                                             (coerce (car *next-answer*) 'list)))
+) ; END get-answer
 
 
 

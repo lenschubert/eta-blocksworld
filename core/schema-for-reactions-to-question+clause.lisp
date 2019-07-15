@@ -74,3 +74,5 @@
  ; the straightforward 'store-output-gist-clauses' used in
  ; the *Eta-schema* code would be needed.
 
+(setf (get '*reactions-to-question+clause* 'topic-keys) (make-hash-table))
+
