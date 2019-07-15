@@ -7,6 +7,7 @@ input.lisp
 sessionInfo.lisp
 ulf.lisp
 reaction.lisp
+answer.lisp
 
 ttt/src/*.fasl
 ttt/src/operators/*.fasl
