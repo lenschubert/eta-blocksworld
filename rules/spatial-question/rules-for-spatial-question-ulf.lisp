@@ -75,7 +75,6 @@
           (noun block table stack row edge face plane line circle pile object
                 color structure left right back front other); NB: "each other"
                                                          ; can also be adj, det
-          (uppermost on highest top sitting)
           (under underneath supporting support)
           (close next)
           (touching face-to-face abutting against flush) 
