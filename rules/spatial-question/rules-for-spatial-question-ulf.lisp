@@ -49,8 +49,8 @@
                 Twitter ) 
           (Shell Show); sometimes misrecognized
 
-          (block blocks cube cubes book books black glock 
-                             blog blogs bach blood glass); often misrecognized
+          (block block-plur cube book black glock blog bach blood glass box look)
+          (block-plur blocks cubes books blacks glocks blogs bloods looks)
           (name corp)
           (prep of on to under in behind near touching abutting between from
                 below above next next_to visible); currently "next" needs to have
@@ -75,6 +75,8 @@
           (noun block table stack row edge face plane line circle pile object
                 color structure left right back front other); NB: "each other"
                                                          ; can also be adj, det
+          (noun-plur block-plur stacks rows edges faces planes lines circles piles objects
+                colors structures others)
           (under underneath supporting support)
           (close next)
           (touching face-to-face abutting against flush) 
@@ -186,6 +188,9 @@
     2 (be det 2 block 1 prep 3 det 3 ?); e.g., Is the NVidia block on a red block ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?)
         ((1 2 3) ?)) (0 :ulf-recur) 
+    2 (be det 2 block 1 prep 3 adj noun-plur ?); e.g., Is the NVidia block on red blocks ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?)
+        ((1 2 3) ?)) (0 :ulf-recur)
     2 (be det 2 block adj ?); e.g., Is the NVidia block clear/red/visible ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (lex-ulf! adj 5) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
