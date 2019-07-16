@@ -25,7 +25,8 @@
       blog blogs bach blood bloods glass box look looks); often misrecognized
     (name corp)
     (prep of on to under in behind near touching abutting between from
-      below above next next_to visible); currently "next" needs to have
+                below above next next_to visible on_top_of to_the_left_of
+                to_the_right_of in_front_of)     ; currently "next" needs to have
                                                  ; the 'prep' feature, to allow
                                                  ; merging into 'next_to.p'; it's
                                                  ; risky, & prior word-joining 
