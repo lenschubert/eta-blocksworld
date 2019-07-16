@@ -206,12 +206,12 @@
   ; so we can preempt them and tell the user that they aren't currently supported.
   (READRULES '*detect-references-tree*
   '(
-    ;; 1 (0 spatial-word-potential 0 ANA-PRON 0)
-    ;;   2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    ;; 1 (0 spatial-word-potential 0 that block 0)
-    ;;   2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    ;; 1 (0 spatial-word-potential 0 that one 0)
-    ;;   2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 ANA-PRON 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 that block 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 that one 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
     1 (0)
       2 (*combine-prepositions-tree* (1)) (0 :subtree+clause)
   ))
