@@ -9,7 +9,7 @@
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_ do)
-    (spatial-ending noun adj there directions pron)
+    (spatial-ending noun adj there directions pron prep)
     (spatial-word noun pron supporting corp adj
       uppermost under close touching farthest rotated)
     (spatial-word-potential spatial-word be wh_ prep)
