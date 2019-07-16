@@ -53,7 +53,8 @@
           (block-plur blocks cubes books blacks glocks blogs bloods looks)
           (name corp)
           (prep of on to under in behind near touching abutting between from
-                below above next next_to visible); currently "next" needs to have
+                below above next next_to visible on_top_of to_the_left_of
+                to_the_right_of in_front_of)     ; currently "next" needs to have
                                                  ; the 'prep' feature, to allow
                                                  ; merging into 'next_to.p'; it's
                                                  ; risky, & prior word-joining 
@@ -317,26 +318,7 @@
  ))
 
 (readrules '*pp-ulf-tree*
- '(1 (on top of det 2 noun); on top of a red block
-    2 ((on_top_of.p (*np-ulf-tree* 4 5 6)) (1 2)) (0 :ulf-recur)
-   1 (on top of 2 noun); on top of red blocks
-    2 ((on_top_of.p (*np-ulf-tree* 4 5)) (1 2)) (0 :ulf-recur)
-   1 (to the left of det 2 noun); to the left of a red block
-    2 ((to_the_left_of.p (*np-ulf-tree* 5 6 7)) (1 2)) (0 :ulf-recur) 
-   1 (to the left of 2 noun); to the left of red blocks
-    2 ((to_the_left_of.p (*np-ulf-tree* 5 6)) (1 2)) (0 :ulf-recur)
-   1 (to the right of det 2 noun); to the right of a red block
-    2 ((to_the_right_of.p (*np-ulf-tree* 5 6 7)) (1 2)) (0 :ulf-recur)
-   1 (to the right of 2 noun); to the right of red blocks
-    2 ((to_the_right_of.p (*np-ulf-tree* 5 6)) (1 2)) (0 :ulf-recur)
-   1 (next to det 2 noun); next to the NVidia block
-    2 ((next_to.p (*np-ulf-tree* 3 4 5)) (1 2)) (0 :ulf-recur)
-   1 (next to 2 noun); next to red blocks
-    2 ((next_to.p (*np-ulf-tree* 3 4)) (1 2)) (0 :ulf-recur)
-   1 (in front of det 2 noun); in front of a red block
-    2 ((in_front_of.p (*np-ulf-tree* 4 5 6)) (1 2)) (0 :ulf-recur)
-   1 (in front of 2 noun); in front of red blocks
-    2 ((in_front_of.p (*np-ulf-tree* 4 5)) (1 2)) (0 :ulf-recur)
+ '(
    1 (prep det 2 noun); on a red block
     2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
    1 (prep 2 noun); on red blocks

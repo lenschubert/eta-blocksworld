@@ -9,7 +9,7 @@
 ; to be replaced by atomic ULFs.
 ;
  (cond ((atom ulf) ulf)
-       ((eq (car ulf) 'lex-ulf!) 
+       ((eq (car ulf) 'lex-ulf!)
         (eval (list (car ulf) 
                     (list 'quote (cadr ulf)) (list 'quote (caddr ulf)))))
        (t (cons (eval-lexical-ulfs (car ulf)) (eval-lexical-ulfs (cdr ulf))))

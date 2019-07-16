@@ -9,8 +9,8 @@
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_ do)
-    (spatial-ending noun adj there directions)
-    (spatial-word noun supporting corp adj
+    (spatial-ending noun adj there directions pron)
+    (spatial-word noun pron supporting corp adj
       uppermost under close touching farthest rotated)
     (spatial-word-potential spatial-word be wh_ prep)
     (kinds types sorts kind type sort formats format)
@@ -205,19 +205,35 @@
   ; so we can preempt them and tell the user that they aren't currently supported.
   (READRULES '*detect-references-tree*
   '(
-    1 (0 spatial-word-potential 0 it 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 spatial-word-potential 0 they 0)
-      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
-    1 (0 spatial-word-potential 0 them 0)
+    1 (0 spatial-word-potential 0 ANA-PRON 0)
       2 ((Can you answer my question referring to a past question ?)) (0 :gist)
     1 (0 spatial-word-potential 0 that block 0)
       2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0 spatial-word-potential 0 that one 0)
+      2 ((Can you answer my question referring to a past question ?)) (0 :gist)
+    1 (0)
+      2 (*combine-prepositions-tree* (1)) (0 :subtree+clause)
+  ))
+
+  ; The third stage of preprocessing. We want to combine complex prepositions (e.g. "on top of")
+  ; into one token simplify ulf parsing a bit.
+  (READRULES '*combine-prepositions-tree*
+  '(
+    1 (0 on top of 0)
+      2 (*combine-prepositions-tree* (1 on_top_of 5)) (0 :subtree+clause)
+    1 (0 to the left of 0)
+      2 (*combine-prepositions-tree* (1 to_the_left_of 6)) (0 :subtree+clause)
+    1 (0 to the right of 0)
+      2 (*combine-prepositions-tree* (1 to_the_right_of 6)) (0 :subtree+clause)
+    1 (0 next to 0)
+      2 (*combine-prepositions-tree* (1 next_to 4)) (0 :subtree+clause)
+    1 (0 in front of 0)
+      2 (*combine-prepositions-tree* (1 in_front_of 5)) (0 :subtree+clause)
     1 (0)
       2 (*trim-suffix-tree* (1)) (0 :subtree+clause)
   ))
 
-  ; The third stage of preprocessing. We want to remove any "suffix" that the user might
+  ; The fourth stage of preprocessing. We want to remove any "suffix" that the user might
   ; throw after the query, such as tag questions. We do this by trimming off everything at
   ; the end that isn't a spatial-ending (noun or adj). Right now this is being done in a rather
   ; unwieldy way, due to the problem of recursion (i.e. an input can theoretically have any number
@@ -252,7 +268,7 @@
       2 (*trim-prefix-tree* (1 2 ?)) (0 :subtree+clause)
   ))
 
-  ; The fourth stage of preprocessing. We want to remove any "prefix" that the user might
+  ; The fifth stage of preprocessing. We want to remove any "prefix" that the user might
   ; use as an opening, e.g. "my question is ...".
   (READRULES '*trim-prefix-tree*
   '(
@@ -302,7 +318,7 @@
       2 (*multi-token-word-tree* (1)) (0 :subtree+clause) 
   ))
 
-  ; The fifth stage of preprocessing. Here we combine any words that have multiple tokens,
+  ; The sixth stage of preprocessing. Here we combine any words that have multiple tokens,
   ; e.g. "burger king" into a single word, joined by an underscore.
   (READRULES '*multi-token-word-tree*
   '(
