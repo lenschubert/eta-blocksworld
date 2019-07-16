@@ -298,24 +298,6 @@
    ; 2 rel-clauses unlikely, so hold off for now 
  )); end of *n1-ulf-tree*
 
-; This now serves only for dealing with a PP[/NP], i.e., a PP with an NP gap,
-; as in the question "What is the NVidia block on top of ?" But probably
-; the *pp-ulf-tree* rules should be modified to make use of this, instead of
-; duplicating the multiword propositional patterns, like "to the left of".
-(READRULES '*rel-ulf-tree* ; phrases like "on" or "on top of"
- '(1 (prep) 
-    2 (lex-ulf! prep 1) (0 :ulf)
-   1 (on top of)
-    2  on_top_of.p (0 :ulf)
-   1 (to the left of)
-    2 to_the_left_of.p (0 :ulf)
-   1 (to the right of)
-    2 to_the_right_of.p (0 :ulf)
-   1 (next to)
-    2  next_to.p (0 :ulf)
-   1 (in front of)
-    2  in_front_of.p (0 :ulf)
- ))
 
 (readrules '*pp-ulf-tree*
  '(
@@ -368,10 +350,10 @@
    1 (what color be the 0 ?)
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) (*np-ulf-tree* 4 5))
        ((sub ({of}.p (1 2)) (3 4 *h)) ?)) (0 :ulf-recur)
-   1 (wh-det noun be the 2 prep 2 prep ?); e.g., What/which block is the NVidia block
+   1 (wh-det noun be the 2 prep ?); e.g., What/which block is the NVidia block
                                         ; on top of [to the left of]?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) the.d (*n1-ulf-tree* 5)
-        (*rel-ulf-tree* 6 7 8) ?) ((sub (1 2) (3 (4 5) (6 *h))) ?)) (0 :ulf-recur)
+        (lex-ulf! prep 6) ?) ((sub (1 2) (3 (4 5) (6 *h))) ?)) (0 :ulf-recur)
    1 (wh-pron be the sup-adj 2 ?); e.g., what is the highest red block ?
     2 (((lex-ulf! pro 1) (lex-ulf! v 2) the.d (*n1-ulf-tree* 4 5) ?)
        ((1 (2 (= (the.d 4)))) ?)) (0 :ulf-recur)
@@ -409,9 +391,9 @@
 
 
 (readrules '*ppwh-question-ulf-tree* ;e.g., On (top of) what object is the NVidia block ?
- '(1 (prep 2 wh-det 2 be det 4 ?) 
-    2 (((*rel-ulf-tree* 1 2) (lex-ulf! det 3) (*n1-ulf-tree* 4) (lex-ulf! v 5) 
-        (lex-ulf! det 6) (*n1-ulf-tree* 7 ) ?) ((sub (1 (2 3)) (4 (5 6) *h)) ?)) 
+ '(1 (prep wh-det 2 be det 4 ?) 
+    2 (((lex-ulf! prep 1) (lex-ulf! det 2) (*n1-ulf-tree* 3) (lex-ulf! v 4) 
+        (lex-ulf! det 5) (*n1-ulf-tree* 6) ?) ((sub (1 (2 3)) (4 (5 6) *h)) ?)) 
        (0 :ulf-recur)
   ; add further rules, e.g., for "On what blocks are there other blocks ?", or
   ; "On how many blocks is the Target block resting/placed/supported/positioned ?"
