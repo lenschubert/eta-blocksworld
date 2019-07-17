@@ -121,7 +121,7 @@
     1 (0 in front of 0)
       2 (*multi-token-word-tree* (1 in_front_of 5)) (0 :subtree+clause)
     1 (0)
-      2 ((spatial-question 1)) (0 :gist)
+      2 (*trim-suffix-tree* (1)) (0 :subtree+clause)
   ))
 
   ; The second stage of preprocessing. We want to remove any "suffix" that the user might
