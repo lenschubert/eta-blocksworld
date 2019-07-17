@@ -1634,6 +1634,9 @@
             (setq ulf (eval-lexical-ulfs ulf))
             (setq result (subst ulf n result))
             (decf n)))
+        (setq result (coref-ulf result)) ; TODO: Currently this has to be here, as
+                                         ; coref-ulf needs to be applied to the whole
+                                         ; ULF, after each part have been combined
         (return-from choose-result-for1 result))
 
       ; Now we deal with cases expected to directly return a result,
@@ -1650,6 +1653,26 @@
       ((eq directive :ulf)
         (setq result (instance pattern parts))
         (setq result (eval-lexical-ulfs result))
+        (return-from choose-result-for1 result))
+
+      ; ``````````````````````
+      ; :ulf-coref directive
+      ; ``````````````````````
+      ; TODO: Implement coreference resolution (ulf case)
+      ((eq directive :ulf-coref)
+        (setq result (instance pattern parts))
+        (setq result (eval-lexical-ulfs result))
+        (setq result (coref-ulf result))
+        (return-from choose-result-for1 result))
+
+      ; ``````````````````````
+      ; :gist-coref directive
+      ; ``````````````````````
+      ; TODO: Implement coreference resolution (gist case)
+      ((eq directive :gist-coref)
+        (setq result (cons directive (instance pattern parts)))
+        (setf (get rule-node 'time-last-used) *count*)
+        (setq result (coref-gist result))
         (return-from choose-result-for1 result))
 
       ; ``````````````````````````````
