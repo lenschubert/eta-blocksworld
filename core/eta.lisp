@@ -23,6 +23,17 @@
 ;; interpretations, to see if the inputs already answer the
 ;; questions, making them redundant. 
 ;;
+;; TODO: Regarding coreference and memory, it seems like there are
+;; a couple separate things:
+;; 1. Eta needs a way to parameterize say-to.v actions (and the corresponding
+;; gist clauses) based on previous user answers. For example, if Eta asks "what
+;; was your favorite class?" and the user replies "Macroeconomics", instead of the
+;; next question being "did you find your favorite class hard", it should be
+;; "did you find Macroeconomics hard?"
+;; 2. Eta needs a way to "trigger" bringing up past information in response to
+;; a user question, perhaps based on some similarity metric
+;;
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; -*- Common-Lisp -*-
 
@@ -774,6 +785,7 @@
         (setq user-ulf (second (second bindings)))
         ; Leaving this open in case we want different procedures for different systems
         (cond
+          ((null *live*) nil)
           ((eq system '|Spatial-QA-Server|) (write-ulf (second user-ulf)))
           (t (write-ulf (second user-ulf))))
         (update-plan {sub}plan-name rest))
@@ -786,6 +798,7 @@
         (setq expr (second (second bindings)))
         ; Leaving this open in case we want different procedures for different systems
         (cond
+          ((null *live*) (setq ans '(Could not connect with system \: not in live mode \.)))
           ((eq system '|Spatial-QA-Server|) (setq ans (get-answer)))
           (t (setq ans (get-answer))))
         ; If '?ans+alternates, split answer into answer and alternates
