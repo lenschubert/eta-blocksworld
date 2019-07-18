@@ -23,6 +23,17 @@
 ;; interpretations, to see if the inputs already answer the
 ;; questions, making them redundant. 
 ;;
+;; TODO: Regarding coreference and memory, it seems like there are
+;; a couple separate things:
+;; 1. Eta needs a way to parameterize say-to.v actions (and the corresponding
+;; gist clauses) based on previous user answers. For example, if Eta asks "what
+;; was your favorite class?" and the user replies "Macroeconomics", instead of the
+;; next question being "did you find your favorite class hard", it should be
+;; "did you find Macroeconomics hard?"
+;; 2. Eta needs a way to "trigger" bringing up past information in response to
+;; a user question, perhaps based on some similarity metric
+;;
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; -*- Common-Lisp -*-
 
@@ -73,6 +84,9 @@
   ; where we are in the plan currently. Action names can have a
   ; 'subplan' property which in turn has a 'rest-of-plan' property, etc.
   (defvar *dialog-plan*)
+
+  ; List of discourse entities
+  (defvar *discourse-entities* nil)
 
   ; A doolittle relic, kept here because we'll probably
   ; want to have some sort of *context* parameter
@@ -138,6 +152,7 @@
 ;
   (init)
   (setq *live* live)
+  (setq *discourse-entities* nil)
   (setq *count* 0) ; Number of outputs so far
 
   ; Create a partially instantiated dialog plan from a schema,
@@ -1652,6 +1667,30 @@
       ((eq directive :ulf)
         (setq result (instance pattern parts))
         (setq result (eval-lexical-ulfs result))
+        (return-from choose-result-for1 result))
+
+      ; ``````````````````````
+      ; :ulf-coref directive
+      ; ``````````````````````
+      ; Obtains a ulf result using the subtree & input specified in the pattern, and
+      ; then resolves the coreferences in the resulting ulf
+      ; TODO: Implement coreference resolution (ulf case)
+      ((eq directive :ulf-coref)
+        (setq newclause (instance (second pattern) parts))
+        (setq new-tagged-clause (mapcar #'tagword newclause))
+        (setq result (choose-result-for1 new-tagged-clause nil (car pattern)))
+        (setq result (coref-ulf result))
+        (format t "discourse entities are ~a~%" *discourse-entities*) ; DEBUGGING
+        (return-from choose-result-for1 result))
+
+      ; ``````````````````````
+      ; :gist-coref directive
+      ; ``````````````````````
+      ; TODO: Implement coreference resolution (gist case)
+      ((eq directive :gist-coref)
+        (setq result (cons directive (instance pattern parts)))
+        (setf (get rule-node 'time-last-used) *count*)
+        (setq result (coref-gist result))
         (return-from choose-result-for1 result))
 
       ; ``````````````````````````````
