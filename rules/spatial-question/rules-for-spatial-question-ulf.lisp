@@ -198,6 +198,9 @@
     2 (be det 2 block adj ?); e.g., Is the NVidia block clear/red/visible ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (lex-ulf! adj 5) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
+   1 (be there 3 noun 1 prep 3 det 5 conj det 5 ?); e.g., Is there a red block above the SRI block and the Nvidia block ?
+    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-ulf-tree* 5 6 7 8 9 10 11 12) ?) 
+       ((1 2 3 4) ?)) (0 :ulf-recur)
    1 (be there 3 noun 1 prep 3 det 5 ?); e.g., Is there a red block on a blue block"
     2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?) 
        ((1 2 3 4) ?)) (0 :ulf-recur)
