@@ -85,6 +85,9 @@
   ; 'subplan' property which in turn has a 'rest-of-plan' property, etc.
   (defvar *dialog-plan*)
 
+  ; List of discourse entities
+  (defvar *discourse-entities* nil)
+
   ; A doolittle relic, kept here because we'll probably
   ; want to have some sort of *context* parameter
   ; eventually, e.g., for the identity of the inter-
@@ -1647,9 +1650,6 @@
             (setq ulf (eval-lexical-ulfs ulf))
             (setq result (subst ulf n result))
             (decf n)))
-        (setq result (coref-ulf result)) ; TODO: Currently this has to be here, as
-                                         ; coref-ulf needs to be applied to the whole
-                                         ; ULF, after each part have been combined
         (return-from choose-result-for1 result))
 
       ; Now we deal with cases expected to directly return a result,
@@ -1671,11 +1671,15 @@
       ; ``````````````````````
       ; :ulf-coref directive
       ; ``````````````````````
+      ; Obtains a ulf result using the subtree & input specified in the pattern, and
+      ; then resolves the coreferences in the resulting ulf
       ; TODO: Implement coreference resolution (ulf case)
       ((eq directive :ulf-coref)
-        (setq result (instance pattern parts))
-        (setq result (eval-lexical-ulfs result))
+        (setq newclause (instance (second pattern) parts))
+        (setq new-tagged-clause (mapcar #'tagword newclause))
+        (setq result (choose-result-for1 new-tagged-clause nil (car pattern)))
         (setq result (coref-ulf result))
+        (format t "discourse entities are ~a~%" *discourse-entities*) ; DEBUGGING
         (return-from choose-result-for1 result))
 
       ; ``````````````````````

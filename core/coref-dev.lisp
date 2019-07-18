@@ -1,3 +1,28 @@
+; Is the Texaco block above the Nvidia block?
+; 1. the Nvidia block
+; 2. the Texaco block
+; Is it below [that block]/[it]?
+; 'it' => the Texaco block
+; 'that block' => the Nvidia block
+
+; Is the Texaco block above the Nvidia block?
+; 1. the Nvidia block
+; 2. the Texaco block
+; Is it above the Starbucks block?
+; 'it' => the Texaco block
+; 1. the Nvidia block
+; 2. the Starbucks block
+; 3. the Texaco block
+; Is it above the SRI block?
+; 'it' => the Texaco block
+
+
+(defun add-discourse-entities (ulf)
+  
+)
+
+
+
 (defun ref? (sym)
 ; ``````````````````
 ; Predicate to check if a symbol is a reference to something previously
