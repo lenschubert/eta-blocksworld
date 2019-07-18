@@ -186,9 +186,12 @@
 (READRULES '*yn-question-ulf-tree* 
 
  '(1 (be det 2 block 0); more generally we would look for (be np_ 0)
+    2 (be det 2 block 1 prep 3 det 3 conj det 3 ?); e.g., Is the NVidia block above the SRI block and the Texaco block ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9 10 11 12) ?)
+        ((1 2 3) ?)) (0 :ulf-recur)
     2 (be det 2 block 1 prep 3 det 3 ?); e.g., Is the NVidia block on a red block ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?)
-        ((1 2 3) ?)) (0 :ulf-recur) 
+        ((1 2 3) ?)) (0 :ulf-recur)
     2 (be det 2 block 1 prep 3 adj noun-plur ?); e.g., Is the NVidia block on red blocks ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
@@ -301,6 +304,8 @@
 
 (readrules '*pp-ulf-tree*
  '(
+   1 (prep det 2 noun and det 2 noun); above the SRI block and the Nvidia block
+    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4) (*np-ulf-tree* 6 7 8)) (1 (set-of 2 3))) (0 :ulf-recur)
    1 (prep det 2 noun); on a red block
     2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
    1 (prep 2 noun); on red blocks

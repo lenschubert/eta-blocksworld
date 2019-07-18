@@ -774,7 +774,6 @@
         (setq user-ulf (second (second bindings)))
         ; Leaving this open in case we want different procedures for different systems
         (cond
-          ((null *live*) nil)
           ((eq system '|Spatial-QA-Server|) (write-ulf (second user-ulf)))
           (t (write-ulf (second user-ulf))))
         (update-plan {sub}plan-name rest))
@@ -790,10 +789,9 @@
           ((eq system '|Spatial-QA-Server|) (setq ans (get-answer)))
           (t (setq ans (get-answer))))
         ; If '?ans+alternates, split answer into answer and alternates
-        (cond
-          ((null *live*) (setq ans '(Could not connect with system \: not in live mode \.)))
-          ((eq system '|Spatial-QA-Server|) (setq ans (get-answer)))
-          (t (setq ans (get-answer))))
+        (cond ((eq expr '?ans+alternates)
+          (setq alternates (second ans))
+          (setq ans (first ans))))
         ; Set 'ans (and 'alternates if applicable) attributes to the recieved answer and
         ; alternates for the current action and subsequent action
         (setf (get eta-action-name 'ans) ans)
