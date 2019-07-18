@@ -437,6 +437,9 @@
    1 (how many 1 block be there 3 prep adj 3 ?); How many blocks are there on red blocks
     2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) there.pro 
        (*pp-ulf-tree* 7 8 9 10) ?) (((1 2) (3 there.pro 5)) ?)) (0 :ulf-recur)
+   1 (how many be adj ?); how many are red ?
+    2 ((how_many.d (lex-ulf! noun blocks) (lex-ulf! v 3) (lex-ulf! adj 4) ?)
+       (((1 2) (3 4)) ?)) (0 :ulf-recur)
  ))
 
 

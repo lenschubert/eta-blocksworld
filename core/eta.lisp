@@ -152,6 +152,7 @@
 ;
   (init)
   (setq *live* live)
+  (setq *discourse-entities* nil)
   (setq *count* 0) ; Number of outputs so far
 
   ; Create a partially instantiated dialog plan from a schema,
