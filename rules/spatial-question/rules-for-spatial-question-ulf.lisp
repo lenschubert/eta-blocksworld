@@ -192,6 +192,9 @@
 
  '(
    1 (be np_ 0); more generally we would look for (be np_ 0)
+    2 (be det 2 block 1 prep 3 det 3 conj det 3 ?); e.g., Is the NVidia block above the SRI block and the Texaco block ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9 10 11 12) ?)
+        ((1 2 3) ?)) (0 :ulf-recur)
     2 (be det 2 block 1 prep 3 np_ 3 ?); e.g., Is the NVidia block on [a red block]/[it] ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
@@ -210,6 +213,9 @@
     2 (be pron adj ?); e.g., Is it clear/red/visible ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2) (lex-ulf! adj 3) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
+   1 (be there 3 noun 1 prep 3 det 5 conj det 5 ?); e.g., Is there a red block above the SRI block and the Nvidia block ?
+    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-ulf-tree* 5 6 7 8 9 10 11 12) ?) 
+       ((1 2 3 4) ?)) (0 :ulf-recur)
    1 (be there 3 noun 1 prep 3 np_ 5 ?); e.g., Is there a red block on [a blue block]/[it]"
     2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-ulf-tree* 5 6 7 8 9) ?) 
        ((1 2 3 4) ?)) (0 :ulf-recur)
@@ -316,6 +322,8 @@
 
 (readrules '*pp-ulf-tree*
  '(
+   1 (prep det 2 noun and det 2 noun); above the SRI block and the Nvidia block
+    2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4) (*np-ulf-tree* 6 7 8)) (1 (set-of 2 3))) (0 :ulf-recur)
    1 (prep det 2 noun); on a red block
     2 (((lex-ulf! prep 1) (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
    1 (prep 2 noun); on red blocks
