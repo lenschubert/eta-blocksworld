@@ -44,7 +44,7 @@
 ;
   (and
     (symbolp sym)
-    (not (equal sym 'THERE.PRO))
+    (not (member sym '(THERE.PRO WHAT.PRO)))
     (> (length (string sym)) 4)
     (equal (implode (last (explode (string sym)) 4)) '.PRO))
 ) ; END pron?
