@@ -30,7 +30,9 @@
   (or
     (pron? sym)
     (equal sym '(THAT.D BLOCK.N))
-    (equal sym '(THOSE.D (PLUR BLOCK.N))))
+    (equal sym '(THAT.D ONE.N))
+    (equal sym '(THOSE.D (PLUR BLOCK.N)))
+    (equal sym '(THOSE.D (PLUR ONE.N))))
 ) ; END ref?
 
 
@@ -137,8 +139,8 @@
 ;
   (let ((candidate-list *discourse-entities*)
         (constraints (cond
-          ((member ref '(IT.PRO (THAT.D BLOCK.N))) '(sing?))
-          ((member ref '(THEY.PRO THEM.PRO (THOSE.D (PLUR BLOCK.N)))) '(plur?))
+          ((member ref '(IT.PRO (THAT.D BLOCK.N) (THAT.D ONE.N))) '(sing?))
+          ((member ref '(THEY.PRO THEM.PRO (THOSE.D (PLUR BLOCK.N)) (THOSE.D (PLUR ONE.N)))) '(plur?))
         )))
     (mapc (lambda (constr)
       (setq candidate-list (remove-if (lambda (x) (not (funcall constr x))) candidate-list)))
