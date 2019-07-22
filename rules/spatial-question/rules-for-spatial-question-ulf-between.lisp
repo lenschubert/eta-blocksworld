@@ -1,4 +1,4 @@
-; "rules-for-between-questions.lisp"  -- currently under revision, June 21/19
+; Ben's version of "rules-for-between-questions.lisp" -- July 22/19
 ; This is the file for "between" rules. These are a bit tricky, because 
 ; the complement of "between" either can be a plural ("between two red
 ; blocks") or a full NP conjunction ("between a red block and a blue
@@ -15,21 +15,21 @@
 (READRULES '*yn-between-question-ulf-tree* ; yes-no questions involving "between"
 
  '(1 (be 0 between 0 block 0); more generally we would look for (be np_ 0)
-    2 (be det 2 block 1 between 7 noun ?); e.g., Is the NVidia block between two
-                                          ;       red blocks ?
-     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-between-ulf-tree* 6 7 8) ?)
+    2 (be det 2 block 1 between 7 noun ?); e.g., Is the NVidia block (directly)
+                                         ;       between two red blocks ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-between-ulf-tree* 5 6 7 8) ?)
         ((1 2 3) ?)) (0 :ulf-recur) 
    1 (be there 3 noun 1 between 7 noun ?); e.g., Is there a red block between
                                          ;       a blue and a green block ?
-    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-btween-ulf-tree* 6 7 8) ?) 
+    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4) (*pp-btween-ulf-tree* 5 6 7 8) ?) 
        ((1 2 3 4) ?)) (0 :ulf-recur)
    1 (be there det 2 noun 1 between 7 noun ?); e.g., are there any red blocks
                                              ;       between two green blocks ?
-    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4 5) (*pp-between-ulf-tree* 7 8 9) ?)
-       ((1 2 3 4) ?)) (0 :ulf-recur)
+    2 (((lex-ulf! v 1) there.pro (*np-ulf-tree* 3 4 5) 
+        (*pp-between-ulf-tree* 6 7 8 9) ?) ((1 2 3 4) ?)) (0 :ulf-recur)
    1 (be there pron 1 between 7 noun ?); e.g., Is there anything between the 
                                        ;       NVidia and Mercedes blocks ?
-    2 (((lex-ulf! v 1) there.pro (lex-ulf! pro 3) (*pp-between-ulf-tree* 5 6 7) ?) 
+    2 (((lex-ulf! v 1) there.pro (lex-ulf! pro 3) (*pp-between-ulf-tree* 4 5 6 7) ?) 
        ((1 2 3 4) ?)) (0 :ulf-recur)
          ; ** Shouldn't we really get (any.d (n+preds thing.n (behind.p (the.d ...))))?
   )); end of *yn-between-question-ulf-tree* rules
@@ -41,7 +41,13 @@
 
 
 (readrules '*pp-between-ulf-tree*
- '(1 (between det 2 noun); between two red blocks; between what blocks
+ '(1 (there between 9 noun); ignore "there", as in "what blocks are there between..."
+    2 (((*pp-between-ulf-tree* 2 3 4)) 1) (0 :ulf-recur)
+   1 (deg-adv between 9 noun); directly between the Esso and NVidia blocks
+    2 (((lex-ulf! adv 1) (*pp-between-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
+   1 (nil between 9 noun); ignore non-adverb preceding "between"
+    2 (((*pp-between-ulf-tree* 2 3 4)) 1) (0 :ulf-recur)
+   1 (between det 2 noun); between two red blocks; between what blocks
     2 ((between.p (*np-ulf-tree* 2 3 4)) (1 2)) (0 :ulf-recur)
    1 (between det 2 noun and det 2 noun); between a red block and a blue block
     2 ((between.p (*np-ulf-tree* 2 3 4) and.cc (*np-ulf-tree* 6 7 8)) 
@@ -61,35 +67,35 @@
 
 
 (readrules '*wh-between-question-ulf-tree* ; wh-questions involving "between"
- '(1 (wh-det noun be between 7 noun ?); e.g., what/which/whose block is between
-                                      ; the Nvidia block and a red block ?
+ '(1 (wh-det noun be 2 between 7 noun ?); e.g., what/which block is there directly
+                                       ; between the Nvidia block and a red block ?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) 
-        (*pp-between-ulf-tree* 4 5 6) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
-   1 (what be between 7 noun ?); what is between the two red blocks ?
-    2 ((what.pro (lex-ulf! v 2) (*pp-between-ulf-tree* 3 4 5) ?) 
+        (*pp-between-ulf-tree* 4 5 6 7) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
+   1 (what be 2 between 7 noun ?); what is between the two red blocks ?
+    2 ((what.pro (lex-ulf! v 2) (*pp-between-ulf-tree* 3 4 5 6) ?) 
        ((1 (2 3)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be 1 between 7 noun ?); What red blocks are (there) between 
                                           ; the Nvidia and Mercedes blocks ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) 
-        (*pp-between-ulf-tree* 6 7 8) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
-   1 (what color noun be between 7 noun ?); e.g., what color block is between a red
-                                          ; and a blue block ? [unusual subj NP!]
+        (*pp-between-ulf-tree* 5 6 7 8) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
+   1 (what color noun be 2 between 7 noun ?); e.g., what color block is between a
+                                        ; red and a blue block ? [unusual subj NP!]
     2 (((lex-ulf! det 1) (lex-ulf! adj 2) (lex-ulf! noun 3) (lex-ulf! v 4) 
-       (*pp-between-ulf-tree* 5 6 7) ?) (((1 (2 3)) (4 5)) ?)) (0 :ulf-recur)
-   1 (what color be the noun between the 6 noun ?); what color is the block between
+       (*pp-between-ulf-tree* 5 6 7 8) ?) (((1 (2 3)) (4 5)) ?)) (0 :ulf-recur)
+   1 (what color be the noun 1 between the 6 noun ?); what color is the block between
                                                   ; the NVidia and Mercedes blocks ?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) the.d (lex-ulf! noun 5)
-        (*pp-between-ulf-tree* 6 7 8 9) ?)
+        (*pp-between-ulf-tree* 6 7 8 9 10) ?)
        ((sub ({of}.p (1 2)) (3 (the.d (n+preds 5 6)) *h)) ?)) (0 :ulf-recur)
-   1 (wh-pron be the 2 noun between 7 noun ?); e.g., what is the block between
+   1 (wh-pron be the 2 noun 1 between 7 noun ?); e.g., what is the block between
                                              ; a red block and a blue block ?
     2 (((lex-ulf! pro 1) (lex-ulf! v 2) the.d (*n1-ulf-tree* 4 5) 
-        (*pp-between-ulf-tree* 6 7 8) ?) ((1 (2 (= (the.d (n+preds 4 5))))) ?))
+        (*pp-between-ulf-tree* 6 7 8 9) ?) ((1 (2 (= (the.d (n+preds 4 5))))) ?))
        (0 :ulf-recur)
-   1 (how many 1 block be 1 between 7 noun ?); e.g., How many blocks are (there)
+   1 (how many 1 block be 2 between 7 noun ?); e.g., How many blocks are (there)
                                              ; between a red block and a blue block ?
     2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) 
-       (*pp-between-ulf-tree* 7 8 9) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
+       (*pp-between-ulf-tree* 6 7 8 9) ?) (((1 2) (3 4)) ?)) (0 :ulf-recur)
  )); end of *wh-between-question-ulf-tree*
 
 
