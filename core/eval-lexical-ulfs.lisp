@@ -91,7 +91,7 @@
                     (nearest 'near.a) (topmost 'top.a) (uppermost 'upper.a)
                     (smallest 'small.a) (lowest 'low.a) (largest 'large.a)
                     (centermost 'centered.a) (shortest 'short.a) (backmost 'back.a)
-                    (longest 'long) (fewest few.a) (frontmost front.a)
+                    (longest 'long.a) (fewest 'few.a) (frontmost 'front.a)
                     (t (intern (format nil "~a.A" (stem-superlative word-sym))))))
          (adv (intern (format nil "~a.ADV-A" word-sym))) )
  )); end of lex-ulf!)
