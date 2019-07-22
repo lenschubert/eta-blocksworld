@@ -1,7 +1,7 @@
 ;; *ETA-SCHEMA*: development version 6
 ;;
 ;; Dialogue for blocksworld conversation 
-;; (intro + 10 questions +  outro)
+;; (intro + 30 questions +  outro)
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -16,12 +16,15 @@
 
 :Actions 
 
-?a1. (Me say-to.v you 
-      '(Hi I am David\. I\'m here to help answer some spatial questions for you\.
-        Please try to speak as clearly as possible\. If you wish to quit at any time\, just say bye or goodbye\.))
+;; ?a1. (Me say-to.v you 
+;;       '(Hi I am David\. I\'m here to help answer some spatial questions for you\.
+;;         Please try to speak as clearly as possible\. If you wish to quit at any time\, just say bye or goodbye\.))
 
-?a2. (Me say-to.v you 
-      '(Before we begin\, would you mind telling me what your name is?))
+?a1. (Me say-to.v you 
+      '(Hi\, my name is David\. I\'m ready to answer your spatial questions\.))
+
+;; ?a2. (Me say-to.v you 
+;;       '(Before we begin\, would you mind telling me what your name is?))
 
 ?a3. (You reply-to.v ?a2.)
 
@@ -268,9 +271,12 @@
 ?a94. (Me react-to.v ?a93.)
 
 
+;; ?a95. (Me say-to.v you
+;;         '(Excellent questions\, but unfortunately all that
+;;           thinking has been very tiring\, so I need to take a break now\.))
+
 ?a95. (Me say-to.v you
-        '(Excellent questions\, but unfortunately all that
-          thinking has been very tiring\, so I need to take a break now\.))
+        '(Excellent questions\, but I need to take a break now\.))
 
 )); end of defparameter *eta-schema*
 
