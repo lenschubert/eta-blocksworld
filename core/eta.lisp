@@ -833,7 +833,7 @@
             (setq ans (get eta-action-name 'ans))
             (if (equal (first ans) 'poss-ans)
               (setq ans (append
-                '(You are not sure if you understood the question correctly\, but your answer is \:)
+                '(You are not sure if you understood the question correctly\, but your answer is)
                 (cdr ans))))
             (setq new-subplan-name (create-say-to-subplan ans))
             (when (null new-subplan-name)
