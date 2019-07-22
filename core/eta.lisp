@@ -1680,7 +1680,7 @@
         (setq new-tagged-clause (mapcar #'tagword newclause))
         (setq result (choose-result-for1 new-tagged-clause nil (car pattern)))
         (setq result (coref-ulf result))
-        (format t "discourse entities are ~a~%" *discourse-entities*) ; DEBUGGING
+        ;; (format t "discourse entities are ~a~%" *discourse-entities*) ; DEBUGGING
         (return-from choose-result-for1 result))
 
       ; ``````````````````````
