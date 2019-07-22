@@ -187,9 +187,88 @@
 
 ?a64. (Me react-to.v ?a63.)
 
-
-
+; 21
 ?a65. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a66. (You reply-to.v ?a65.)
+
+?a67. (Me react-to.v ?a66.)
+
+; 22
+?a68. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a69. (You reply-to.v ?a68.)
+
+?a70. (Me react-to.v ?a69.)
+
+; 23
+?a71. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a72. (You reply-to.v ?a71.)
+
+?a73. (Me react-to.v ?a72.)
+
+; 24
+?a74. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a75. (You reply-to.v ?a74.)
+
+?a76. (Me react-to.v ?a75.)
+
+; 25
+?a77. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a78. (You reply-to.v ?a77.)
+
+?a79. (Me react-to.v ?a78.)
+
+; 26
+?a80. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a81. (You reply-to.v ?a80.)
+
+?a82. (Me react-to.v ?a81.)
+
+; 27
+?a83. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a84. (You reply-to.v ?a83.)
+
+?a85. (Me react-to.v ?a84.)
+
+; 28
+?a86. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a87. (You reply-to.v ?a86.)
+
+?a88. (Me react-to.v ?a87.)
+
+; 29
+?a89. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a90. (You reply-to.v ?a89.)
+
+?a91. (Me react-to.v ?a90.)
+
+; 30
+?a92. (Me say-to.v you
+      '(Do you have another spatial question for me?))
+
+?a93. (You reply-to.v ?a92.)
+
+?a94. (Me react-to.v ?a93.)
+
+
+?a95. (Me say-to.v you
         '(Excellent questions\, but unfortunately all that
           thinking has been very tiring\, so I need to take a break now\.))
 
@@ -248,6 +327,16 @@
     (?a56. ((do you have a spatial question ?)))
     (?a59. ((do you have a spatial question ?)))
     (?a62. ((do you have a spatial question ?)))
+    (?a65. ((do you have a spatial question ?)))
+    (?a68. ((do you have a spatial question ?)))
+    (?a71. ((do you have a spatial question ?)))
+    (?a74. ((do you have a spatial question ?)))
+    (?a77. ((do you have a spatial question ?)))
+    (?a80. ((do you have a spatial question ?)))
+    (?a83. ((do you have a spatial question ?)))
+    (?a86. ((do you have a spatial question ?)))
+    (?a89. ((do you have a spatial question ?)))
+    (?a92. ((do you have a spatial question ?)))
   )
 ); end of mapcar #'store-output-gist-clauses
 
@@ -276,5 +365,25 @@
     (?a26. (spatial-question8))
     (?a29. (spatial-question9))
     (?a32. (spatial-question10))
+    (?a35. (spatial-question11))
+    (?a38. (spatial-question12))
+    (?a41. (spatial-question13))
+    (?a44. (spatial-question14))
+    (?a47. (spatial-question15))
+    (?a50. (spatial-question16))
+    (?a53. (spatial-question17))
+    (?a56. (spatial-question18))
+    (?a59. (spatial-question19))
+    (?a62. (spatial-question20))
+    (?a65. (spatial-question21))
+    (?a68. (spatial-question22))
+    (?a71. (spatial-question23))
+    (?a74. (spatial-question24))
+    (?a77. (spatial-question25))
+    (?a80. (spatial-question26))
+    (?a83. (spatial-question27))
+    (?a86. (spatial-question28))
+    (?a89. (spatial-question29))
+    (?a92. (spatial-question30))
   )
 ); end of mapcar
