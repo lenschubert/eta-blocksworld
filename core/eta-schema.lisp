@@ -26,9 +26,9 @@
 ;; ?a2. (Me say-to.v you 
 ;;       '(Before we begin\, would you mind telling me what your name is?))
 
-?a3. (You reply-to.v ?a2.)
+;; ?a3. (You reply-to.v ?a2.)
 
-?a4. (Me react-to.v ?a3.)
+;; ?a4. (Me react-to.v ?a3.)
 
 ; 1
 ?a5. (Me say-to.v you
@@ -312,7 +312,7 @@
 (mapcar #'(lambda (x) 
       (store-output-gist-clauses (first x) (second x) '*eta-schema*))
   '(
-    (?a2.  ((what is your name ?)))
+    ;; (?a2.  ((what is your name ?)))
     (?a5.  ((do you have a spatial question ?)))
     (?a8.  ((do you have a spatial question ?)))
     (?a11. ((do you have a spatial question ?)))
@@ -360,7 +360,7 @@
 (mapcar #'(lambda (x) 
       (store-topic-keys (first x) (second x) '*eta-schema*))
   '(
-    (?a2.  (name))
+    ;; (?a2.  (name))
     (?a5.  (spatial-question1))
     (?a8.  (spatial-question2))
     (?a11. (spatial-question3))
