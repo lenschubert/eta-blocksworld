@@ -606,17 +606,56 @@
 ; for step elaboration typically elaborate (me react-to.v ...) actions
 ; into single or multiple (me say-to.v you '(...)) subactions.
 ;
-  (let* ((rest (get {sub}plan-name 'rest-of-plan)) (eta-action-name (car rest))
+  (let* ((rest (get {sub}plan-name 'rest-of-plan)) (event-name (car rest))
         (wff (second rest)) bindings expr user-action-name user-ulf n new-subplan-name
         user-gist-clauses user-gist-passage main-clause info topic suggestion query user-ulf
         ans alternates)
   
     ;; (format t "~%WFF = ~a,~% in the ETA action ~a being ~
-    ;;           processed~%" wff eta-action-name) ; DEBUGGING
+    ;;           processed~%" wff event-name) ; DEBUGGING
 
     ; Big conditional statement to determine the type of the current
     ; action, and to form the subsequent action accordingly.
     (cond
+
+      ; ````````````````````
+      ; Eta: Choosing
+      ; ````````````````````
+      ; if-statements, potentially other conditionals in the future.
+      ; bindings yields ((_+ (cond1 name1 wff1 cond2 name2 wff2 ...)))
+      ; NOTE: one potential issue, could complex wffs have name-wff pairs within them??
+      ((setq bindings (bindings-from-ttt-match '(:if _+) wff))
+        (setq expr (second (car bindings)))
+        ; Generate a subplan for the 1st action-wff with a true condition:
+        (setq new-subplan-name (plan-cond expr))
+        ; Make bidirectional connection to the new subplan
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
+
+      ; ````````````````````
+      ; Eta: Looping
+      ; ````````````````````
+      ; repeat-until, potentially other forms of loops in the future.
+      ; bindings yields ((_+ (name0 wff0 name1 wff1 ...)))
+      ; episode name0, with wff0, provides the stop condition. wff1 the 1st action,
+      ; wff2 the 2nd action (each w/ name), etc.
+      ((setq bindings (bindings-from-ttt-match '(:repeat-until  _+) wff))
+        (setq expr (second bindings))
+        ; Generate a subplan for the 1st action-wff with a true condition:
+        (setq new-subplan-name (plan-repeat-until expr))
+        ; If this is nil, the stop condition holds, & we drop the loop:
+        (cond
+          ; If nil, the stop condition holds, so we drop the loop by associating wff0
+          ; with 'event-name', destructively replacing the previous characterizing wff
+          ; (the repeat-until construct) with it.
+          ((null new-subplan-name)
+            (rplacd rest (cons (second wff) (cddr rest))))
+          ; Otherwise, an iteration (and repeat-loop copy) was added as subplan, so
+          ; make bidirectional connection to new subplan.
+          (t
+            (setf (get event-name 'subplan) new-subplan-name)
+            (setf (get new-subplan-name 'subplan-of) event-name))))
+
       ; ````````````````````
       ; Eta: Saying
       ; ````````````````````
@@ -626,12 +665,9 @@
         (setq expr (second (car bindings)))
         ; If the current "say" action is a question (final question mark,
         ; can also check for wh-words & other cues), then use 'topic-keys'
-        ; and 'gist-clauses' of current eta-action-name and the *gist-kb*
+        ; and 'gist-clauses' of current event-name and the *gist-kb*
         ; to see if question has already been answered. If so, omit action.
-        (when (not (null (obviated-question expr eta-action-name)))
-          (delete-current-action {sub}plan-name)
-          ; TODO: investigate why in triplicate. Accidental modification?
-          (delete-current-action {sub}plan-name)
+        (when (not (null (obviated-question expr event-name)))
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
 
@@ -651,8 +687,8 @@
           ; inform acts. For the moment however, handle equivalently to tell.v.
           (t
             (setq new-subplan-name (plan-tell expr))
-            (setf (get eta-action-name 'subplan) new-subplan-name)
-            (setf (get new-subplan-name 'subplan-of) eta-action-name))))
+            (setf (get event-name 'subplan) new-subplan-name)
+            (setf (get new-subplan-name 'subplan-of) event-name))))
 
       ; For now, saying something is the only primitive action, so everything
       ; beyond this point is non-primitive actions, to be expanded using choice packets.
@@ -677,8 +713,8 @@
         ; 'new-subplan-name' will be the name of a subplan with some amount of primitive
         ; or nonprimitive steps (usually just a single say-to.v action). Link eta action
         ; to subplan bidirectionally (in case bidirectional plan traversals are used in future)
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; NOTE: Apart from saying and reacting, assume that Eta actions
       ; also allow telling, describing, suggesting, asking, saying 
@@ -706,8 +742,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ````````````````````
       ; Eta: Describing
@@ -730,8 +766,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ````````````````````
       ; Eta: Suggesting
@@ -743,8 +779,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ````````````````````
       ; Eta: Asking
@@ -756,8 +792,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ````````````````````
       ; Eta: Saying hello
@@ -767,8 +803,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ````````````````````
       ; Eta: Saying good-bye
@@ -778,8 +814,8 @@
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
           (return-from implement-next-eta-action nil))
-        (setf (get eta-action-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) eta-action-name))
+        (setf (get event-name 'subplan) new-subplan-name)
+        (setf (get new-subplan-name 'subplan-of) event-name))
 
       ; ```````````````````````````````````````
       ; Eta: Seek answer from external source
@@ -811,8 +847,8 @@
           (setq ans (first ans))))
         ; Set 'ans (and 'alternates if applicable) attributes to the recieved answer and
         ; alternates for the current action and subsequent action
-        (setf (get eta-action-name 'ans) ans)
-        (setf (get eta-action-name 'alternates) alternates)
+        (setf (get event-name 'ans) ans)
+        (setf (get event-name 'alternates) alternates)
         (update-plan {sub}plan-name rest)
         (setf (get (car (get {sub}plan-name 'rest-of-plan)) 'ans) ans)
         (setf (get (car (get {sub}plan-name 'rest-of-plan)) 'alternates) alternates))
@@ -830,7 +866,7 @@
           ; (regardless of what specific variable is given - TODO this should probably be changed)
           ; and convert directly to primitive say-to.v subplan
           ((or (variable? expr) (variable? (second expr)))
-            (setq ans (get eta-action-name 'ans))
+            (setq ans (get event-name 'ans))
             (if (equal (first ans) 'poss-ans)
               (setq ans (append
                 '(You are not sure if you understood the question correctly\, but your answer is)
@@ -839,16 +875,16 @@
             (when (null new-subplan-name)
               (delete-current-action {sub}plan-name)
               (return-from implement-next-eta-action nil))
-            (setf (get eta-action-name 'subplan) new-subplan-name)
-            (setf (get new-subplan-name 'subplan-of) eta-action-name))
+            (setf (get event-name 'subplan) new-subplan-name)
+            (setf (get new-subplan-name 'subplan-of) event-name))
           ; Otherwise, convert directly to primitive say-to.v subplan
           (t
             (setq new-subplan-name (create-say-to-subplan (second expr)))
             (when (null new-subplan-name)
               (delete-current-action {sub}plan-name)
               (return-from implement-next-eta-action nil))
-            (setf (get eta-action-name 'subplan) new-subplan-name)
-            (setf (get new-subplan-name 'subplan-of) eta-action-name))))
+            (setf (get event-name 'subplan) new-subplan-name)
+            (setf (get new-subplan-name 'subplan-of) event-name))))
       
       ; Unrecognizable step
       (t (format t "~%*** UNRECOGNIZABLE STEP ~a " wff))
@@ -1198,6 +1234,30 @@
     (setq ulf (choose-result-for tagged-clause '*clause-ulf-tree*))
  ulf)
 ) ; END form-ulf-from-clause
+
+
+
+
+
+(defun plan-cond (expr)
+; ```````````````````````
+; TODO: Create plan-cond
+; expr = (cond1 name1 wff1 cond2 name2 wff2 ...)
+;
+  ...
+) ; END plan-cond
+
+
+
+
+
+(defun plan-repeat-until (expr)
+; ````````````````````````````````
+; TODO: Create plan-repeat-until
+; expr = (name0 wff0 name1 wff1 ...)
+;
+  ...
+) ; END plan-cond
 
 
 
