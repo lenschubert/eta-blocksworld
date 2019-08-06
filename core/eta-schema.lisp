@@ -30,10 +30,8 @@
 
 ;; ?a4. (Me react-to.v ?a3.)
 
-; 1
-
 ?a5. (:repeat-until
-  ?a6. (?a5 finished.a) ; Should this be '?a6.', '?a6', or '?e1' ?
+  ?e6 (?a5 finished2.a) ; Should this be '?a6.', '?a6', or '?e1' ?
 
   ?a7. (Me say-to.v you
         '(Do you have a spatial question for me?))
@@ -45,14 +43,6 @@
   ?a10. (:if ('?ulf ((nn termination.n) request.n)); check interpretation of ?ulf
                    (:store-in-context '(?a5 finished2.a)))
 )
-
-;; ?a5. (Me say-to.v you
-;;       '(Do you have a spatial question for me?))
-
-;; ?a6. (You reply-to.v ?a5.)
-
-;; ?a7. (Me react-to.v ?a6.)
-
 
 ;; ?a95. (Me say-to.v you
 ;;         '(Excellent questions\, but unfortunately all that
