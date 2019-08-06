@@ -14,7 +14,7 @@
 ; to know you" type questions, followed by a series of 10 questions.
 ;
 
-:Actions 
+:episodes 
 
 ;; ?a1. (Me say-to.v you 
 ;;       '(Hi I am David\. I\'m here to help answer some spatial questions for you\.

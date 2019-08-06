@@ -215,9 +215,9 @@
     (setq plan (cons 'plan (cdr plan)))
 
     ; If no actions in schema, return error
-    (when (not (find :actions plan))
+    (when (not (find :episodes plan))
       (format t "~%*** Attempt to form plan ~a from schema ~a ~
-                  which contains no ':ACTIONS' keyword" plan-name schema-name)
+                  which contains no ':episodes' keyword" plan-name schema-name)
       (return-from init-plan nil))
 
     ; Substitute the arguments 'args' (if non-nil) for the variables in the
@@ -228,8 +228,8 @@
     ;; (format t "~%Schema to be used for plan ~a, with arguments instantiated~
     ;;            ~% ~a" plan-name plan) ; DEBUGGING
 
-    ; Find first action variable, should be a list like (:actions ?a1. ...)
-    (setq action-list (member :actions plan))
+    ; Find first action variable, should be a list like (:episodes ?a1. ...)
+    (setq action-list (member :episodes plan))
     (setq prop-var (second action-list))
 
     ;; (format t "~%Action list of argument-instantiated schema is~
@@ -1107,7 +1107,7 @@
         (setf (get user-action-name1 'wff) wff1)
         (setq subplan-name (gensym "SUBPLAN"))
         ; NOTE: maybe the following is not needed
-        (set subplan-name (list :actions user-action-name1 wff1))
+        (set subplan-name (list :episodes user-action-name1 wff1))
         (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
         ; Bidirectional hierarchical connections
         (setf (get subplan-name 'subplan-of) user-action-name)
@@ -1256,8 +1256,49 @@
 ; TODO: Create plan-repeat-until
 ; expr = (name0 wff0 name1 wff1 ...)
 ;
+; 'ep-var' is the variable that was replaced by a new name, designating
+;    the occurrence of the complex repeat-until event. It will be used
+;    again in the recursion at the end of the plan we are forming;
+; 'expr' is of form
+;    (name0 wff0 name1 wff1 name2 wff2 ...), 
+; where 'name0' is the episode characterized by stop condition 'wff0',
+; 'name1' is the episode characterized by the first action- or event-wff
+; 'wff1', 'name2' is the episode characterized by the 2nd action- or
+; event-wff 'wff2', etc.
+;
+; The subplan (if wff0 is false) will consist of all the steps of the loop, 
+; and ending with another repeat-until loop, identical to the original one.
+;
+; TODO: I THINK I'LL ALSO NEED 'plan-seq-acts', 'plan-consec-acts', ETC.
+; THESE SHOULD BE PRETTY SIMPLE, JUST LISTING THE ACTIONS & PROVIDING
+; seq-ep, consec-ep, ETC. RELATIONS IN THE SUBPLAN. 
+;
+  (let (truth-val subplan-name)
+    ; First check termination condition
+    (setq truth-val (contextual-truth-value (second expr))) ; TODO: create contextual-truth-value
+    (cond
+      ; Termination has been reached - return nil so the calling program can delete loop
+      (truth-val nil)
+      ; Otherwise, create a subplan that has the steps of the loop & a recursive copy of the loop
+      (t
+        (setq subplan-name (gentemp "SUBPLAN"))
+        ; Value of subplan has steps name1 wff1 name2 wff2 ... followed by (cons `(:repeat-until ,expr))
+        (set subplan-name (cons :episodes
+          (append expr (append `(,ep-var :repeat-until) expr))))
+        (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
+        subplan-name))
+)) ; END plan-repeat-until
+
+
+
+
+
+(defun contextual-truth-value (wff)
+; ````````````````````````````````````
+; TODO: implement contextual-truth-value
+;
   ...
-) ; END plan-cond
+) ; END contextual-truth-value
 
 
 
