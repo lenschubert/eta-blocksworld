@@ -45,7 +45,7 @@
 ; use had in mind but "paraphrased" in the context of the preceding
 ; Eta question.
 
-:Actions ; we start execution at this keyword
+:episodes ; we start execution at this keyword
          ; (other schema components are omitted for the time being.)
 ?a1. (You paraphrase.v '?question)
 
