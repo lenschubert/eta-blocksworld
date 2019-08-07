@@ -13,9 +13,10 @@
 ;-----------Text Mode-----------
   (if (or (not *mode*) (not (probe-file "sessionInfo.lisp")))
     (progn
-      (format t "~%~%Enter user-id ~%")
-      (princ "user id: ") (finish-output)
-      (setq *user-id* (write-to-string (read))))
+      ;; (format t "~%~%Enter user-id ~%")
+      ;; (princ "user id: ") (finish-output)
+      ;; (setq *user-id* (write-to-string (read))))
+      (setq *user-id* "test"))
 ;----------Speak Mode-----------
     (progn
       (load "sessionInfo.lisp")))

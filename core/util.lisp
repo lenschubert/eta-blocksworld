@@ -574,7 +574,7 @@
 ; two new names (constants): one for an episode (e.g., 'EP38'), and 
 ; one for the corresponding reified proposition (e.g., 'EP38.'); we 
 ; then return the two variables with the two new names, e.g.,
-;   ((?a1 . EP38) (?a1. EP38.))
+;   ((?a1 . EP38) (?a1. . EP38.))
 ; If there is no final period, we just return an episode name for the
 ; variable, e.g. if dual-var is just '?a1', we return
 ;   ((?a1 . EP38))
