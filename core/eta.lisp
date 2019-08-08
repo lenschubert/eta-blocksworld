@@ -1351,7 +1351,7 @@
 ; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
 ; Use hash tables?
 ;
-  (setq *context* (append wff *context*))
+  (setq *context* (append wffs *context*))
 ) ; END store-in-context
 
 
