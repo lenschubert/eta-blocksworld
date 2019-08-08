@@ -93,10 +93,5 @@
 ;``````````
 (handler-case (eta *mode*)
   (error (c)
-    (format t "Execution of Eta failed due to an internal error.~%")
-    (if *mode*
-      (with-open-file (outfile "./output.txt" :direction :output
-                                              :if-exists :append
-                                              :if-does-not-exist :create)
-      (format outfile "~%#: ~a" "Execution of Eta failed due to an internal error.")))
+    (error-message "Execution of Eta failed due to an internal error." *mode*)
     (values 0 c)))

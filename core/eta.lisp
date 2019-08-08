@@ -124,6 +124,10 @@
   ; used response too soon).
   (defparameter *count* 0)
 
+  ; This is used to check whether some error has caused Eta to enter
+  ; an infinite loop (e.g. if the plan isn't correctly updated).
+  (defparameter *error-check* 0)
+
   ; If *live* = T, operates in "live mode" (intended for avatar
   ; system) with file IO. If *live* = nil, operates in terminal mode.
   (defparameter *live* nil)
@@ -172,6 +176,13 @@
   do
     ;; (print-current-plan-status '*dialog-plan*) ; DEBUGGING
     ;; (format t "~% here is after the print-current-plan-status -----------")
+
+    ; Error check
+    (cond
+      ((> *error-check* 100)
+        (error-message "An error caused Eta to fall into an infinite loop. Check if the plan is being updated correctly." *live*)
+        (error))
+      (t (setq *error-check* (1+ *error-check*))))
 
     ; Update the 'rest-of-plan' pointers after processing the
     ; previous step.
@@ -268,6 +279,9 @@
       (return-from update-plan nil))
 
     (process-plan-variables schema-name plan-name prop-name prop-var)
+
+    ; Restart error count
+    (setq *error-check* 0)
 
     (get plan-name 'rest-of-plan)
 )) ; END update-plan
@@ -592,9 +606,9 @@
     ; action, and to form the subsequent action accordingly.
     (cond
 
-      ; ````````````````````````
+      ;`````````````````````````
       ; Eta: Storing in context
-      ; ````````````````````````
+      ;`````````````````````````
       ; Storing a given wff expression in context
       ((setq bindings (bindings-from-ttt-match '(:store-in-context _+) wff))
         (setq expr (get-multiple-bindings bindings))
@@ -602,9 +616,9 @@
         (store-in-context expr)
         (update-plan {sub}plan-name rest))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Choosing
-      ; ````````````````````
+      ;`````````````````````
       ; if-statements, potentially other conditionals in the future.
       ; bindings yields ((_+ (cond1 name1 wff1 cond2 name2 wff2 ...)))
       ; NOTE: one potential issue, could complex wffs have name-wff pairs within them??
@@ -616,9 +630,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Looping
-      ; ````````````````````
+      ;`````````````````````
       ; repeat-until, potentially other forms of loops in the future.
       ; bindings yields ((_+ (name0 wff0 name1 wff1 ...)))
       ; episode name0, with wff0, provides the stop condition. wff1 the 1st action,
@@ -708,9 +722,9 @@
     ; action, and to form the subsequent action accordingly.
     (cond
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Saying
-      ; ````````````````````
+      ;`````````````````````
       ; e.g. yields ((_+ '(I am a senior comp sci major\, how about you?)))
       ; or nil, for non-match
       ((setq bindings (bindings-from-ttt-match '(me say-to.v you _+) wff))
@@ -744,9 +758,9 @@
       ; For now, saying something is the only primitive action, so everything
       ; beyond this point is non-primitive actions, to be expanded using choice packets.
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Reacting
-      ; ````````````````````
+      ;`````````````````````
       ; Yields e.g. ((_! EP34.)), or nil if unsuccessful.
       ((setq bindings (bindings-from-ttt-match '(me react-to.v _!) wff))
         (setq user-action-name (get-single-binding bindings))
@@ -778,9 +792,9 @@
       ; TODO: Most of the following use redundant code, which can probably
       ; be factored into a single higher order function (for now)
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Telling
-      ; ````````````````````
+      ;`````````````````````
       ; e.g. telling one's name could be formulated as
       ; (me tell.v you (ans-to (wh ?x (me have-as.v name.n ?x))))
       ; and answer retrieval should bind ?x to a name. Or we could have
@@ -796,9 +810,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Describing
-      ; ````````````````````
+      ;`````````````````````
       ; Describing, like telling, is an inform-act, but describing conveys a proposition
       ; at an abstract level (e.g. "who I am", describing one's capabilities or appearance, etc.).
       ; This involves access to knowledge in the appropriate categories, and this may then
@@ -820,9 +834,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Suggesting
-      ; ````````````````````
+      ;`````````````````````
       ; e.g. (that (you provide-to.v me (K ((attr extended.a) (plur answer.n)))))
       ((setq bindings (bindings-from-ttt-match '(me suggest-to.v you _!) wff))
         (setq suggestion (get-single-binding bindings))
@@ -833,9 +847,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Asking
-      ; ````````````````````
+      ;`````````````````````
       ; e.g. (ans-to (wh ?x (you have-as.v major.n ?x)))
       ((setq bindings (bindings-from-ttt-match '(me ask.v you _!) wff))
         (setq query (get-single-binding bindings))
@@ -846,9 +860,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Saying hello
-      ; ````````````````````
+      ;`````````````````````
       ((equal wff '(me say-hello-to.v you))
         (setq new-subplan-name (plan-saying-hello))
         (when (null new-subplan-name)
@@ -857,9 +871,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ````````````````````
+      ;`````````````````````
       ; Eta: Saying good-bye
-      ; ````````````````````
+      ;`````````````````````
       ((equal wff '(me say-bye-to.v you))
         (setq new-subplan-name (plan-saying-bye))
         (when (null new-subplan-name)
@@ -868,9 +882,9 @@
         (setf (get episode-name 'subplan) new-subplan-name)
         (setf (get new-subplan-name 'subplan-of) episode-name))
 
-      ; ```````````````````````````````````````
+      ;````````````````````````````````````````
       ; Eta: Seek answer from external source
-      ; ```````````````````````````````````````
+      ;````````````````````````````````````````
       ((setq bindings (bindings-from-ttt-match '(me seek-answer-from.v _! _!1) wff))
         (setq system (second (first bindings)))
         (setq user-ulf (second (second bindings)))
@@ -881,9 +895,9 @@
           (t (write-ulf (second user-ulf))))
         (update-plan {sub}plan-name rest))
 
-      ; `````````````````````````````````````````
+      ;``````````````````````````````````````````
       ; Eta: Recieve answer from external source
-      ; `````````````````````````````````````````
+      ;``````````````````````````````````````````
       ((setq bindings (bindings-from-ttt-match '(me receive-answer-from.v _! _!1) wff))
         (setq system (second (first bindings)))
         (setq expr (second (second bindings)))
@@ -904,9 +918,9 @@
         (setf (get (car (get {sub}plan-name 'rest-of-plan)) 'ans) ans)
         (setf (get (car (get {sub}plan-name 'rest-of-plan)) 'alternates) alternates))
 
-      ; ```````````````````````````
+      ;````````````````````````````
       ; Eta: Conditionally saying
-      ; ```````````````````````````
+      ;````````````````````````````
       ; NOTE: Currently just creates a primitive say-to.v subplan directly from the given
       ; answer
       ; TODO: In the future we should change this to use the alternates (if given) somehow
@@ -1031,9 +1045,9 @@
 
     ; Big conditional statement to observe different types of user actions
     (cond
-      ; ````````````````````
+      ;`````````````````````
       ; User: Saying
-      ; ````````````````````
+      ;`````````````````````
       ; We deal with primitive say-actions first (previously created from
       ; (you reply-to.v <eta action>)) based on reading the user's input:
       ((setq bindings (bindings-from-ttt-match '(you say-to.v me _!) wff))
@@ -1100,9 +1114,9 @@
         ;; (print-current-plan-status {sub}plan-name) ; DEBUGGING
         (list user-action-name wff))
 
-      ; ````````````````````
+      ;`````````````````````
       ; User: Paraphrasing
-      ; ````````````````````
+      ;`````````````````````
       ; Next we deal with gist clauses "attributed" to the user, in user
       ; actions of form '(you paraphrase.v '<gist clause>')' in a subplan
       ; derived from a schema for handling complex user turns; i.e. we take the
@@ -1126,9 +1140,9 @@
         ;; (print-current-plan-status {sub}plan-name) ; DEBUGGING
         (list user-action-name wff))
 
-      ; ````````````````````
+      ;`````````````````````
       ; User: Replying
-      ; ````````````````````
+      ;`````````````````````
       ; Nonprimitive (you reply-to.v <eta action name>) action; we particularize this
       ; action as a subplan, based on reading the user's input
       (t
@@ -1210,7 +1224,7 @@
         clause keys specific-answers  question facts gist-clauses)
 
     ; Form specific answer clauses from input
-    ; ````````````````````````````````````````
+    ;`````````````````````````````````````````
     ;; (format t "~% prior-gist-clause =" prior-gist-clause) ; DEBUGGING
     (setq tagged-prior-gist-clause (mapcar #'tagword prior-gist-clause))
     ;; (format t "~% tagged prior gist clause = ~a" tagged-prior-gist-clause) ; DEBUGGING
@@ -1231,7 +1245,7 @@
       (store-fact (car specific-answer) keys *gist-kb*))
 
     ; Form final question from input
-    ; ```````````````````````````````
+    ;````````````````````````````````
     ; Use up to 12 final words of input
     (if (> n 2) (setq question (cdr
       (choose-result-for (mapcar #'tagword (last words 12)) question-content-tree))))
@@ -1291,7 +1305,7 @@
 
 
 (defun plan-cond (expr)
-; ```````````````````````
+;````````````````````````
 ; TODO: Create plan-cond
 ; expr = (cond1 name1 wff1 cond2 name2 wff2 ...)
 ;
@@ -1304,7 +1318,7 @@
 
 
 (defun plan-repeat-until (expr)
-; ````````````````````````````````
+;`````````````````````````````````
 ; TODO: Create plan-repeat-until
 ; expr = (name0 wff0 name1 wff1 ...)
 ;
@@ -1346,7 +1360,7 @@
 
 
 (defun store-in-context (wffs)
-; ``````````````````````````````
+;```````````````````````````````
 ; Stores a given list of wffs in context.
 ; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
 ; Use hash tables?
@@ -1359,7 +1373,7 @@
 
 
 (defun contextual-truth-value (wff)
-; ````````````````````````````````````
+;`````````````````````````````````````
 ; TODO: implement contextual-truth-value
 ;
   nil
@@ -1617,7 +1631,7 @@
 ; result rules, in particular reassembly rules.
 ;
 ; Method:
-; ```````
+;````````
 ; If the rule has a NIL 'directive' property, then its 'pattern'
 ; property supplies a decomposition rule. We match this pattern,
 ; and if successful, recursively seek a result from the children
@@ -1732,9 +1746,9 @@
     ; failure and thus recursive backtracking), no directive (i.e. decomposition
     ; rule), :subtree, :subtree+clause, and :ulf-recur
     (cond
-      ; `````````````````
+      ;``````````````````
       ; No directive
-      ; `````````````````
+      ;``````````````````
       ; Look depth-first for more specific match, otherwise try alternatives
       ((null directive)
         (setq newparts (match1 pattern tagged-clause))
@@ -1753,9 +1767,9 @@
                    (return-from choose-result-for1
                       (choose-result-for1 tagged-clause parts (get rule-node 'next)))))
 
-      ; ````````````````````
+      ;`````````````````````
       ; :subtree directive
-      ; ````````````````````
+      ;`````````````````````
       ; Recursively obtain a result from the choice tree specified via its
       ; root name, given as 'pattern'
       ((eq directive :subtree)
@@ -1763,9 +1777,9 @@
         (return-from choose-result-for1
           (choose-result-for1 tagged-clause parts pattern)))
 
-      ; ```````````````````````````
+      ;````````````````````````````
       ; :subtree+clause directive
-      ; ```````````````````````````
+      ;````````````````````````````
       ; Similar to :subtree, except that 'pattern' is not simply the root
       ; name of a tree to be searched, but rather a pair of form
       ; (<root name of tree> <reassembly pattern>), indicating that the
@@ -1779,9 +1793,9 @@
         (return-from choose-result-for1
           (choose-result-for1 new-tagged-clause nil (car pattern))))
 
-      ; ```````````````````````
+      ;````````````````````````
       ; :ulf-recur directive
-      ; ```````````````````````
+      ;````````````````````````
       ; Find the instance of the rule pattern determined by 'parts',
       ; which will be a shallow analysis of a text segment, of the
       ; form described in the initial commentary; try to find results
@@ -1822,9 +1836,9 @@
       ; Now we deal with cases expected to directly return a result,
       ; not requiring allowance for failure-driven backtracking
 
-      ; ````````````````
+      ;`````````````````
       ; :ulf directive
-      ; ````````````````
+      ;`````````````````
       ; In the case of ULF computation we don't prefix the result with
       ; the directive symbol; this is in contrast with  cases like :out,
       ; :gist, :schema, etc., where the schema executor needs to know
@@ -1835,9 +1849,9 @@
         (setq result (eval-lexical-ulfs result))
         (return-from choose-result-for1 result))
 
-      ; ``````````````````````
+      ;```````````````````````
       ; :ulf-coref directive
-      ; ``````````````````````
+      ;```````````````````````
       ; Obtains a ulf result using the subtree & input specified in the pattern, and
       ; then resolves the coreferences in the resulting ulf
       ; TODO: Implement coreference resolution (ulf case)
@@ -1849,9 +1863,9 @@
         ;; (format t "discourse entities are ~a~%" *discourse-entities*) ; DEBUGGING
         (return-from choose-result-for1 result))
 
-      ; ``````````````````````
+      ;```````````````````````
       ; :gist-coref directive
-      ; ``````````````````````
+      ;```````````````````````
       ; TODO: Implement coreference resolution (gist case)
       ((eq directive :gist-coref)
         (setq result (cons directive (instance pattern parts)))
@@ -1859,9 +1873,9 @@
         (setq result (coref-gist result))
         (return-from choose-result-for1 result))
 
-      ; ``````````````````````````````
+      ;```````````````````````````````
       ; Misc non-recursive directives
-      ; ``````````````````````````````
+      ;```````````````````````````````
       ; TODO: Remove temporary :schema+ulf directive once solution is found
       ((member directive '(:out :subtrees :schema :schemas 
                            :schema+args :gist :schema+ulf))
