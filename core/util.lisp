@@ -217,6 +217,23 @@
 
 
 
+(defun get-single-binding (bindings)
+; ```````````````````````````````````
+; Retrieves a single bound symbol from the first match variable.
+;
+  (car (second (car bindings)))
+) ; END get-first-single-binding
+
+
+(defun get-multiple-bindings (bindings)
+;```````````````````````````````````````
+; Retrieves multiple bound symbols from the first match variable.
+;
+  (second (car bindings))
+) ; END get-first-multiple-bindings
+
+
+
 (defun tagword (word)
 ;```````````````````````
 ; Returns a list headed by WORD and followed by its features
