@@ -599,7 +599,7 @@
       ; ````````````````````````
       ; Storing a given wff expression in context
       ((setq bindings (bindings-from-ttt-match '(:store-in-context _+) wff))
-        (setq expr (second (car bindings)))
+        (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
         (store-in-context expr)
         (update-plan {sub}plan-name rest))
@@ -611,7 +611,7 @@
       ; bindings yields ((_+ (cond1 name1 wff1 cond2 name2 wff2 ...)))
       ; NOTE: one potential issue, could complex wffs have name-wff pairs within them??
       ((setq bindings (bindings-from-ttt-match '(:if _+) wff))
-        (setq expr (second (car bindings)))
+        (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
         (setq new-subplan-name (plan-cond expr))
         ; Make bidirectional connection to the new subplan
@@ -626,7 +626,7 @@
       ; episode name0, with wff0, provides the stop condition. wff1 the 1st action,
       ; wff2 the 2nd action (each w/ name), etc.
       ((setq bindings (bindings-from-ttt-match '(:repeat-until  _+) wff))
-        (setq expr (second bindings))
+        (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
         (setq new-subplan-name (plan-repeat-until expr))
         ; If this is nil, the stop condition holds, & we drop the loop:
@@ -710,61 +710,13 @@
     ; action, and to form the subsequent action accordingly.
     (cond
 
-      ; ````````````````````````
-      ; Eta: Storing in context
-      ; ````````````````````````
-      ; Storing a given wff expression in context
-      ((setq bindings (bindings-from-ttt-match '(:store-in-context _+) wff))
-        (setq expr (second (car bindings)))
-        ; Generate a subplan for the 1st action-wff with a true condition:
-        (store-in-context expr)
-        (update-plan {sub}plan-name rest))
-
-      ; ````````````````````
-      ; Eta: Choosing
-      ; ````````````````````
-      ; if-statements, potentially other conditionals in the future.
-      ; bindings yields ((_+ (cond1 name1 wff1 cond2 name2 wff2 ...)))
-      ; NOTE: one potential issue, could complex wffs have name-wff pairs within them??
-      ((setq bindings (bindings-from-ttt-match '(:if _+) wff))
-        (setq expr (second (car bindings)))
-        ; Generate a subplan for the 1st action-wff with a true condition:
-        (setq new-subplan-name (plan-cond expr))
-        ; Make bidirectional connection to the new subplan
-        (setf (get episode-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) episode-name))
-
-      ; ````````````````````
-      ; Eta: Looping
-      ; ````````````````````
-      ; repeat-until, potentially other forms of loops in the future.
-      ; bindings yields ((_+ (name0 wff0 name1 wff1 ...)))
-      ; episode name0, with wff0, provides the stop condition. wff1 the 1st action,
-      ; wff2 the 2nd action (each w/ name), etc.
-      ((setq bindings (bindings-from-ttt-match '(:repeat-until  _+) wff))
-        (setq expr (second bindings))
-        ; Generate a subplan for the 1st action-wff with a true condition:
-        (setq new-subplan-name (plan-repeat-until expr))
-        ; If this is nil, the stop condition holds, & we drop the loop:
-        (cond
-          ; If nil, the stop condition holds, so we drop the loop by associating wff0
-          ; with 'episode-name', destructively replacing the previous characterizing wff
-          ; (the repeat-until construct) with it.
-          ((null new-subplan-name)
-            (rplacd rest (cons (second wff) (cddr rest))))
-          ; Otherwise, an iteration (and repeat-loop copy) was added as subplan, so
-          ; make bidirectional connection to new subplan.
-          (t
-            (setf (get episode-name 'subplan) new-subplan-name)
-            (setf (get new-subplan-name 'subplan-of) episode-name))))
-
       ; ````````````````````
       ; Eta: Saying
       ; ````````````````````
       ; e.g. yields ((_+ '(I am a senior comp sci major\, how about you?)))
       ; or nil, for non-match
       ((setq bindings (bindings-from-ttt-match '(me say-to.v you _+) wff))
-        (setq expr (second (car bindings)))
+        (setq expr (get-single-binding bindings))
         ; If the current "say" action is a question (final question mark,
         ; can also check for wh-words & other cues), then use 'topic-keys'
         ; and 'gist-clauses' of current episode-name and the *gist-kb*
@@ -799,7 +751,7 @@
       ; ````````````````````
       ; Yields e.g. ((_! EP34.)), or nil if unsuccessful.
       ((setq bindings (bindings-from-ttt-match '(me react-to.v _!) wff))
-        (setq user-action-name (second (car bindings)))
+        (setq user-action-name (get-single-binding bindings))
         ; Get user gist clauses and ulf from bound user action
         ; TODO: modify to use ulf to plan reaction
         (setq user-gist-clauses (get user-action-name 'gist-clauses))
@@ -838,7 +790,7 @@
       ; or (that (me be.v ((attr autonomous.a) avatar.n))). The match variable
       ; _! will have as a binding the (wh ...) expression.
       ((setq bindings (bindings-from-ttt-match '(me tell.v you _!) wff))
-        (setq info (second (car bindings)))
+        (setq info (get-single-binding bindings))
         (setq new-subplan-name (plan-tell info))
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
@@ -862,7 +814,7 @@
       ; reified with the 'that' operator. Combining the two ideas, we can provide schemas for expanding
       ; a describe-act directly into a tell-act with a complex meaning-of.f argument.
       ((setq bindings (bindings-from-ttt-match '(me describe-to.v you _!) wff))
-        (setq topic (second bindings))
+        (setq topic (get-single-binding bindings))
         (setq new-subplan-name (plan-description topic))
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
@@ -875,7 +827,7 @@
       ; ````````````````````
       ; e.g. (that (you provide-to.v me (K ((attr extended.a) (plur answer.n)))))
       ((setq bindings (bindings-from-ttt-match '(me suggest-to.v you _!) wff))
-        (setq suggestion (second bindings))
+        (setq suggestion (get-single-binding bindings))
         (setq new-subplan-name (plan-suggest suggestion))
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
@@ -888,7 +840,7 @@
       ; ````````````````````
       ; e.g. (ans-to (wh ?x (you have-as.v major.n ?x)))
       ((setq bindings (bindings-from-ttt-match '(me ask.v you _!) wff))
-        (setq query (second bindings))
+        (setq query (get-single-binding bindings))
         (setq new-subplan-name (plan-question query))
         (when (null new-subplan-name)
           (delete-current-action {sub}plan-name)
@@ -1087,7 +1039,7 @@
       ; We deal with primitive say-actions first (previously created from
       ; (you reply-to.v <eta action>)) based on reading the user's input:
       ((setq bindings (bindings-from-ttt-match '(you say-to.v me _!) wff))
-        (setq words (second (car bindings)))
+        (setq words (get-single-binding bindings))
         ; Anything but a quoted word list is unexpected:
         (when (not (eq (car words) 'quote))
           (format t "~%*** SAY-ACTION ~a~%    BY THE USER ~
@@ -1161,7 +1113,7 @@
       ; properties of the user action rather than applying 'form-gist-clauses-from-input'
       ; again (as was done above for (you say-to.v me '(...)) actions).
       ((setq bindings (bindings-from-ttt-match '(you paraphrase.v _!) wff))
-        (setq words (second (car bindings)))
+        (setq words (get-single-binding bindings))
         (when (not (eq (car words) 'quote))
           (format t "~%*** PARAPHRASE-ACTION ~a~%    BY THE USER ~
                     SHOULD SPECIFY A QUOTED WORD LIST" words)
@@ -1345,7 +1297,8 @@
 ; TODO: Create plan-cond
 ; expr = (cond1 name1 wff1 cond2 name2 wff2 ...)
 ;
-  nil
+  (if (not *blah*) (format t ":::~a~%" expr))
+  (setf *blah* t)
 ) ; END plan-cond
 
 
@@ -1394,13 +1347,13 @@
 
 
 
-(defun store-in-context (wff)
-; `````````````````````````````
-; Stores a given wff in context.
+(defun store-in-context (wffs)
+; ``````````````````````````````
+; Stores a given list of wffs in context.
 ; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
 ; Use hash tables?
 ;
-  (setq *context* (cons wff *context*))
+  (setq *context* (append wffs *context*))
 ) ; END store-in-context
 
 

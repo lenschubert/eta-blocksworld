@@ -20,9 +20,17 @@
 
 ?a2. (You reply-to.v ?a1.)
 
-?a3. (:store-in-context (ulf-of.f ?a2.))
+;; ?a3. (:if
+;;       ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
+;;         (Me say-to.v you '(Wow\, that\'s a nice name\.))
+;;       ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BOB |))))
+;;         (Me say-to.v you '(That\'s a weird name\.))
+;;       :default
+;;         (Me say-to.v you '(It\'s very nice to meet you\.)))
 
-;; ?a3. (:if ())
+;; ?a3. (:store-in-context (ulf-of.f ?a2.))
+
+?a3. (:store-in-context ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
 
 ?a4. (Me say-to.v you '(Bye\.))
 
