@@ -63,16 +63,8 @@
 ;
 (setf *temp-dir* "core")
 (setf *default-pathname-defaults* (truename *temp-dir*))
-(load "eta.lisp")
-(load "util.lisp")
-(load "eta-schema.lisp")
-(load "general-word-data.lisp")
-(load "schema-for-reactions-to-answer-plus-question.lisp")
-(load "schema-for-reactions-to-question+clause.lisp")
-(load "schema-for-reactions-to-spatial-question.lisp")
-(load "eval-lexical-ulfs.lisp")
-(load "coref-dev.lisp")
-(load "stem.lisp")
+(mapcar (lambda (file) (load file))
+    (directory "*.lisp"))
 (setf *default-pathname-defaults* *root-dir*)
 
 
@@ -81,21 +73,14 @@
 ;
 (setf *temp-dir* "rules")
 (setf *default-pathname-defaults* (truename *temp-dir*))
-(load "choose-clause-ulf-tree.lisp")
-(load "choose-gist-clause-trees-for-input.lisp")
-(load "choose-reaction-to-input.lisp")
-(load "choose-reactions-to-input.lisp")
-(load "rules-for-question-reaction.lisp")
+(mapcar (lambda (file) (load file))
+    (directory "*.lisp"))
 
-(load "getting-to-know/family-out.lisp")
-(load "getting-to-know/female-out.lisp")
-(load "getting-to-know/male-out.lisp")
-(load "getting-to-know/rules-for-name-input.lisp")
+(mapcar (lambda (file) (load file))
+    (directory "getting-to-know/*.lisp"))
 
-(load "spatial-question/rules-for-spatial-question-input.lisp")
-(load "spatial-question/rules-for-spatial-question-reaction.lisp")
-(load "spatial-question/rules-for-spatial-question-ulf.lisp")
-(load "spatial-question/rules-for-spatial-question-ulf-between.lisp")
+(mapcar (lambda (file) (load file))
+    (directory "spatial-question/*.lisp"))
 (setf *default-pathname-defaults* *root-dir*)
 
 (eta *mode*)
