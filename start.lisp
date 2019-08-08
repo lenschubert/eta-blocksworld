@@ -89,6 +89,17 @@
     (directory "spatial-question/*.lisp"))
 (setf *default-pathname-defaults* *root-dir*)
 
-(eta *mode*)
+;
+; Run Eta
+;
+(handler-case (eta *mode*)
+  (error (c)
+    (format t "Execution of Eta failed due to an internal error.~%")
+    (if *mode*
+      (with-open-file (outfile "./output.txt" :direction :output
+                                              :if-exists :append
+                                              :if-does-not-exist :create)
+      (format outfile "~%#: ~a" "Execution of Eta failed due to an internal error.")))
+    (values 0 c)))
 
 (setf *default-pathname-defaults* *root-dir*)
