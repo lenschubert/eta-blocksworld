@@ -1309,8 +1309,7 @@
 ; TODO: Create plan-cond
 ; expr = (cond1 name1 wff1 cond2 name2 wff2 ...)
 ;
-  (if (not *blah*) (format t ":::~a~%" expr))
-  (setf *blah* t)
+  nil
 ) ; END plan-cond
 
 
