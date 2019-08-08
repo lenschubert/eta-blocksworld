@@ -48,41 +48,41 @@
 
 
 ; Load ttt
-; `````````
+;``````````
 (load (truename "ttt/src/load.lisp"))
 
 
 ; Load core code
 ; (in directory 'core/')
-; ```````````````````````
+;````````````````````````
 (mapcar (lambda (file) (load file))
     (directory "core/*.lisp"))
 
 
 ; Load core resources
 ; (in directory 'core/resources/')
-; `````````````````````````````````
+;``````````````````````````````````
 (mapcar (lambda (file) (load file))
     (directory "core/resources/*.lisp"))
 
 
 ; Load schema files
 ; (in directory 'schemas/')
-; ```````````````````````````
+;````````````````````````````
 (mapcar (lambda (file) (load file))
     (directory "schemas/*.lisp"))
 
 
 ; Load general rule files
 ; (in directory 'rules/')
-; ````````````````````````
+;`````````````````````````
 (mapcar (lambda (file) (load file))
     (directory "rules/*.lisp"))
 
 
 ; Load topic-specific rule files
 ; (in subdirectories of 'rules/')
-; ````````````````````````````````
+;`````````````````````````````````
 (mapcar (lambda (directory)
     (mapcar (lambda (file) (load file))
         (directory (concatenate 'string (namestring directory) "/*.lisp"))))
@@ -90,7 +90,7 @@
 
 
 ; Run Eta
-; `````````
+;``````````
 (handler-case (eta *mode*)
   (error (c)
     (format t "Execution of Eta failed due to an internal error.~%")

@@ -22,7 +22,7 @@
 
 
 (defun ref? (sym)
-; ``````````````````
+;```````````````````
 ; Predicate to check if a symbol is a reference to something previously
 ; in the conversation.
 ; TODO: Need a general way to detect references.
@@ -38,7 +38,7 @@
 
 
 (defun pron? (sym)
-; ``````````````````
+;```````````````````
 ; Predicate to check if a symbol is a pronoun. For now, we exclude
 ; existential there.pro from this.
 ;
@@ -52,7 +52,7 @@
 
 
 (defun definite-np? (ulf)
-; `````````````````````````
+;``````````````````````````
 ; Check if a noun phrase is a definite noun phrase, i.e. if we should
 ; introduce a discourse entity that may be referred to by a future reference.
 ;
@@ -81,7 +81,7 @@
 
 
 (defun plur? (np)
-; `````````````````
+;``````````````````
 ; Check if a noun phrase is plural or not. If it uses a set-of operator, or has a plur operator
 ; nested somewhere (although we need to be careful not to count as plural if an n+preds with a plural
 ; in the postmodifier), then it is counted as plural.
@@ -98,7 +98,7 @@
 
 
 (defun sing? (np)
-; ```````````````````
+;````````````````````
 ; Check if singular. If not plural, we count it as singular.
 ;
   (not (plur? np))
@@ -107,7 +107,7 @@
 
 
 (defun update-de-list (ulf)
-; ```````````````````````````
+;````````````````````````````
 ; Updates the list of discourse-entities by traversing ulf in depth-first order
 ; (but reversed, so the subject is given preference over the object). When a definite
 ; noun phrase is encountered, add it to the front of the discourse-entities list (or if
@@ -128,7 +128,7 @@
 
 
 (defun resolve-ref! (ref)
-; `````````````````````````
+;``````````````````````````
 ; Resolves a reference. First, we determine what category the reference falls under
 ; (currently just singular vs. plural), and we enforce the corresponding constraints,
 ; removing the candidates from the discourse entities list which don't abide by the
@@ -153,7 +153,7 @@
 
 
 (defun coref-ulf (ulf)
-; `````````````````````
+;``````````````````````
 ; The top level coreference function for ulf. We do two steps: first, use TTT rule to
 ; transduce any references to the noun phrase at the top of the discourse entities list
 ; (satisfying constraints). Then update the discourse entity list using the new ulf,
@@ -166,7 +166,7 @@
 
 
 (defun coref-gist (gist)
-; ```````````````````````
+;````````````````````````
 ; Currently unused.
 ;
   gist

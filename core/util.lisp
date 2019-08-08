@@ -168,7 +168,7 @@
 
 
 (defun ttt-var? (x)
-; ``````````````````
+;```````````````````
 ; Is x a TTT match variable?
 ;
   (or (ttt-non-initial-var? x) (ttt-initial-var? x))
@@ -177,7 +177,7 @@
 
 
 (defun ttt-match-vars (patt)
-; ```````````````````````````
+;````````````````````````````
 ; Form a list of distinct TTT match-variables that occur in 'patt';
 ; Duplicate variables that occur earlier in a left-to-right scan are
 ; discarded.
@@ -198,7 +198,7 @@
 
 
 (defun bindings-from-ttt-match (patt expr)
-; ``````````````````````````````````````````
+;```````````````````````````````````````````
 ; From the TTT pattern 'patt', create a rule that generates the
 ; binding list for the match variables of 'expr', when matched
 ; to that expression. Apply the rule to 'expr', hence obtain
@@ -218,7 +218,7 @@
 
 
 (defun get-single-binding (bindings)
-; ```````````````````````````````````
+;````````````````````````````````````
 ; Retrieves a single bound symbol from the first match variable.
 ;
   (car (second (car bindings)))
@@ -531,7 +531,7 @@
 
 
 (defun eval-func! (f &rest args)
-; ```````````````````````````````
+;````````````````````````````````
 ; Evaluate some ELF function <some-func>.f and its args.
 ;
   (apply f args)
@@ -540,7 +540,7 @@
 
 
 (defun eval-functions (wff)
-; ``````````````````````````
+;```````````````````````````
 ; Evaluates all ELF functions (<some-func>.f arg1 arg2 ...) in a wff.
 ;
   (ttt:apply-rule '(/ (function? _*) (eval-func! function? _*)) wff)
@@ -1143,3 +1143,10 @@
       (if (get rule 'time-last-used)
         (setf (get rule 'time-last-used) -100))))
 ) ; END reset-rule
+
+
+
+(defun error-message (str)
+;``````````````````````````
+; 
+)
