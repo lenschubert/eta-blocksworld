@@ -212,7 +212,6 @@
   ; case, return nil for it:
   (if (eq vals expr) (return-from bindings-from-ttt-match nil))
   ; Otherwise return the variables matched with their values:
-  (format t ":: patt: ~a~% |- expr: ~a~% |- vars: ~a~% |- vals: ~a~%~%" patt expr vars vals)
   (mapcar #'list vars vals)
 )) ; END bindings-from-ttt-match
 
