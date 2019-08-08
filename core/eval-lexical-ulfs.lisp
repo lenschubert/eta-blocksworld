@@ -121,8 +121,7 @@
 ; Return variant of str with first letter upper case; 
 ; assumes 1st character of str is alphabetic;
 ;
- (concatenate 'string (string-upcase (subseq str 0 1))
-                      (subseq str 1 (length str))))
+ (format nil "~:(~a~)" str))
 
                
 
