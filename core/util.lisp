@@ -167,6 +167,15 @@
 
 
 
+(defun ttt-var? (x)
+; ``````````````````
+; Is x a TTT match variable?
+;
+  (or (ttt-non-initial-var? x) (ttt-initial-var? x))
+) ; END ttt-var?
+
+
+
 (defun ttt-match-vars (patt)
 ; ```````````````````````````
 ; Form a list of distinct TTT match-variables that occur in 'patt';
@@ -174,26 +183,16 @@
 ; discarded.
 ;
   (let (var vars)
-    ; Find the match variables occurring in 'patt':
-    (if (symbolp patt)
-      (if (ttt-non-initial-var? patt)
-        (return-from ttt-match-vars `(,patt)) ; Top-level match variable -- return as list
-        (return-from ttt-match-vars nil)))
-            
-    ; It's a list; check for initial match variable (save as 'var')
-    (if (and
-          (listp patt) 
-          (symbolp (car patt))
-          (ttt-initial-var? (car patt)))
-      (setq var (car patt)))
-    
-    ; Append the results of mapping 'ttt-match-vars onto (cdr patt)
-    (setq vars (apply #'append 
-      (mapcar #'ttt-match-vars (cdr patt))))
-    
-    ; Add var as initial element, if it is non-nil
-    (if var (push var vars))
-  (remove-duplicates vars))
+    (cond
+      ; Base case - if patt is a symbol, return the pattern if it is a
+      ; non-initial var, or nil otherwise
+      ((symbolp patt)
+        (if (ttt-var? patt) `((,patt)) nil))
+      ; Recursive case
+      (t
+        (remove-duplicates
+          (remove nil (mapcan #'ttt-match-vars patt))
+          :test #'equal))))
 ) ; END ttt-match-vars
 
 
@@ -213,6 +212,7 @@
   ; case, return nil for it:
   (if (eq vals expr) (return-from bindings-from-ttt-match nil))
   ; Otherwise return the variables matched with their values:
+  (format t ":: patt: ~a~% |- expr: ~a~% |- vars: ~a~% |- vals: ~a~%~%" patt expr vars vals)
   (mapcar #'list vars vals)
 )) ; END bindings-from-ttt-match
 
