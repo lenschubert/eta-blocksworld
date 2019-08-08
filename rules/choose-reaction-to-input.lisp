@@ -1,5 +1,3 @@
-(eval-when (load eval)
-
 (mapc 'attachfeat
   '()
 )
@@ -38,6 +36,3 @@
 
 (READRULES '*reaction-to-unexpected*
  '())
- 
-); end of eval-when
-

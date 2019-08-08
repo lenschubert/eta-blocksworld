@@ -1,6 +1,4 @@
-(eval-when (load eval)
- 
-  (READRULES '*reaction-to-question*
+(READRULES '*reaction-to-question*
   '(
     1 (0 wh_ 1 your name 0)
       2 (Your creators have named you David \.) (0 :out)
@@ -14,6 +12,4 @@
 	1 (0 aux you 0)
       2 (You can try your best to answer yes no questions \, wh questions \, and how many
         questions \. You cannot answer modal questions right now \, though \.) (0 :out)
-  ))
-); end of eval-when
-
+))

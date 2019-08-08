@@ -3,7 +3,6 @@
 ;;
 ;; "How did you get here today?"
 
-(eval-when (load eval)
   (MAPC 'ATTACHFEAT
   '(
     (spatial-beginning-pair spatial-beginning there)
@@ -485,5 +484,3 @@
   (READRULES '*question-from-spatial-question-input*
   '(
   ))
-
-); end of eval-when

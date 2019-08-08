@@ -28,8 +28,6 @@
 ;    of them are as yet used.)
 ;
 
-(eval-when (load eval)
-
   (MAPC (LAMBDA (TRIPLE) (SETF (GET (CAR TRIPLE) 'TWOWORDS) (CDR TRIPLE)))
 	'((DON\'T DO NOT) (DONT DO NOT) (DOESN\'T DOES NOT) (DIDN\'T DID NOT)
 	  (WON\'T WILL NOT) (WONT WILL NOT) 
@@ -279,6 +277,6 @@
 	  ))
 
 
-   (SETQ *TRACERULES* NIL))
+   (SETQ *TRACERULES* NIL)
 
 

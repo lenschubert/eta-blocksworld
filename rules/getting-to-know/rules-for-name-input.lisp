@@ -1,8 +1,7 @@
-(eval-when (load eval)
-  (MAPC 'ATTACHFEAT
+(MAPC 'ATTACHFEAT
   '(
- (american-names american-male-names american-female-names)
- ))
+     (american-names american-male-names american-female-names)
+  ))
  
 ;; (what did you have for breakfast ?)
 ;; (name)
@@ -38,4 +37,3 @@
     1 (0)
       2 (It is very nice to meet me \. You hope we have many great interactions in the future\.) (100 :out)
   ))
-); end of eval-when

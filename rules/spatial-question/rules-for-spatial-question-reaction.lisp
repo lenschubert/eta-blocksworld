@@ -1,5 +1,4 @@
-(eval-when (load eval)
-  (MAPC 'ATTACHFEAT
+(MAPC 'ATTACHFEAT
   '())
 
 (READRULES '*reaction-to-spatial-question-input*
@@ -11,4 +10,3 @@
     1 (0)
       2 (1) (0 :out)
   ))
-); end of eval-when

@@ -45,8 +45,6 @@
 ;; The initial set of features are intended to support analysis
 ;; of the user's spatial relation questions in the Blocks world
 
-(eval-when (load eval)
-
   (MAPC 'ATTACHFEAT
         '(; New as of June 9/19:
           (corp Adidas Burger_King Esso Heineken HP McDonalds Mercedes NVidia  
@@ -515,7 +513,3 @@
 ;   2 *wh-question-ulf-tree* (0 :subtree)
 ;  1 (prep 2 wh_ 0) ; e.g., "On top of which block is the NVidia block ?"
 ;   2 *ppwh-question-ulf-tree* (0 :subtree)
-
-
-
-); end of eval-when

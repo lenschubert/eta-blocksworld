@@ -8,8 +8,6 @@
 ;
 ; ====================================================================
 
-;(eval-when (load eval)
-
 ; The following rules are only reached by questions containing "between"
 
 (READRULES '*yn-between-question-ulf-tree* ; yes-no questions involving "between"
@@ -149,5 +147,3 @@
 ;   2 *ppwh-question-ulf-tree* (0 :subtree)
 
 
-
-;); end of eval-when
