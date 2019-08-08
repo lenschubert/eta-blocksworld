@@ -187,7 +187,7 @@
       ; Base case - if patt is a symbol, return the pattern if it is a
       ; non-initial var, or nil otherwise
       ((symbolp patt)
-        (if (ttt-var? patt) `((,patt)) nil))
+        (if (ttt-var? patt) `(,patt) nil))
       ; Recursive case
       (t
         (remove-duplicates
@@ -206,7 +206,7 @@
 ;
 (let ((vars (ttt-match-vars patt)) vals)
   (if (null vars) (return-from bindings-from-ttt-match nil))
-  (setq vals (ttt:apply-rule `(/ ,patt ,vars) expr))
+  (setq vals (ttt:apply-rule `(/ ,patt ,(mapcar #'list vars)) expr))
   ; For rules that don't match a given expr, 'ttt:apply-rule' 
   ; returns a result 'eq' to the expr.  Since that's a failure 
   ; case, return nil for it:
