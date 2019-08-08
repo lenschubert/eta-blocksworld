@@ -1,14 +1,12 @@
 
 ; NIL for text mode
 ; T for speak mode
-;; (defparameter *mode* t)
-(defparameter *mode* NIL)
+(defparameter *mode* t)
+;; (defparameter *mode* NIL)
 (defparameter *user-id* NIL)
 
 ; sessionInfo.lisp should be as following
 ; (setq *user-id* "456")
-
-(setf *root-dir* *default-pathname-defaults*)
 
 ;-----------Text Mode-----------
   (if (or (not *mode*) (not (probe-file "sessionInfo.lisp")))
@@ -49,49 +47,50 @@
 (clrhash *gist-kb*)
 
 
-;
 ; Load ttt
-;
-(setf *temp-dir* "ttt/src")
-(setf *default-pathname-defaults* (truename *temp-dir*))
-(load "load")
-(setf *default-pathname-defaults* *root-dir*)
+; `````````
+(load (truename "ttt/src/load.lisp"))
 
 
-;
-; Load shared code
-;
-(setf *temp-dir* "core")
-(setf *default-pathname-defaults* (truename *temp-dir*))
+; Load core code
+; (in directory 'core/')
+; ```````````````````````
 (mapcar (lambda (file) (load file))
-    (directory "*.lisp"))
+    (directory "core/*.lisp"))
 
+
+; Load core resources
+; (in directory 'core/resources/')
+; `````````````````````````````````
 (mapcar (lambda (file) (load file))
-    (directory "resources/*.lisp"))
+    (directory "core/resources/*.lisp"))
 
+
+; Load schema files
+; (in directory 'schemas/')
+; ```````````````````````````
 (mapcar (lambda (file) (load file))
     (directory "schemas/*.lisp"))
-(setf *default-pathname-defaults* *root-dir*)
 
 
-;
-; Start dialogue
-;
-(setf *temp-dir* "rules")
-(setf *default-pathname-defaults* (truename *temp-dir*))
+; Load general rule files
+; (in directory 'rules/')
+; ````````````````````````
 (mapcar (lambda (file) (load file))
-    (directory "*.lisp"))
+    (directory "rules/*.lisp"))
 
-(mapcar (lambda (file) (load file))
-    (directory "getting-to-know/*.lisp"))
 
-(mapcar (lambda (file) (load file))
-    (directory "spatial-question/*.lisp"))
-(setf *default-pathname-defaults* *root-dir*)
+; Load topic-specific rule files
+; (in subdirectories of 'rules/')
+; ````````````````````````````````
+(mapcar (lambda (directory)
+    (mapcar (lambda (file) (load file))
+        (directory (concatenate 'string (namestring directory) "/*.lisp"))))
+    (remove nil (mapcar (lambda (p) (if (not (pathname-name p)) p)) (directory "rules/*"))))
 
-;
+
 ; Run Eta
-;
+; `````````
 (handler-case (eta *mode*)
   (error (c)
     (format t "Execution of Eta failed due to an internal error.~%")
@@ -101,5 +100,3 @@
                                               :if-does-not-exist :create)
       (format outfile "~%#: ~a" "Execution of Eta failed due to an internal error.")))
     (values 0 c)))
-
-(setf *default-pathname-defaults* *root-dir*)

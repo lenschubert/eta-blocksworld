@@ -695,12 +695,10 @@
 ; Writes a ulf to the file ulf.lisp, so that it can be used
 ; by the blocksworld system.
 ;
-  (setf *default-pathname-defaults* *root-dir*)
   (with-open-file (outfile "./ulf.lisp" :direction :output
                                         :if-exists :supersede
                                         :if-does-not-exist :create)
     (format outfile "(setq *next-ulf* '~a)" ulf))
-  (setf *default-pathname-defaults* (truename *temp-dir*))
 ) ; END write-ulf
 
 
@@ -736,12 +734,10 @@
     (setq wordstring (reverse (cdr wordstring)))
     (setq wordstring (eval (cons 'concatenate (cons ''string wordstring))))
 	  
-    (setf *default-pathname-defaults* *root-dir*)
     (with-open-file (outfile "./output.txt" :direction :output
                                             :if-exists :append
                                             :if-does-not-exist :create)
       (format outfile "~%#: ~a" wordstring))
-    (setf *default-pathname-defaults* (truename *temp-dir*))
 
     ; Also write ETA's words to standard output:
     (format t "~% ... ")
@@ -775,7 +771,6 @@
 ; terminal input mode.
 ;
   (setq *next-input* nil)
-  (setf *default-pathname-defaults* *root-dir*)
   (loop while (not *next-input*) do
     (sleep .5)
     (progn
@@ -786,7 +781,6 @@
           (with-open-file (outfile "./input.lisp" :direction :output 
                                                   :if-exists :supersede
                                                   :if-does-not-exist :create))))))
-  (setf *default-pathname-defaults* (truename *temp-dir*))
           
   (parse-chars (coerce *next-input* 'list))
 ) ; END hear-words
@@ -799,7 +793,6 @@
 ; which will set the value of *next-answer*, and then processes it.
 ;
   (setq *next-answer* nil)
-  (setf *default-pathname-defaults* *root-dir*)
   (loop while (not *next-answer*) do
     (sleep .5)
     (progn
@@ -808,7 +801,6 @@
         (with-open-file (outfile "./answer.lisp" :direction :output 
                                                    :if-exists :supersede
                                                    :if-does-not-exist :create)))))
-  (setf *default-pathname-defaults* (truename *temp-dir*))
           
   (parse-chars (if (stringp *next-answer*) (coerce *next-answer* 'list)
                                              (coerce (car *next-answer*) 'list)))

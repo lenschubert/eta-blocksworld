@@ -129,11 +129,9 @@
   (defparameter *live* nil)
 
   ; Initialize/clear output file (only used in live mode)
-  (setf *default-pathname-defaults* *root-dir*)
   (with-open-file (outfile "./output.txt" :direction :output
                                           :if-exists :append
                                           :if-does-not-exist :create))
-  (setf *default-pathname-defaults* (truename *temp-dir*))
 ) ; END init
 
 
@@ -1353,7 +1351,7 @@
 ; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
 ; Use hash tables?
 ;
-  (setq *context* (append wffs *context*))
+  (setq *context* (append wff *context*))
 ) ; END store-in-context
 
 
