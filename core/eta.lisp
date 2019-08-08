@@ -546,6 +546,14 @@
 
     (setq wff (second rest))
 
+    ;; (format t "~%'wff' before evaluating ELF functions is~% ~a" wff) ; DEBUGGING
+
+    ; Evaluate all ELF functions in the wff.
+    (setq wff (eval-functions wff))
+    (setf (second rest) wff)
+
+    ;; (format t "~%'wff' after evaluating ELF functions is~% ~a" wff) ; DEBUGGING
+
     ; Match '(me ...)' (Eta) actions, or '(you ...)' (User) actions, and
     ; act accordingly.
     (cond

@@ -18,9 +18,11 @@
 
 ?a1. (Me say-to.v you '(Hi\.))
 
-?a2. (Me say-to.v you '(Test\.))
+?a2. (You reply-to.v ?a1.)
 
-?a3. (:store-in-context '(?a1 finished2.a))
+?a3. (:store-in-context (ulf-of.f ?a2.))
+
+;; ?a3. (:if ())
 
 ?a4. (Me say-to.v you '(Bye\.))
 
@@ -58,7 +60,7 @@
 (mapcar #'(lambda (x) 
       (store-output-gist-clauses (first x) (second x) '*eta-schema*))
   '(
-    ;; (?a2.  ((what is your name ?)))
+    (?a1.  ((what is your name ?)))
   )
 ); end of mapcar #'store-output-gist-clauses
 
@@ -76,7 +78,7 @@
 (mapcar #'(lambda (x) 
       (store-topic-keys (first x) (second x) '*eta-schema*))
   '(
-    ;; (?a2.  (name))
+    (?a1.  (name))
   )
 ); end of mapcar
 

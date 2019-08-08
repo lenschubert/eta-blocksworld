@@ -95,6 +95,15 @@
 
 
 
+(defun function? (atm)
+;``````````````````````
+; Check whether a symbol is a function, i.e. ends with '.f'
+;
+  (and (symbolp atm) (equal '(#\. #\F) (last (explode atm) 2)))
+) ; END function?
+
+
+
 (defun quoted-question? (sentence)
 ;```````````````````````````````````````
 ; Is sentence of form (quote (<word> ... <word> ?)), or with the
@@ -502,6 +511,24 @@
     (t (presubst (cons response 0)))
     
 )) ; END presubst
+
+
+
+(defun eval-func! (f &rest args)
+; ```````````````````````````````
+; Evaluate some ELF function <some-func>.f and its args.
+;
+  (apply f args)
+) ; END eval-func!
+
+
+
+(defun eval-functions (wff)
+; ``````````````````````````
+; Evaluates all ELF functions (<some-func>.f arg1 arg2 ...) in a wff.
+;
+  (ttt:apply-rule '(/ (function? _*) (eval-func! function? _*)) wff)
+) ; END eval-functions
 
 
 

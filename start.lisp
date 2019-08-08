@@ -65,6 +65,12 @@
 (setf *default-pathname-defaults* (truename *temp-dir*))
 (mapcar (lambda (file) (load file))
     (directory "*.lisp"))
+
+(mapcar (lambda (file) (load file))
+    (directory "resources/*.lisp"))
+
+(mapcar (lambda (file) (load file))
+    (directory "schemas/*.lisp"))
 (setf *default-pathname-defaults* *root-dir*)
 
 
