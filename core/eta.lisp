@@ -351,7 +351,7 @@
 
 
 (defun process-plan-variables (schema-name plan-name prop-name prop-var)
-;`````````````````````````````````````````````````````````````````
+;```````````````````````````````````````````````````````````````````````
 ; Handles the creation and substitution of dual names from variables,
 ; as well as attaching properties to the action from associated hash tables,
 ; during the init-plan and update-plan functions.
@@ -553,16 +553,17 @@
 
     (setq rest (get {sub}plan-name 'rest-of-plan))
 
-    ;; (format t "~%'rest-of-plan' of currently due ~a is~% (~a ~a ...)~%"
-              ;; {sub}plan-name (car rest) (second rest)) ; DEBUGGING
+    (format t "~%'rest-of-plan' of currently due ~a is~% (~a ~a ...)~%"
+              {sub}plan-name (car rest) (second rest)) ; DEBUGGING
 
     (setq wff (second rest))
 
     ;; (format t "~%'wff' before evaluating ELF functions is~% ~a" wff) ; DEBUGGING
 
-    ; Evaluate all ELF functions in the wff.
-    (setq wff (eval-functions wff))
-    (setf (second rest) wff)
+    ; If the wff is ground, evaluate all ELF functions in the wff.
+    (cond ((ground-wff? wff)
+      (setq wff (eval-functions wff))
+      (setf (second rest) wff)))
 
     ;; (format t "~%'wff' after evaluating ELF functions is~% ~a" wff) ; DEBUGGING
 
@@ -643,7 +644,7 @@
       ((setq bindings (bindings-from-ttt-match '(:repeat-until  _+) wff))
         (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
-        (setq new-subplan-name (plan-repeat-until expr))
+        (setq new-subplan-name (plan-repeat-until episode-name expr))
         ; If this is nil, the stop condition holds, & we drop the loop:
         (cond
           ; If nil, the stop condition holds, so we drop the loop by associating wff0
@@ -1324,7 +1325,7 @@
 ;`````````````````````````````````````
 ; TODO: implement contextual-truth-value
 ;
-  nil
+  (member wff *context* :test #'equal)
 ) ; END contextual-truth-value
 
 
@@ -1357,8 +1358,8 @@
 
 
 
-(defun plan-repeat-until (expr)
-;`````````````````````````````````
+(defun plan-repeat-until (prop-var expr)
+;````````````````````````````````````````
 ; TODO: Create plan-repeat-until
 ; expr = (name0 wff0 name1 wff1 ...)
 ;
@@ -1379,9 +1380,14 @@
 ; THESE SHOULD BE PRETTY SIMPLE, JUST LISTING THE ACTIONS & PROVIDING
 ; seq-ep, consec-ep, ETC. RELATIONS IN THE SUBPLAN. 
 ;
-  (let (truth-val subplan-name)
+  (let ((name0 (first expr)) (wff0 (second expr)) (expr-rest (cddr expr)) truth-val subplan-name)
     ; First check termination condition
-    (setq truth-val (contextual-truth-value (second expr))) ; TODO: create contextual-truth-value
+    (setq truth-val (contextual-truth-value wff0)) ; TODO: create contextual-truth-value
+    (format t ":::~a~% |- ~a~% |- ~a~% |- ~a~% |- ~a~%" prop-var expr name0 wff0 truth-val)
+    (setq *t-ep-var* prop-var)
+    (setq *t-expr* expr)
+    (setq *t-name0* name0)
+    (setq *t-wff0* wff0)
     (cond
       ; Termination has been reached - return nil so the calling program can delete loop
       (truth-val nil)
@@ -1389,9 +1395,14 @@
       (t
         (setq subplan-name (gentemp "SUBPLAN"))
         ; Value of subplan has steps name1 wff1 name2 wff2 ... followed by (cons `(:repeat-until ,expr))
+        ;; (set subplan-name (cons :episodes
+        ;;   (append expr (append `(,prop-var :repeat-until) expr))))
         (set subplan-name (cons :episodes
-          (append expr (append `(,ep-var :repeat-until) expr))))
+          (append expr-rest (list prop-var (cons :repeat-until expr)))))
         (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
+        (format t ">>>~a~%" (get subplan-name 'rest-of-plan))
+        ;; (update-plan subplan-name (get subplan-name 'rest-of-plan))
+        (format t ">>>~a~%" (get subplan-name 'rest-of-plan))
         subplan-name))
 )) ; END plan-repeat-until
 

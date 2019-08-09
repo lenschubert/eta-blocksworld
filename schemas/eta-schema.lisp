@@ -28,7 +28,7 @@
       ?a6. (You reply-to.v ?a5.)
 
       ?a7. (:if
-            ((ulf-of.f ?a5.) (STOP.X))
+            ((ulf-of.f ?a6.) (GOODBYE.GR))
             ?a8. (:store-in-context '(?e3 finished2.a)))
     )
 
@@ -73,7 +73,7 @@
       (store-output-gist-clauses (first x) (second x) '*eta-schema*))
   '(
     (?a1.  ((what is your name ?)))
-    (?a6.  ((do you have a spatial question ?)))
+    (?a5.  ((do you have a spatial question ?)))
   )
 ); end of mapcar #'store-output-gist-clauses
 
