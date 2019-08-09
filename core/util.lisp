@@ -104,6 +104,17 @@
 
 
 
+(defun ground-wff? (wff)
+;`````````````````````````
+; Check whether a wff is a ground wff, i.e. it has no variables
+;
+  (cond
+    ((atom wff) (not (variable? wff)))
+    (t (every #'ground-wff? wff)))
+) ; END ground-wff?
+
+
+
 (defun quoted-question? (sentence)
 ;```````````````````````````````````````
 ; Is sentence of form (quote (<word> ... <word> ?)), or with the
