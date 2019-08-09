@@ -626,9 +626,12 @@
         (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
         (setq new-subplan-name (plan-cond expr))
-        ; Make bidirectional connection to the new subplan
-        (setf (get episode-name 'subplan) new-subplan-name)
-        (setf (get new-subplan-name 'subplan-of) episode-name))
+        ; Make bidirectional connection to the new subplan (if not nil)
+        (cond
+          (new-subplan-name
+            (setf (get episode-name 'subplan) new-subplan-name)
+            (setf (get new-subplan-name 'subplan-of) episode-name))
+          (t (update-plan {sub}plan-name rest))))
 
       ;`````````````````````
       ; Eta: Looping
@@ -1304,13 +1307,49 @@
 
 
 
-(defun plan-cond (expr)
-;````````````````````````
-; TODO: Create plan-cond
-; expr = (cond1 name1 wff1 cond2 name2 wff2 ...)
+(defun store-in-context (wffs)
+;```````````````````````````````
+; Stores a given list of wffs in context.
+; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
+; Use hash tables?
+;
+  (setq *context* (append wffs *context*))
+) ; END store-in-context
+
+
+
+
+
+(defun contextual-truth-value (wff)
+;`````````````````````````````````````
+; TODO: implement contextual-truth-value
 ;
   nil
-) ; END plan-cond
+) ; END contextual-truth-value
+
+
+
+
+
+(defun plan-cond (expr)
+;````````````````````````
+; Expr is a list of consecutive (cond name wff) triples. Currently, cond is either
+; a pair (?var expr), in which case the condition is satisfied if the value of ?var is
+; equivalent to expr, or :default, in which case the condition will be satisfied unconditionally.
+; The first condition that is satisfies results in a subplan being created from the subsequent
+; name and wff. If no conditions are satisfied, a nil subplan is returned.
+;
+  (let ((cond1 (first expr)) (name1 (second expr)) (wff1 (third expr)) subplan-name)
+    (cond
+      ; None of the cases have been matched, so no subplan is generated
+      ((null expr) nil)
+      ; The condition is satisfied (or :default), so create a subplan from the given action & wff
+      ((or (and (symbolp cond1) (equal cond1 :default))
+           (and (listp cond1) (= (length cond1) 2) (equal (first cond1) (second cond1))))
+        (create-simple-subplan name1 wff1))
+      ; Try next (cond name wff) triple
+      (t (plan-cond (cdddr expr))))
+)) ; END plan-cond
 
 
 
@@ -1353,30 +1392,6 @@
         (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
         subplan-name))
 )) ; END plan-repeat-until
-
-
-
-
-
-(defun store-in-context (wffs)
-;```````````````````````````````
-; Stores a given list of wffs in context.
-; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
-; Use hash tables?
-;
-  (setq *context* (append wffs *context*))
-) ; END store-in-context
-
-
-
-
-
-(defun contextual-truth-value (wff)
-;`````````````````````````````````````
-; TODO: implement contextual-truth-value
-;
-  nil
-) ; END contextual-truth-value
 
 
 
