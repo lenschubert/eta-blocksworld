@@ -3,6 +3,7 @@
 ; T for speak mode
 ;; (defparameter *mode* t)
 (defparameter *mode* NIL)
+(defparameter *safe-mode* NIL)
 (defparameter *user-id* NIL)
 
 ; sessionInfo.lisp should be as following
@@ -91,7 +92,9 @@
 
 ; Run Eta
 ;``````````
-(handler-case (eta *mode*)
-  (error (c)
-    (error-message "Execution of Eta failed due to an internal error." *mode*)
-    (values 0 c)))
+(if *safe-mode*
+  (handler-case (eta *mode*)
+    (error (c)
+      (error-message "Execution of Eta failed due to an internal error." *mode*)
+      (values 0 c)))
+  (eta *mode*))
