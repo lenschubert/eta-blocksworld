@@ -284,7 +284,8 @@
     (setq *error-check* 0)
 
     (get plan-name 'rest-of-plan)
-)) ; END update-plan
+  plan-name)
+) ; END update-plan
 
 
 
@@ -418,6 +419,13 @@
 
   ;; (format t "~%  'rest-of-plan' of ~a is ~%   (~a ~a ...)"
             ;; plan-name (car rest) (second rest)) ; DEBUGGING
+
+  ; Error check
+  (cond
+    ((> *error-check* 100)
+      (error-message "An error caused Eta to fall into an infinite loop. Check if the plan is being updated correctly." *live*)
+      (error))
+    (t (setq *error-check* (1+ *error-check*))))
 
   (cond
     ; Next action is top-level; may be primitive, or may need elaboration into subplan
@@ -553,19 +561,10 @@
 
     (setq rest (get {sub}plan-name 'rest-of-plan))
 
-    (format t "~%'rest-of-plan' of currently due ~a is~% (~a ~a ...)~%"
-              {sub}plan-name (car rest) (second rest)) ; DEBUGGING
+    (format t "~%'rest-of-plan' of currently due ~a is~% ~a~%"
+              {sub}plan-name rest) ; DEBUGGING
 
     (setq wff (second rest))
-
-    ;; (format t "~%'wff' before evaluating ELF functions is~% ~a" wff) ; DEBUGGING
-
-    ; If the wff is ground, evaluate all ELF functions in the wff.
-    (cond ((ground-wff? wff)
-      (setq wff (eval-functions wff))
-      (setf (second rest) wff)))
-
-    ;; (format t "~%'wff' after evaluating ELF functions is~% ~a" wff) ; DEBUGGING
 
     ; Match '(me ...)' (Eta) actions, or '(you ...)' (User) actions, and
     ; act accordingly.
@@ -1103,11 +1102,9 @@
         (setf (get user-action-name1 'gist-clauses) user-gist-clauses)
 
         ; Get ulfs from user gist clauses and set them as an attribute to the current
-        ; user action, and output it to ulf.lisp
-        ;
-        ; TODO: change the output step to be part of a schema
+        ; user action
         (setq user-ulf (mapcar #'form-ulf-from-clause user-gist-clauses))
-        ;; (write-ulf (car user-ulf))
+
         (setf (get user-action-name 'ulf) user-ulf)
         (setf (get user-action-name1 'ulf) user-ulf)
 
@@ -1342,7 +1339,8 @@
 ; TODO: This should be changed in the future to allow for complicated wff's which are actually
 ; lists of name and wff pairs. Potentially we might also want to allow for more complex conditions.
 ;
-  (let ((cond1 (first expr)) (name1 (second expr)) (wff1 (third expr)) subplan-name)
+  (let ((cond1 (eval-functions (first expr))) (name1 (second expr)) (wff1 (third expr)) subplan-name)
+    (format t " |- ~a~% |- ~a~% |- ~a~%" cond1 name1 wff1)
     (cond
       ; None of the cases have been matched, so no subplan is generated
       ((null expr) nil)
@@ -1383,11 +1381,6 @@
   (let ((name0 (first expr)) (wff0 (second expr)) (expr-rest (cddr expr)) truth-val subplan-name)
     ; First check termination condition
     (setq truth-val (contextual-truth-value wff0)) ; TODO: create contextual-truth-value
-    (format t ":::~a~% |- ~a~% |- ~a~% |- ~a~% |- ~a~%" prop-var expr name0 wff0 truth-val)
-    (setq *t-ep-var* prop-var)
-    (setq *t-expr* expr)
-    (setq *t-name0* name0)
-    (setq *t-wff0* wff0)
     (cond
       ; Termination has been reached - return nil so the calling program can delete loop
       (truth-val nil)
