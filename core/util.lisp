@@ -206,7 +206,7 @@
 ;
 (let ((vars (ttt-match-vars patt)) vals)
   (if (null vars) (return-from bindings-from-ttt-match nil))
-  (setq vals (ttt:apply-rule `(/ ,patt ,(mapcar #'list vars)) expr))
+  (setq vals (ttt:apply-rule `(/ ,patt ,(mapcar #'list vars)) expr :shallow t))
   ; For rules that don't match a given expr, 'ttt:apply-rule' 
   ; returns a result 'eq' to the expr.  Since that's a failure 
   ; case, return nil for it:
