@@ -84,6 +84,13 @@
     ;; ----------------------------------------
     1 (0 spatial-word 0)
       2 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
+    ;; -----------------
+    ;; Special requests
+    ;; -----------------
+    1 (bye 0)
+      2 ((Goodbye \.)) (0 :gist)
+    1 (goodbye 0)
+      2 ((Goodbye \.)) (0 :gist)
     ;; ---------------------
     ;; "Small talk" patterns
     ;; ---------------------
