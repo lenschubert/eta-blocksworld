@@ -417,7 +417,7 @@
         (wff (second rest)) (subplan-name (get act-propos-name 'subplan)))
 
   ;; (format t "~%  'rest-of-plan' of ~a is ~%   (~a ~a ...)"
-  ;;           plan-name (car rest) (second rest)) ; DEBUGGING
+            ;; plan-name (car rest) (second rest)) ; DEBUGGING
 
   (cond
     ; Next action is top-level; may be primitive, or may need elaboration into subplan
@@ -600,7 +600,7 @@
         ans alternates)
   
     ;; (format t "~%WFF = ~a,~% in the ETA action ~a being ~
-    ;;           processed~%" wff episode-name) ; DEBUGGING
+              ;; processed~%" wff episode-name) ; DEBUGGING
 
     ; Big conditional statement to determine the type of the current
     ; action, and to form the subsequent action accordingly.
@@ -1338,6 +1338,8 @@
 ; equivalent to expr, or :default, in which case the condition will be satisfied unconditionally.
 ; The first condition that is satisfies results in a subplan being created from the subsequent
 ; name and wff. If no conditions are satisfied, a nil subplan is returned.
+; TODO: This should be changed in the future to allow for complicated wff's which are actually
+; lists of name and wff pairs. Potentially we might also want to allow for more complex conditions.
 ;
   (let ((cond1 (first expr)) (name1 (second expr)) (wff1 (third expr)) subplan-name)
     (cond

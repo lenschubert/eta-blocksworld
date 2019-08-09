@@ -23,16 +23,19 @@
 ?a3. (:if
       ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
         ?a4. (Me say-to.v you '(Wow\, that\'s a nice name\.))
+        ;; ?a4. (:if
+        ;;       (A A)
+        ;;         ?a5. (Me say-to.v you '(Cool\.)))
       ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BOB |))))
-        ?a5. (Me say-to.v you '(That\'s a weird name\.))
+        ?a4. (Me say-to.v you '(That\'s a weird name\.))
       :default
-        ?a6. (Me say-to.v you '(It\'s very nice to meet you\.)))
+        ?a4. (Me say-to.v you '(It\'s very nice to meet you\.)))
 
 ;; ?a3. (:store-in-context (ulf-of.f ?a2.))
 
 ;; ?a3. (:store-in-context ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
 
-?a7. (Me say-to.v you '(Bye\.))
+?a6. (Me say-to.v you '(Bye\.))
 
 )); end of defparameter *eta-schema*
 
