@@ -20,22 +20,23 @@
 
 ?a2. (You reply-to.v ?a1.)
 
-?a3. (:if
-      ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
-        ?a4. (Me say-to.v you '(Wow\, that\'s a nice name\.))
-        ;; ?a4. (:if
-        ;;       (A A)
-        ;;         ?a5. (Me say-to.v you '(Cool\.)))
-      ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BOB |))))
-        ?a4. (Me say-to.v you '(That\'s a weird name\.))
-      :default
-        ?a4. (Me say-to.v you '(It\'s very nice to meet you\.)))
+?e3. (:repeat-until
+      ?e4. (?e3 finished2.a)
+      
+      ?a5. (Me say-to.v you '(Looping\.))
+
+      ?a6. (You reply-to.v ?a5.)
+
+      ?a7. (:if
+            ((ulf-of.f ?a5.) (STOP.X))
+            ?a8. (:store-in-context '(?e3 finished2.a)))
+    )
 
 ;; ?a3. (:store-in-context (ulf-of.f ?a2.))
 
 ;; ?a3. (:store-in-context ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
 
-?a6. (Me say-to.v you '(Bye\.))
+?a9. (Me say-to.v you '(Bye\.))
 
 )); end of defparameter *eta-schema*
 
@@ -72,6 +73,7 @@
       (store-output-gist-clauses (first x) (second x) '*eta-schema*))
   '(
     (?a1.  ((what is your name ?)))
+    (?a6.  ((do you have a spatial question ?)))
   )
 ); end of mapcar #'store-output-gist-clauses
 

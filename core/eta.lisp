@@ -1157,10 +1157,10 @@
         ; "quick exit" code in the event that the user says "goodbye" or "bye".
         ; TODO: update this in the future with something that actually makes sense,
         ; such as a schema, rather than something hardcoded.
-        (when (or (member 'goodbye input) (member 'bye input))
-	        (setq expr '(Oh\, thank you for the questions\. Good bye for now!))
-          (if *live* (say-words expr) (print-words expr))
-          (return-from observe-next-user-action 'exit))
+        ;; (when (or (member 'goodbye input) (member 'bye input))
+	      ;;   (setq expr '(Oh\, thank you for the questions\. Good bye for now!))
+        ;;   (if *live* (say-words expr) (print-words expr))
+        ;;   (return-from observe-next-user-action 'exit))
 
         ; Make sure that any final punctuation, such as ?, ., or !,
         ; is separated from the final word (so as to not impair pattern matching)
