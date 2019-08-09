@@ -638,22 +638,33 @@
 
 
 
+(defun create-simple-subplan (action-prop-name wff)
+; ``````````````````````````````````````````````````
+; Creates and returns a simple subplan consisting of a given
+; action and wff
+;
+  (let (subplan-name)
+    (setf (get action-prop-name 'wff) wff)
+    (setq subplan-name (gentemp "SUBPLAN"))
+    (set subplan-name (list :episodes action-prop-name wff))
+    (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
+  subplan-name)
+) ; END create-simple-subplan
+
+
+
 (defun create-say-to-subplan (content)
 ;````````````````````````````````````````
 ; Creates and returns a subplan which consists only of a single
 ; primitive say-to.v action, given particular content to say
 ;
-  (let (wff action-prop-name subplan-name)
+  (let (wff action-prop-name)
     (setq content (modify-response content))
     (setq wff `(me say-to.v you (quote ,content)))
     ; We want the action proposition name to terminate in a period
     (setq action-prop-name (action-name))
     ; Build the 1-step plan
-    (setf (get action-prop-name 'wff) wff)
-    (setq subplan-name (gensym "SUBPLAN"))
-    (set subplan-name (list :actions action-prop-name wff))
-    (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
-  subplan-name)
+    (create-simple-subplan action-prop-name wff))
 ) ; END create-say-to-subplan
 
 
