@@ -25,5 +25,5 @@
 ; Retrives gist clauses attached to action proposition name.
 ; TODO: See issue with ulf-of.f
 ;
-  (if (and (symbolp x) (get x 'gist)) (car (get x 'gist-clauses)) nil)
+  (if (and (symbolp x) (get x 'gist-clauses)) (car (get x 'gist-clauses)) nil)
 ) ; END gist-of.f
