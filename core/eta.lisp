@@ -325,6 +325,14 @@
 ; want to update the 'rest-of-plan' pointer of a plan, we need
 ; the plan name.
 ;
+
+  ; Error check
+  (cond
+    ((> *error-check* 100)
+      (error-message "An error caused Eta to fall into an infinite loop. Check if the plan is being updated correctly." *live*)
+      (error))
+    (t (setq *error-check* (1+ *error-check*))))
+
   (let ((rest (get plan-name 'rest-of-plan)) step-name subplan-name)
     (setq step-name (car rest))
     ;; (format t "~%~%'rest-of-plan' pointer of ~a at beginning of update~
