@@ -336,11 +336,13 @@
       ((null (get step-name 'subplan)) nil)
       ; Otherwise update plan pointers
       (t (setq subplan-name (get step-name 'subplan))
-        (when (null (get subplan-name 'rest-of-plan))
-          ;; (format t "~%~%Since subplan ~a has a NIL 'rest-of-plan', ~% advance~
-          ;;            'rest-of-plan' of ~a over step ~a ~% with WFF = ~a~%"
-          ;;            subplan-name plan-name step-name (second rest)) ; DEBUGGING
-          (update-plan plan-name rest))))
+        (cond
+          ((null (get subplan-name 'rest-of-plan))
+            ;; (format t "~%~%Since subplan ~a has a NIL 'rest-of-plan', ~% advance~
+                      ;; 'rest-of-plan' of ~a over step ~a ~% with WFF = ~a~%"
+                      ;; subplan-name plan-name step-name (second rest)) ; DEBUGGING
+            (update-plan plan-name rest))
+          (t (update-rest-of-plan-pointers subplan-name)))))
 
     ;; (format t "~%~%'rest-of-plan' pointer of ~a at end of update ~% is (~a ~a ...)~%"
     ;;   plan-name (car (cddr1 rest)) (second (cddr1 rest))) ; DEBUGGING
@@ -436,7 +438,8 @@
     ((null (get subplan-name 'rest-of-plan))
       ;; (format t "~%**'find-curr-{sub}plan' applied to ~a ~
       ;;           ~%   arrived at a completed subplan ~a" plan-name subplan-name)
-      (update-plan plan-name rest))
+      ;; (update-plan plan-name rest)
+    )
     ; The subplan is not fully executed, so find & return the current
     ; {sub}subplan recursively:
     (t (find-curr-{sub}plan subplan-name)))
