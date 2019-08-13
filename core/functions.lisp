@@ -33,6 +33,9 @@
 (defun main-answer.f (x)
 ; ```````````````````````
 ; Given a list of an answer and alternatives, split off the main answer from the list.
+; If a string is given, it is assumed that it is the main answer (with no alternatives).
 ;
-  (if (and (listp x) (= 2 (length x))) (car x) nil)
+  (cond
+    ((and (listp (eval x))) (car (eval x)))
+    ((stringp (eval x)) (eval x)))
 ) ; END main-answer.f
