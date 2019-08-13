@@ -1,8 +1,8 @@
 
 ; NIL for text mode
 ; T for speak mode
-(defparameter *mode* t)
-;; (defparameter *mode* NIL)
+;; (defparameter *mode* t)
+(defparameter *mode* NIL)
 (defparameter *safe-mode* NIL)
 (defparameter *user-id* NIL)
 
