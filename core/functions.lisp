@@ -27,3 +27,12 @@
 ;
   (if (and (symbolp x) (get x 'gist-clauses)) (car (get x 'gist-clauses)) nil)
 ) ; END gist-of.f
+
+
+
+(defun main-answer.f (x)
+; ```````````````````````
+; Given a list of an answer and alternatives, split off the main answer from the list.
+;
+  (if (and (listp x) (= 2 (length x))) (car x) nil)
+) ; END main-answer.f
