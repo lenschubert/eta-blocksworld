@@ -95,6 +95,24 @@
 
 
 
+(defun prop-var? (atm)
+;`````````````````````
+; Check whether a symbol is a proposition variable, i.e. ends with .
+;
+  (and (variable? atm) (char-equal #\. (car (last (explode atm)))))
+) ; END prop-var?
+
+
+
+(defun ep-var? (atm)
+;`````````````````````
+; Check whether a symbol is an episode variable, i.e. does not end with .
+;
+  (and (variable? atm) (not (prop-var? atm)))
+) ; END ep-var?
+
+
+
 (defun function? (atm)
 ;``````````````````````
 ; Check whether a symbol is a function, i.e. ends with '.f'
@@ -234,6 +252,7 @@
 ;
   (car (second (car bindings)))
 ) ; END get-first-single-binding
+
 
 
 (defun get-multiple-bindings (bindings)
@@ -559,9 +578,19 @@
 
 
 
+(defun nsubst-variable (plan-name val var)
+;``````````````````````````````````````````
+; Substitutes (destructively) a given value (val) for a given variable (var)
+; in a plan.
+;
+  (nsubst val var (get plan-name 'rest-of-plan))
+) ; END nsubst-variable
+
+
+
 (defun nsubst-schema-args (args schema)
 ;```````````````````````````````````````
-; substitute the successive arguments in the 'args' list for successive
+; Substitute the successive arguments in the 'args' list for successive
 ; variables occurring in the schema or plan header exclusive of the 
 ; episode variable characterized by the header predication (for 
 ; episodic headers). In relational schemas, headers are assumed to 
@@ -609,6 +638,14 @@
 
 
 
+(defun action-var ()
+;````````````````````````````
+; Creates an action variable starting with "?A" % with final "."
+  (intern (format nil "?~a." (string (gensym "A"))))
+) ; END action-var
+
+
+
 (defun action-name ()
 ;````````````````````````````
 ; Creates an action name starting with "A" % with final "."
@@ -649,34 +686,85 @@
 
 
 
-(defun create-simple-subplan (action-prop-name wff)
-; ``````````````````````````````````````````````````
-; Creates and returns a simple subplan consisting of a given
-; action and wff
+(defun create-say-to-wff (content &key reverse)
+;```````````````````````````````````````````````
+; Creates and returns a wff consisting of a (me say-to.v you '(...))
+; action, or a (you say-to.v me '(...)) action if :reverse t is given.
 ;
-  (let (subplan-name)
-    (setf (get action-prop-name 'wff) wff)
-    (setq subplan-name (gentemp "SUBPLAN"))
-    (set subplan-name (list :episodes action-prop-name wff))
-    (setf (get subplan-name 'rest-of-plan) (cdr (eval subplan-name)))
-  subplan-name)
-) ; END create-simple-subplan
+  (if (not reverse)
+    `(me say-to.v you (quote ,(modify-response content)))
+    `(you say-to.v me (quote ,content)))
+) ; END create-say-to-wff
 
 
 
-(defun create-say-to-subplan (content)
-;````````````````````````````````````````
-; Creates and returns a subplan which consists only of a single
-; primitive say-to.v action, given particular content to say
+(defun get-episode-vars (plan)
+;`````````````````````````````
+; Form a list of all episode vars (in proposition form) from a plan.
 ;
-  (let (wff action-prop-name)
-    (setq content (modify-response content))
-    (setq wff `(me say-to.v you (quote ,content)))
-    ; We want the action proposition name to terminate in a period
-    (setq action-prop-name (action-name))
-    ; Build the 1-step plan
-    (create-simple-subplan action-prop-name wff))
-) ; END create-say-to-subplan
+  (let (var vars)
+    (cond
+      ; Base case - if plan is a symbol, return the symbol if it is an action
+      ; var, or nil otherwise.
+      ((symbolp plan)
+        (if (variable? plan)
+          `(,(if (ep-var? plan) (intern (format nil "~a." plan)) plan)) nil))
+      ; Recursive case
+      (t
+        (remove-duplicates
+          (remove nil (mapcan #'get-episode-vars plan))
+          :test #'equal))))
+) ; END get-episode-vars
+
+
+
+(defun subst-duplicate-variables (plan &optional schema-name)
+;``````````````````````````````````````````````````````````````````
+; Substitutes all variables in a plan with duplicate variables, inheriting
+; the gist-clauses, ulf, etc. attached to them in the current schema (if no
+; schema-name is given, this is assumed to be *eta-schema*).
+; TODO: The above assumption does not always hold, so this needs to be changed
+; ASAP - see notes in the process-plan-variables function.
+;
+  (let* ((episode-vars (get-episode-vars plan))
+        (var-duals (mapcar (lambda (var)
+          (cons (implode (butlast (explode var))) var)) episode-vars))
+        (new-var-duals (mapcar #'duplicate-variable episode-vars))
+        (result plan))
+    (mapcar (lambda (var-dual new-var-dual)
+      (setq result
+        (subst (car new-var-dual) (car var-dual)
+          (subst (cdr new-var-dual) (cdr var-dual) result))))
+      var-duals new-var-duals)
+  result)
+) ; END subst-duplicate-variables
+
+
+
+(defun duplicate-variable (var &optional schema-name)
+;`````````````````````````````````````````````````````
+; Duplicates a variable, inheriting the gist-clauses, ulf, etc. attached to
+; it in the current schema (if no schema-name is given, this is assumed
+; to be *eta-schema*).
+; TODO: see above.
+  (let (new-var)
+    ; Create new variable
+    (setq new-var (intern (format nil "~a." (gensym
+      (if (prop-var? var)
+        (string var)
+        (concatenate 'string (string var) "."))))))
+    (unless schema-name
+      (setq schema-name '*eta-schema*))
+    ; Inherit gist-clauses, semantics, and topic keys
+    (setf (gethash new-var (get schema-name 'gist-clauses))
+      (gethash var (get schema-name 'gist-clauses)))
+    (setf (gethash new-var (get schema-name 'semantics))
+      (gethash var (get schema-name 'semantics)))
+    (setf (gethash new-var (get schema-name 'topic-keys))
+      (gethash var (get schema-name 'topic-keys)))
+  ; Return (?a1 . ?a1.) pair
+  (cons (implode (butlast (explode new-var))) new-var))
+) ; END duplicate-variable
 
 
 
@@ -720,7 +808,7 @@
   (with-open-file (outfile "./ulf.lisp" :direction :output
                                         :if-exists :supersede
                                         :if-does-not-exist :create)
-    (format outfile "(setq *next-ulf* '~a)" ulf))
+    (format outfile "(setq *next-ulf* ~a)" ulf))
 ) ; END write-ulf
 
 
@@ -824,8 +912,12 @@
                                                    :if-exists :supersede
                                                    :if-does-not-exist :create)))))
           
-  (parse-chars (if (stringp *next-answer*) (coerce *next-answer* 'list)
-                                             (coerce (car *next-answer*) 'list)))
+  ;; (parse-chars (if (stringp *next-answer*) (coerce *next-answer* 'list)
+  ;;                                            (coerce (car *next-answer*) 'list)))
+  (cond
+    ((stringp *next-answer*) (list (parse-chars (coerce *next-answer* 'list))))
+    ((listp *next-answer*) (cons (parse-chars (coerce (car *next-answer*) 'list))
+                            (cdr *next-answer*))))
 ) ; END get-answer
 
 
