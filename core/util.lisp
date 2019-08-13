@@ -718,18 +718,17 @@
 
 
 
-(defun subst-duplicate-variables (plan &optional schema-name)
-;``````````````````````````````````````````````````````````````````
+(defun subst-duplicate-variables (plan-name plan)
+;``````````````````````````````````````````````````
 ; Substitutes all variables in a plan with duplicate variables, inheriting
-; the gist-clauses, ulf, etc. attached to them in the current schema (if no
-; schema-name is given, this is assumed to be *eta-schema*).
-; TODO: The above assumption does not always hold, so this needs to be changed
-; ASAP - see notes in the process-plan-variables function.
+; the gist-clauses, ulf, etc. attached to them in the schema used (directly
+; or indirectly) to create the current plan.
 ;
   (let* ((episode-vars (get-episode-vars plan))
         (var-duals (mapcar (lambda (var)
           (cons (implode (butlast (explode var))) var)) episode-vars))
-        (new-var-duals (mapcar #'duplicate-variable episode-vars))
+        (new-var-duals (mapcar (lambda (episode-var)
+          (duplicate-variable plan-name episode-var)) episode-vars))
         (result plan))
     (mapcar (lambda (var-dual new-var-dual)
       (setq result
@@ -741,20 +740,18 @@
 
 
 
-(defun duplicate-variable (var &optional schema-name)
-;`````````````````````````````````````````````````````
+(defun duplicate-variable (plan-name var)
+;``````````````````````````````````````````
 ; Duplicates a variable, inheriting the gist-clauses, ulf, etc. attached to
-; it in the current schema (if no schema-name is given, this is assumed
-; to be *eta-schema*).
-; TODO: see above.
-  (let (new-var)
+; it in the schema used (directly or indirectly) to create the current plan.
+;
+  (let (new-var schema-name)
     ; Create new variable
     (setq new-var (intern (format nil "~a." (gensym
       (if (prop-var? var)
         (string var)
         (concatenate 'string (string var) "."))))))
-    (unless schema-name
-      (setq schema-name '*eta-schema*))
+    (setq schema-name (get plan-name 'schema-name))
     ; Inherit gist-clauses, semantics, and topic keys
     (setf (gethash new-var (get schema-name 'gist-clauses))
       (gethash var (get schema-name 'gist-clauses)))
@@ -1257,6 +1254,19 @@
       (if (get rule 'time-last-used)
         (setf (get rule 'time-last-used) -100))))
 ) ; END reset-rule
+
+
+
+(defun error-check ()
+;`````````````````````
+; Checks whether program has entered an infinite loop using a counter
+;
+  (cond
+    ((> *error-check* 100)
+      (error-message "An error caused Eta to fall into an infinite loop. Check if the plan is being updated correctly." *live*)
+      (error))
+    (t (setq *error-check* (1+ *error-check*))))
+) ; END error-check
 
 
 
