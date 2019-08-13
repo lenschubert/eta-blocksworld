@@ -1,8 +1,8 @@
 
 ; NIL for text mode
 ; T for speak mode
-;; (defparameter *mode* t)
-(defparameter *mode* NIL)
+(defparameter *mode* t)
+;; (defparameter *mode* NIL)
 (defparameter *safe-mode* NIL)
 (defparameter *user-id* NIL)
 
@@ -37,7 +37,7 @@
                                :supersede :if-does-not-exist :create))
 
 ; Delete the content of reaction.lisp, if it exists, otherwise create
-(with-open-file (outfile "./reaction.lisp" :direction :output :if-exists 
+(with-open-file (outfile "./answer.lisp" :direction :output :if-exists 
                                :supersede :if-does-not-exist :create))
 
 
