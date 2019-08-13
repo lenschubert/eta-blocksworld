@@ -30,6 +30,8 @@
       2 *reaction-to-name-input* (0 :subtree)
     1 (spatial-question 0)
       2 *reactions-to-spatial-question* (0 :schema+ulf)
+    1 (Goodbye 0)
+      2 (Oh\, thank me for the questions\. Good bye for now!) (0 :out)
     1 (0)
       2 (You apologize \, you could not understand what I said \.) (0 :out)
   ))
