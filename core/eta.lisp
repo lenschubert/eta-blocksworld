@@ -484,7 +484,7 @@
   (cond
     ; Next action is top-level; may be primitive, or may need elaboration into subplan
     ((null subplan-name) plan-name)
-    ; BEN TODO Unexpected: If subplan forms an infinite loop (in the case of :repeat-until) just return nil
+    ; Unexpected: If subplan forms an infinite loop (in the case of :repeat-until) just return nil
     ((equal subplan-name (get (car (get subplan-name 'rest-of-plan)) 'subplan))
       (setf (get prop-name 'subplan) nil)
       subplan-name)
