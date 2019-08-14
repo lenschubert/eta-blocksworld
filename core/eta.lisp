@@ -844,9 +844,6 @@
       ; rejecting, praising, advising, reprimanding, acknowledging,
       ; apologizing, exclaiming, etc.)
 
-      ; TODO: Most of the following use redundant code, which can probably
-      ; be factored into a single higher order function (for now)
-
       ;`````````````````````
       ; Eta: Telling
       ;`````````````````````

@@ -8,8 +8,8 @@
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_ do)
-    (spatial-ending noun adj there directions pron prep)
-    (spatial-word noun pron supporting corp adj
+    (spatial-ending noun adj there directions ana-pron prep)
+    (spatial-word noun ana-pron supporting corp adj
       uppermost under close touching farthest rotated)
     (spatial-word-potential spatial-word be wh_ prep)
     (kinds types sorts kind type sort formats format)
@@ -91,6 +91,12 @@
       2 ((Goodbye \.)) (0 :gist)
     1 (goodbye 0)
       2 ((Goodbye \.)) (0 :gist)
+    1 (0 pause 0)
+      2 ((Can you pause for a moment \.)) (0 :gist)
+    1 (0 stop for 1 moment 0)
+      2 ((Can you pause for a moment \.)) (0 :gist)
+    1 (0 give 2 moment 0)
+      2 ((Can you pause for a moment \.)) (0 :gist)
     ;; ---------------------
     ;; "Small talk" patterns
     ;; ---------------------
