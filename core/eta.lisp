@@ -1377,6 +1377,12 @@
     ; :not condition satisfied if the rest of the condition is not true
     ((and (listp cond) (equal (car cond) :not))
       (not (eval-truth-value (second cond))))
+    ; :and condition satisfied if every part of the condition is true
+    ((and (listp cond) (equal (car cond) :and))
+      (every #'eval-truth-value (cdr cond)))
+    ; :or condition satisfied if some part of the condition is true
+    ((and (listp cond) (equal (car cond) :or))
+      (some #'eval-truth-value (cdr cond)))
 )) ; END eval-truth-value
 
 
