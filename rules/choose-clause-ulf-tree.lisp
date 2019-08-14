@@ -8,4 +8,6 @@
          2 (*request-ulf-tree* (1 2)) (0 :ulf-coref)
       1 (Can you pause 0)
          2 (*request-ulf-tree* (1 2 3 4)) (0 :ulf-coref)
+      1 (Resume 0)
+         2 (*request-ulf-tree* (1 2)) (0 :ulf-coref)
 ))

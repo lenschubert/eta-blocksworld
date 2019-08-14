@@ -97,6 +97,8 @@
       2 ((Can you pause for a moment \.)) (0 :gist)
     1 (0 give 2 moment 0)
       2 ((Can you pause for a moment \.)) (0 :gist)
+    1 (0 resume 0)
+      2 ((Resume \.)) (0 :gist)
     ;; ---------------------
     ;; "Small talk" patterns
     ;; ---------------------
