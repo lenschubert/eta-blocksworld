@@ -244,7 +244,7 @@
     ; If first action variable does not start with '?', return error
     (when (not (variable? prop-var))
       (format t "~%*** Attempt to form plan ~a from schema ~a ~
-                  which contains no episodes" plan-name schema-name)
+                  which contains no episodes~%" plan-name schema-name)
       (return-from init-plan-from-schema nil))
 
     ; Found the next action to be processed; set rest-of-plan pointer
@@ -379,18 +379,22 @@
 ;
   (error-check)
 
-  (let ((rest (get plan-name 'rest-of-plan)) step-name subplan-name)
-    (setq step-name (car rest))
+  (let ((rest (get plan-name 'rest-of-plan)) prop-name subplan-name)
+    (setq prop-name (car rest))
     ;; (format t "~%~%'rest-of-plan' pointer of ~a at beginning of update~
-    ;;            ~% is (~a ~a ...)" plan-name step-name (second rest)) ; DEBUGGING
+    ;;            ~% is (~a ~a ...)" plan-name prop-name (second rest)) ; DEBUGGING
     (cond
       ; Unexpected issues
       ((null rest) nil)
-      ((or (not (symbolp step-name)) (null step-name)) nil)
+      ((or (not (symbolp prop-name)) (null prop-name)) nil)
       ; If no subplan, nothing needs to be done
-      ((null (get step-name 'subplan)) nil)
+      ((null (get prop-name 'subplan)) nil)
       ; Otherwise update plan pointers
-      (t (setq subplan-name (get step-name 'subplan))
+      (t (setq subplan-name (get prop-name 'subplan))
+        ; Unexpected: If subplan forms an infinite loop (in the case of :repeat-until) just return nil
+        (when (equal subplan-name (get (car (get subplan-name 'rest-of-plan)) 'subplan))
+          (setf (get prop-name 'subplan) nil)
+          (return-from update-rest-of-plan-pointers nil))
         ; Do recursive updating of the 'rest-of-plan' pointers for 'subplan-name':
         (update-rest-of-plan-pointers subplan-name)
         ; The 'rest-of-plan' pointer of 'subplan-name' may now be
@@ -398,7 +402,7 @@
         (when (null (get subplan-name 'rest-of-plan))
           ;;  (format t "~%~%Since subplan ~a has a NIL 'rest-of-plan',~
           ;;             ~% advance 'rest-of-plan' of ~a over step ~a~
-          ;;             ~% with WFF = ~a~%" subplan-name plan-name step-name (second rest)) ; DEBUGGING
+          ;;             ~% with WFF = ~a~%" subplan-name plan-name prop-name (second rest)) ; DEBUGGING
           (delete-current-episode plan-name))))
 
     ;; (format t "~%~%'rest-of-plan' pointer of ~a at end of update ~% is (~a ~a ...)~%"
@@ -484,7 +488,7 @@
   (cond
     ; Next action is top-level; may be primitive, or may need elaboration into subplan
     ((null subplan-name) plan-name)
-    ; Unexpected: If subplan forms an infinite loop (in the case of :repeat-until) just return nil
+    ; Unexpected: If subplan forms an infinite loop (in the case of :repeat-until) just return subplan name
     ((equal subplan-name (get (car (get subplan-name 'rest-of-plan)) 'subplan))
       (setf (get prop-name 'subplan) nil)
       subplan-name)
@@ -621,7 +625,7 @@
     (setq rest (get {sub}plan-name 'rest-of-plan))
 
     ;; (format t "~%'rest-of-plan' of currently due ~a is~% ~a~%"
-              ;; {sub}plan-name rest) ; DEBUGGING
+    ;;           {sub}plan-name rest) ; DEBUGGING
 
     (setq wff (second rest))
 
@@ -671,7 +675,7 @@
       ; Storing a given wff expression in context
       ((setq bindings (bindings-from-ttt-match '(:store-in-context _+) wff))
         (setq expr (get-multiple-bindings bindings))
-        ; Generate a subplan for the 1st action-wff with a true condition:
+        ; Store each formula in context
         (store-in-context expr)
         (delete-current-episode {sub}plan-name))
 
@@ -679,8 +683,7 @@
       ; Eta: Choosing
       ;`````````````````````
       ; if-statements, potentially other conditionals in the future.
-      ; bindings yields ((_+ (cond1 name1 wff1 cond2 name2 wff2 ...)))
-      ; NOTE: one potential issue, could complex wffs have name-wff pairs within them??
+      ; bindings yields ((_+ (cond1 name1.1 wff1.1 name1.2 wff1.2 ... cond2 name2.1 wff2.1 name2.2 wff2.2 ...)))
       ((setq bindings (bindings-from-ttt-match '(:if _+) wff))
         (setq expr (get-multiple-bindings bindings))
         ; Generate a subplan for the 1st action-wff with a true condition:
@@ -1242,7 +1245,7 @@
 ;
   (let ((n (length words)) tagged-prior-gist-clause relevant-trees 
         specific-content-tree question-content-tree chunks tagged-chunk
-        clause keys specific-answers  question facts gist-clauses)
+        clause keys specific-answers question facts gist-clauses)
 
     ; Form specific answer clauses from input
     ;`````````````````````````````````````````
@@ -1256,7 +1259,7 @@
     ;;   '*gist-clause-trees-for-input*))
     ;; (format t "~% relevant trees = ~a" relevant-trees) ; DEBUGGING      
     (setq specific-content-tree (first relevant-trees)
-          question-content-tree (fourth relevant-trees))
+          question-content-tree (second relevant-trees))
 
     (setq specific-answer (cdr
       (choose-result-for (mapcar #'tagword words) specific-content-tree)))
@@ -1331,7 +1334,11 @@
 ; TODO: improve context - different types of facts (static & temporal), list of discourse entities, etc.
 ; Use hash tables?
 ;
-  (setq *context* (append (mapcar #'eval wffs) *context*))
+  (setq *context* (append (mapcar (lambda (wff)
+    (if (equal (car wff) 'quote)
+      (eval wff)
+      (eval-functions wff)))
+    wffs) *context*))
 ) ; END store-in-context
 
 
@@ -1340,7 +1347,8 @@
 
 (defun contextual-truth-value (wff)
 ;`````````````````````````````````````
-; TODO: implement contextual-truth-value
+; Finds whether a given wff is made true by the context.
+; TODO: see store-in-context note.
 ;
   (member wff *context* :test #'equal)
 ) ; END contextual-truth-value
@@ -1349,8 +1357,35 @@
 
 
 
+(defun eval-truth-value (cond)
+;```````````````````````````````
+; Evaluates the truth of a conditional schema action.
+;
+  (cond
+    ; :default condition is always satisfied
+    ((and (symbolp cond) (equal cond :default))
+      t)
+    ; :equal condition satisfied if the two formulas of the condition are equivalent
+    ((and (listp cond) (equal (car cond) :equal))
+      (equal (second cond) (third cond)))
+    ; :exists condition satisfied if the formula of the condition exists (i.e. is non-nil)
+    ((and (listp cond) (equal (car cond) :exists))
+      (not (null (second cond))))
+    ; :context condition satisfied if the formula of the condition is made true by context
+    ((and (listp cond) (equal (car cond) :context))
+      (contextual-truth-value (second cond)))
+    ; :not condition satisfied if the rest of the condition is not true
+    ((and (listp cond) (equal (car cond) :not))
+      (not (eval-truth-value (second cond))))
+)) ; END eval-truth-value
+
+
+
+
+
 (defun plan-cond ({sub}plan-name expr)
 ;```````````````````````````````````````
+; expr = ((cond1 name1.1 wff1.1 name1.2 wff1.2 ...) (cond2 name2.1 wff2.1 name2.2 wff2.2 ...)))
 ; Expr is a list of consecutive (cond name wff) triples. Currently, cond is either
 ; a pair (?var expr), in which case the condition is satisfied if the value of ?var is
 ; equivalent to expr, or :default, in which case the condition will be satisfied unconditionally.
@@ -1359,18 +1394,17 @@
 ; TODO: This should be changed in the future to allow for complicated wff's which are actually
 ; lists of name and wff pairs. Potentially we might also want to allow for more complex conditions.
 ;
-  (let ((cond1 (eval-functions (first expr))) (name1 (second expr)) (wff1 (third expr)) subplan-name)
+  (let ((cond1 (eval-functions (caar expr))) (episodes1 (cdar expr)) truth-val subplan-name)
     (cond
       ; None of the cases have been matched, so no subplan is generated
       ((null expr) nil)
-      ; The condition is satisfied (or :default), so create a subplan from the given action & wff
-      ((or (and (symbolp cond1) (equal cond1 :default))
-           (and (listp cond1) (= (length cond1) 2) (equal (first cond1) (second cond1))))
+      ; If the condition is satisfied, create a subplan from the episode list
+      ((eval-truth-value cond1)
         (init-plan-from-episode-list
-          (list :episodes name1 wff1)
+          (cons :episodes episodes1)
           {sub}plan-name))
-      ; Try next (cond name wff) triple
-      (t (plan-cond {sub}plan-name (cdddr expr))))
+      ; Otherwise, try next condition & episodes
+      (t (plan-cond {sub}plan-name (cdr expr))))
 )) ; END plan-cond
 
 
@@ -1401,7 +1435,7 @@
 ;
   (let ((cond1 (first expr)) (expr-rest (cdr expr)) truth-val subplan-name)
     ; First check termination condition
-    (setq truth-val (contextual-truth-value cond1))
+    (setq truth-val (eval-truth-value cond1))
     ; Substitute expr-rest with duplicate variables
     (setq expr-rest (subst-duplicate-variables {sub}plan-name expr-rest))
     (cond
