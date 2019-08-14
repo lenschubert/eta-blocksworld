@@ -5,6 +5,8 @@
 
   (MAPC 'ATTACHFEAT
   '(
+    (special-request bye goodbye pause stop exit moment quit resume david)
+
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_ do)
@@ -87,18 +89,8 @@
     ;; -----------------
     ;; Special requests
     ;; -----------------
-    1 (bye 0)
-      2 ((Goodbye \.)) (0 :gist)
-    1 (goodbye 0)
-      2 ((Goodbye \.)) (0 :gist)
-    1 (0 pause 0)
-      2 ((Can you pause for a moment \.)) (0 :gist)
-    1 (0 stop for 1 moment 0)
-      2 ((Can you pause for a moment \.)) (0 :gist)
-    1 (0 give 2 moment 0)
-      2 ((Can you pause for a moment \.)) (0 :gist)
-    1 (0 resume 0)
-      2 ((Resume \.)) (0 :gist)
+    1 (0 special-request 0)
+      2 (*specific-answer-from-request-input* (1 2 3)) (0 :subtree+clause)
     ;; ---------------------
     ;; "Small talk" patterns
     ;; ---------------------
