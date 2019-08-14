@@ -20,16 +20,15 @@
 
 ?a2. (You reply-to.v ?a1.)
 
-?e3. (:repeat-until (?e3 finished2.a)
+?e3. (:repeat-until (:context (?e3 finished2.a))
       
       ?a4. (Me say-to.v you '(Looping until user says goodbye\.))
 
       ?a5. (You reply-to.v ?a4.)
 
       ?a6. (:if
-            ((ulf-of.f ?a5.) (GOODBYE.GR))
-            ?a7. (:store-in-context '(?e3 finished2.a)))
-    )
+            ((:equal (ulf-of.f ?a5.) (GOODBYE.GR))
+            ?a7. (:store-in-context '(?e3 finished2.a)))))
 
 ;; ?a3. (:store-in-context (ulf-of.f ?a2.))
 

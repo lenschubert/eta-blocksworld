@@ -12,16 +12,18 @@
 
 ?a2. (You reply-to.v ?a1.)
 
+?a5. (:store-in-context (ulf-of.f ?a2.))
+;; ?a5. (:store-in-context '(?a2 finished2.a))
+
 ?a3. (:if
-      ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
-        ?a4. (Me say-to.v you '(Wow\, that\'s a nice name\.))
-        ;; ?a4. (:if
-        ;;       (A A)
-        ;;         ?a5. (Me say-to.v you '(Cool\.)))
-      ((ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BOB |))))
-        ?a4. (Me say-to.v you '(That\'s a weird name\.))
-      :default
+      ((:equal (ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BEN |))))
+        ?a4. (Me say-to.v you '(Wow\, that\'s a nice name\.)))
+      ((:equal (ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |BOB |))))
+        ?a4. (Me say-to.v you '(That\'s a weird name\.)))
+      ((:not (:equal (ulf-of.f ?a2.) ((THE.D ((POSS-BY ME.PRO) NAME.N)) ((PRES BE.V) (= |George|)))))
         ?a4. (Me say-to.v you '(It\'s very nice to meet you\.)))
+      (:default
+        ?a4. (Me say-to.v you '(Okay\.))))
 
 ;; ?a3. (:store-in-context (ulf-of.f ?a2.))
 
