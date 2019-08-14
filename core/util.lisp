@@ -747,7 +747,7 @@
 ;
   (let (new-var schema-name)
     ; Create new variable
-    (setq new-var (intern (format nil "~a." (gensym
+    (setq new-var (intern (format nil "~a." (gentemp
       (if (prop-var? var)
         (string var)
         (concatenate 'string (string var) "."))))))
