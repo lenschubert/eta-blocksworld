@@ -5,7 +5,9 @@
 
   (MAPC 'ATTACHFEAT
   '(
-    (special-request bye goodbye pause stop exit moment quit resume david)
+    (special-request bye goodbye pause stop exit moment minute that that\'s
+      second bit quit resume david now today finished-word)
+    (finished-word it all everything)
 
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
@@ -84,8 +86,9 @@
     ;; ----------------------------------------
     ;; If spatial question, start preprocessing
     ;; ----------------------------------------
-    1 (0 spatial-word 0)
-      2 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
+    1 (- 0 that is finished-word 0)
+      2 (0 spatial-word 0)
+        3 (*multi-token-word-tree* (1 2 3)) (0 :subtree+clause)
     ;; -----------------
     ;; Special requests
     ;; -----------------
