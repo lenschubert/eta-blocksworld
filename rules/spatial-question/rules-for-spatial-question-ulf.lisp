@@ -68,7 +68,7 @@
           (sup-adj leftmost rightmost furthest farthest nearest closest highest
                 tallest nearest topmost uppermost smallest lowest largest
                 centermost shortest backmost longest fewest frontmost)
-          (ord-adj first second third fourth fifth sixthe seventh eighth ninth
+          (ord-adj first second third fourth fifth sixth seventh eighth ninth
            tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth
            seventeens eighteenth nineteenth twentieth)
           (diff-adj other different same distinct separate unique)
