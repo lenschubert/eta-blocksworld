@@ -12,7 +12,7 @@
     (spatial-beginning-pair spatial-beginning there)
     (spatial-beginning spatial-verb between prep)
     (spatial-verb be modal wh_ do)
-    (spatial-ending noun adj there directions ana-pron prep)
+    (spatial-ending noun adj there directions ana-pron prep facing)
     (spatial-word noun ana-pron supporting corp adj
       uppermost under close touching farthest rotated)
     (spatial-word-potential spatial-word be wh_ prep)
@@ -48,14 +48,14 @@
     (adj qual-adj rel-adj num-adj sup-adj ord-adj diff-adj)
     (mod-n adj corp)
     (noun block table stack row edge face plane line circle pile object
-      color structure left right back front other); NB: "each other"
+      color structure left right back front direction way other); NB: "each other"
                                                          ; can also be adj, det
     (under underneath supporting support)
     (close next)
     (touching face-to-face abutting against flush) 
     (be is are was were)
     (verb touch touches support supports connect connects consist_of
-      consists_of sit sits adjoin adjoins flank flanks)
+      consists_of sit sits adjoin adjoins flank flanks face faces)
     (farthest furthest)
     (rotated angled swivelled turned)
   ))

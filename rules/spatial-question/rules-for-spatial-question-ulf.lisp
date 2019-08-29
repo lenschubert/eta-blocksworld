@@ -54,7 +54,7 @@
 
           (block blocks)
           (name corp)
-          (prep of on to under in behind near touching abutting between from
+          (prep of on to under in behind near touching facing abutting between from
                 below above next next_to visible); currently "next" needs to have
                                                  ; the 'prep' feature, to allow
                                                  ; merging into 'next_to.p'; it's
@@ -75,7 +75,7 @@
           (adj qual-adj rel-adj num-adj sup-adj ord-adj diff-adj)
           (mod-n adj corp)
           (noun block table stack row edge face plane line circle pile object
-                color structure left right back front other one); NB: "each other"
+                color structure left right back front direction way other one); NB: "each other"
                                                          ; can also be adj, det
           (noun-plur blocks stacks rows edges faces planes lines circles piles objects
                 colors structures others ones)
@@ -84,7 +84,7 @@
           (touching face-to-face abutting against flush) 
           (be is are was were)
           (verb touch touches support supports connect connects consist_of
-           consists_of sit sits adjoin adjoins flank flanks)
+           consists_of sit sits adjoin adjoins flank flanks face faces)
           (farthest furthest)
           (rotated angled swivelled turned)
           ))
@@ -190,6 +190,12 @@
 
  '(
    1 (be np_ 0); more generally we would look for (be np_ 0)
+    2 (be det 3 and det 3 rel-adj ?); e.g., Are the NVidia block and the SRI block touching ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (*np-ulf-tree* 5 6) (lex-ulf! adj 7) ?)
+        ((1 (set-of 2 3) 4) ?)) (0 :ulf-recur)
+    2 (be det 3 and det 3 prep 3 each other ?); e.g., Are the NVidia block and the SRI block touching each other ?
+     3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3) (*np-ulf-tree* 5 6) (*pp-ulf-tree* 7 8 9 10) ?)
+        ((1 (set-of 2 3) 4) ?)) (0 :ulf-recur)
     2 (be det 2 block 1 prep 3 det 3 conj det 3 ?); e.g., Is the NVidia block above the SRI block and the Texaco block ?
      3 (((lex-ulf! v 1) (*np-ulf-tree* 2 3 4) (*pp-ulf-tree* 5 6 7 8 9 10 11 12) ?)
         ((1 2 3) ?)) (0 :ulf-recur)
@@ -395,6 +401,9 @@
    1 (what color be pron ?); e.g., What color is it ?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) (*np-ulf-tree* 4))
        ((sub ({of}.p (1 2)) (3 4 *h)) ?)) (0 :ulf-recur)
+   1 (wh-det 1 noun be np_ 3 facing ?); e.g., What/which block/direction is the NVidia block facing?
+    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*np-ulf-tree* 5 6))
+       (((1 2) (3 4 facing.a)) ?)) (0 :ulf-recur)
    1 (wh-det noun be the 2 prep ?); e.g., What/which block is the NVidia block
                                         ; on top of [to the left of]?
     2 (((lex-ulf! det 1) (lex-ulf! noun 2) (lex-ulf! v 3) the.d (*n1-ulf-tree* 5)
@@ -456,7 +465,8 @@
   ; These rules should be accessed as last resort by *spatial-question-ulf-tree*
   ; For the most part, these rules just allow for ignoring some words here and
   ; there, but there are also some reformulations (e,g., "support" relations)
- '(1 (4 where 2 det 2 block 2)
+ '(
+   1 (4 where 2 det 2 block 2)
     2 (((*wh-question-ulf-tree* where is 4 5 6 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 where 2 pron 2)
     2 (((*wh-question-ulf-tree* where is 4 ?)) (poss-ques 1)) (0 :ulf-recur)
@@ -485,6 +495,9 @@
     2 (((*wh-question-ulf-tree* on 2 3 4 is 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 wh-det 2 noun be 1 supported by det 2 noun 2); transform to on-relation
     2 (((*wh-question-ulf-tree* 2 3 4 5 on 9 10 11 ?)) (poss-ques 1)) (0 :ulf-recur) 
+   1 (0 det 2 block and 2 block 0); sometimes a determiner may be dropped in a conjunction,
+                                  ; e.g., are the SRI block and NVidia block touching?
+    2 (((*yn-question-ulf-tree* 1 2 3 4 5 2 6 7 8)) (poss-ques 1)) (0 :ulf-recur)
    1 (2 be 1 det 2 noun 2 prep 3 det 3 noun 2)
     2 (((*yn-question-ulf-tree* 2 4 5 6 8 9 10 11 12 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (2 be pron 2 prep 3 det 3 noun 2) 
