@@ -101,7 +101,8 @@
   ; These rules should be accessed as last resort by *spatial-question-ulf-tree*
   ; For the most part, these rules just allow for ignoring some words here and
   ; there, but there are also some reformulations (e,g., "support" relations)
- '(1 (4 wh-det 2 noun be 2 between 8 noun 2 ?); what block is between a red 
+ '(
+   1 (4 wh-det 2 noun be 2 between 8 noun 2 ?); what block is between a red 
                                               ; and a blue block?
     2 (((*wh-beteen-question-ulf-tree* 2 3 4 5 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 wh-det 1 color 1 block be 1 between 3 noun 4); what color block is between ...

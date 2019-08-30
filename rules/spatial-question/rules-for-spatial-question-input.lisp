@@ -10,12 +10,12 @@
     (finished-word it all everything)
 
     (spatial-beginning-pair spatial-beginning there)
-    (spatial-beginning spatial-verb between prep)
+    (spatial-beginning spatial-verb between prep conj-prep)
     (spatial-verb be modal wh_ do)
-    (spatial-ending noun adj there directions ana-pron prep facing)
+    (spatial-ending noun adj there directions ana-pron prep conj-prep facing)
     (spatial-word noun ana-pron supporting corp adj
       uppermost under close touching farthest rotated)
-    (spatial-word-potential spatial-word be wh_ prep)
+    (spatial-word-potential spatial-word be wh_ prep conj-prep)
     (kinds types sorts kind type sort formats format)
     (question questions)
     (answer understand hear interpret parse)
@@ -26,7 +26,8 @@
       Starbucks Texaco Target Toyota Twitter Shell Adidas)
     (block blocks)
     (name corp)
-    (prep of on to under in behind near touching abutting between from
+    (conj-prep of to)
+    (prep on under in behind near touching abutting between from
                 below above next next_to visible on_top_of to_the_left_of
                 to_the_right_of in_front_of)     ; currently "next" needs to have
                                                  ; the 'prep' feature, to allow

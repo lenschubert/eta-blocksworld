@@ -54,8 +54,10 @@
 
           (block blocks)
           (name corp)
-          (prep of on to under in behind near touching facing abutting between from
-                below above next next_to visible); currently "next" needs to have
+          (conj-prep of to)
+          (prep on under in behind near touching abutting between from
+                below above next next_to visible on_top_of to_the_left_of
+                to_the_right_of in_front_of); currently "next" needs to have
                                                  ; the 'prep' feature, to allow
                                                  ; merging into 'next_to.p'; it's
                                                  ; risky, & prior word-joining 
@@ -374,17 +376,17 @@
     2 ((what.pro (lex-ulf! v 2) (*pp-ulf-tree* 3 4 5) ?)
        ((1 (2 3)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be not adj ?); e.g., Which blocks are not clear ?
-    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) not.adv-a 
-        (lex-ulf! adj 6) ?) (((1 2) (3 4 5)) ?)) (0 :ulf-recur)
+    2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (lex-ulf! adj 6) ?)
+       (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be 1 adj ?); e.g., Which blocks are (totally) clear ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (lex-ulf! adj 6) ?) 
        (((1 2) (3 4)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be not 3 prep 2 noun ?); e.g., What red blocks are not on blue blocks ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 6 7 8 9) ?)
-        (((1 2) (3 (not.adv-a 4))) ?)) (0 :ulf-recur)
+        (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be not 3 prep pron ?); e.g., What red blocks are not on top of it ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 6 7 8) ?)
-        (((1 2) (3 (not.adv-a 4))) ?)) (0 :ulf-recur)
+        (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
    1 (wh-det 1 noun be 1 prep 4 noun ?); e.g., What red blocks are (there) on blue blocks ?
     2 (((lex-ulf! det 1) (*n1-ulf-tree* 2 3) (lex-ulf! v 4) (*pp-ulf-tree* 6 7 8) ?)
         (((1 2) (3 4)) ?)) (0 :ulf-recur)
@@ -419,15 +421,15 @@
     2 (((lex-ulf! pro 1) (lex-ulf! v 2) (*np-ulf-tree* 3 4 5 6 7 8) ?)
        ((1 (2 (= 3))) ?)) (0 :ulf-recur)
    1 (how many 1 block be not prep 3 np_ 3 ?); How many blocks are not on a red block ?
-    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree*  7 8 9 10) ?)
+    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 7 8 9 10) ?)
        (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
    1 (how many 1 block be 1 prep 3 np_ 3 ?); How many blocks are (there) on some red block ?
-    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree*  7 8 9 10) ?) 
+    2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 7 8 9 10) ?) 
        (((1 2) (3 4)) ?)) (0 :ulf-recur)
    1 (how many 1 block be not 3 prep adj 3 ?); e.g., How many blocks are not in front
                                          ;        of red blocks ? (NB: no 'det')
     2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 7 8 9 10) ?)
-       (((1 2) (3 4)) ?)) (0 :ulf-recur)
+       (((1 2) (3 not.adv-a 4)) ?)) (0 :ulf-recur)
    1 (how many 1 block be 3 prep adj 3 ?); e.g., How many blocks are in front of 
                                          ;       red blocks ? (NB: no 'det')
     2 ((how_many.d (*n1-ulf-tree* 3 4) (lex-ulf! v 5) (*pp-ulf-tree* 6 7 8 9) ?)
@@ -474,6 +476,10 @@
     2 (((*fallback-spatial-question-ulf-tree* 3 4 5)) 1) (0 :ulf-recur)
   1 (4 wh-det 2 noun be 2 prep 2 noun 2 ?);
     2 (((*wh-question-ulf-tree* 2 3 4 5 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
+  1 (wh-det 1 noun be left conj-prep det 3 ?); e.g., What block is left of the NVidia block?
+    2 (((*wh-question-ulf-tree* 1 2 3 4 to_the_left_of 7 8 ?)) (poss-ques 1)) (0 :ulf-recur)
+  1 (wh-det 1 noun be right conj-prep det 3 ?); e.g., What block is right of the NVidia block?
+    2 (((*wh-question-ulf-tree* 1 2 3 4 to_the_right_of 7 8 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 wh-det 1 color be det 1 block 2)
     2 (((*wh-question-ulf-tree* 2 4 5 6 7 8 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 wh-det 1 color 1 block be 1 prep 3 noun 2)
@@ -495,9 +501,6 @@
     2 (((*wh-question-ulf-tree* on 2 3 4 is 7 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (4 wh-det 2 noun be 1 supported by det 2 noun 2); transform to on-relation
     2 (((*wh-question-ulf-tree* 2 3 4 5 on 9 10 11 ?)) (poss-ques 1)) (0 :ulf-recur) 
-   1 (0 det 2 block and 2 block 0); sometimes a determiner may be dropped in a conjunction,
-                                  ; e.g., are the SRI block and NVidia block touching?
-    2 (((*yn-question-ulf-tree* 1 2 3 4 5 2 6 7 8)) (poss-ques 1)) (0 :ulf-recur)
    1 (2 be 1 det 2 noun 2 prep 3 det 3 noun 2)
     2 (((*yn-question-ulf-tree* 2 4 5 6 8 9 10 11 12 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (2 be pron 2 prep 3 det 3 noun 2) 
@@ -506,6 +509,13 @@
     2 (((*yn-question-ulf-tree* 2 4 5 6 8 9 10 ?)) (poss-ques 1)) (0 :ulf-recur)
    1 (2 be det 2 noun 1 adj 2)
     2 (((*yn-question-ulf-tree* 2 3 4 5 7 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (how many 1 block be left conj-prep det 3 ?); e.g., How many blocks are left of the NVidia block?
+    2 (((*wh-question-ulf-tree* 1 2 3 4 5 to_the_left_of 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (how many 1 block be right conj-prep det 3 ?); e.g., How many blocks are right of the NVidia block?
+    2 (((*wh-question-ulf-tree* 1 2 3 4 5 to_the_right_of 8 9 ?)) (poss-ques 1)) (0 :ulf-recur)
+   1 (0 det 2 block and 2 block 0); sometimes a determiner may be dropped in a conjunction,
+                                  ; e.g., are the SRI block and NVidia block touching?
+    2 (((*yn-question-ulf-tree* 1 2 3 4 5 2 6 7 8)) (poss-ques 1)) (0 :ulf-recur)
    ; More can/should be added
    1 (0 det 2 block 0)
     2 (I am asking about some 3 4 \, but you didn\'t catch what it was\.) (0 :out)
