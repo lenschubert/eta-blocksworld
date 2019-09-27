@@ -61,6 +61,13 @@
     (directory "core/*.lisp"))
 
 
+; Load core coreference code
+; (in directory 'core/coref')
+;````````````````````````
+(mapcar (lambda (file) (load file))
+    (directory "core/coref/*.lisp"))
+
+
 ; Load core resources
 ; (in directory 'core/resources/')
 ;``````````````````````````````````
