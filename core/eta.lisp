@@ -113,6 +113,18 @@
   ;
   (defparameter *context* nil)
 
+  ; Here we maintain various histories of the conversation (surface text,
+  ; ulf, gist, and references, respectively).
+  (defparameter *discourse-history* nil)
+  (defparameter *discourse-history-ulf* nil)
+  (defparameter *discourse-history-gist* nil)
+  (defparameter *reference-list* nil)
+
+  ; Recency cutoff used when attempting coreference (i.e. the coreference
+  ; module will only look this far back, in terms of turns, in the discourse
+  ; history to find possible referents).
+  (defparameter *recency-cutoff* 2)
+
   ; Another doolittle relic: a list of saved responses,
   ; to be used to revert to an earlier exchange, if 
   ; no better options remained. This idea may still be
