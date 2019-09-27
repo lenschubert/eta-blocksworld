@@ -186,7 +186,7 @@
 ; ````````````````
 ; Checks if a ULF is some simple noun phrase modifier (either adj or nominal predicate)
 ;
-  (or (adj? ulf) (noun? ulf))
+  (or (adj? ulf) (noun? ulf) (and (no-type? ulf) (not (proper-name? ulf))))
 ) ; END mod?
 
 
@@ -282,11 +282,25 @@
 ) ; END reified-event?
 
 
+(defun no-type? (ulf)
+; ````````````````````
+; Checks whether ULF is a symbol with no type, e.g. |NVidia|, |Ben|, etc.
+;
+  (and (symbolp ulf) (not (special-op? ulf)) (not (sym-contains ulf #\.)))
+) ; END no-type?
+
+
 (defun proper-name? (ulf)
 ; `````````````````````````
 ; Checks if a ULF is a proper name.
+; NOTE: Due to the way company names act as modifiers in the blocks world ULF, we have to do
+; a check here so these aren't counted as individuals. This is a bit odd and should be changed
+; in the future.
 ;
-  (and (symbolp ulf) (not (special-op? ulf)) (not (sym-contains ulf #\.)))
+  (and (no-type? ulf)
+    (not (member ulf '(|Adidas| |Burger King| |Esso| |Heineken| |HP | |HP| |McDonalds| |Mercedes|
+                       |NVidia| |Pepsi| |SRI | |SRI| |Starbucks| |Texaco| |Target| |Toyota| |Shell| |Twitter|))))
+  
 ) ; END proper-name?
 
 
@@ -303,7 +317,7 @@
 ; Checks if a ULF is a definite noun phrase.
 ;
   (and (det-np? ulf) (or
-    (member (first ulf) '(the.d which.d what.d whichever.d whatever.d))
+    (member (first ulf) '(the.d))
     (and (equal (first ulf) 'np+preds) (definite-np? (second ulf)))))
 ) ; END definite-np?
 
@@ -313,7 +327,7 @@
 ; Checks if a ULF is an indexical noun phrase (e.g. "that block")
 ;
   (and (det-np? ulf) (or
-    (member (first ulf) '(that.d this.d those.d))
+    (member (first ulf) '(that.d this.d those.d which.d what.d whichever.d whatever.d))
     (and (equal (first ulf) 'np+preds) (definite-np? (second ulf)))))
 ) ; END definite-np?
 

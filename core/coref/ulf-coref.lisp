@@ -3,6 +3,22 @@
 ; Code for resolving references in ulf.
 ;
 
+(defun coref-ulf (ulf)
+;``````````````````````
+; The top level coreference function for ulf. Wrapper for process-ulf function.
+;
+  (first (process-ulf ulf))
+) ; END coref-ulf
+
+
+(defun coref-gist (gist)
+;````````````````````````
+; Currently unused.
+;
+  gist
+) ; END coref-gist
+
+
 (defun add-entity (entity)
 ; ``````````````````````````
 ; Adds an entity to the reference list.
