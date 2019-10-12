@@ -9,7 +9,7 @@
     1 (0 wh_ 1 questions 1 aux you 1 answer 0)
       2 (You can try your best to answer yes no questions \, wh questions \, and how many
         questions \. You cannot answer modal questions right now \, though \.) (0 :out)
-	1 (0 aux you 0)
+    1 (0 aux you 0)
       2 (You can try your best to answer yes no questions \, wh questions \, and how many
         questions \. You cannot answer modal questions right now \, though \.) (0 :out)
 ))
